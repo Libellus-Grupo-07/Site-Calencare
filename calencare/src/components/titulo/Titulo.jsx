@@ -1,12 +1,12 @@
 import React from "react";
 import "./Button.module.css";
 
-const Button = (titulo) => {
+const Titulo = (titulo, ) => {
     return (
         <>
-            <button> {titulo} </button>
+            <h1> {titulo} </h1>
         </>
     );
 }
 
-export default Button;
+export default Titulo;
