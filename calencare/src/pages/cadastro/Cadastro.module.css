@@ -1,0 +1,24 @@
+.container-adrress {
+    display: flex;
+    width: 100%;
+    margin-right: 10px;
+    column-gap: 15px;
+    padding: 0;
+    margin: 0;
+}
+
+.container-buttons {
+    display: flex;
+    column-gap: 15px;
+    margin-top: 15px;
+
+}
+
+.container-cadastro {
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end ;
+    
+    
+}

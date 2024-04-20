@@ -1,10 +1,21 @@
 import React from "react";
-import "./Input.module.css";
+import styles from "./Input.module.css";
 
-const Input = () => {
+const Input = ({valor,titulo}) => {
     return (
         <>
-            <input type="text" />
+         <div className={styles["componet-input"]}>
+         <label>
+            <span className={styles["titulo-input"]}>{titulo}</span>
+         </label>
+            <input
+                type="text"
+                value={valor}
+                placeholder={titulo}
+                
+            />
+         </div>
+
         </>
     );
 }

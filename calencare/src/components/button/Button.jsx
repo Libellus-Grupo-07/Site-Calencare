@@ -1,10 +1,13 @@
 import React from "react";
-import "./Button.module.css";
+import styles from "./Button.module.css" ;
 
-const Button = (titulo) => {
+
+
+
+const Button = ({titulo,cor,icone}) => {
     return (
         <>
-            <button> {titulo} </button>
+            <button className={styles[cor]}> {icone ?  icone : ""} {titulo}  </button>
         </>
     );
 }

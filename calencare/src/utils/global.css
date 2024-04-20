@@ -24,4 +24,5 @@
 body {
   background: var(--branco-secundario);
   background-image: url(./assets/bolinhas_fundo.svg);
+  background-size: cover;
 }

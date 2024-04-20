@@ -1,0 +1,21 @@
+button{
+    padding: 0px 32px;
+    height: 48px;
+    border-radius: 100px;
+    font-family: "Poppins";
+   font-size: 21px;
+   display: flex;
+   align-items: center;
+   
+}
+
+.roxo{
+    background-color: var(--roxo-principal);
+    color: white;
+    border-color: var(--roxo-principal);
+}
+
+.branco{
+    background-color: var(--branco);
+    
+}

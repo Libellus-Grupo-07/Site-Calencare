@@ -1,0 +1,23 @@
+input{
+    padding: 0px 32px;
+    height: 48px;
+    border-radius: 100px;
+   
+}
+
+.componet-input{
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    width: 100%;
+}
+
+.titulo-input{
+    font-family: "Poppins";
+    margin-left: 30px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+
+
