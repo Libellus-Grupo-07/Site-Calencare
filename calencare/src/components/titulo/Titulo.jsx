@@ -1,10 +1,11 @@
 import React from "react";
-import "./Button.module.css";
+import "./Titulo.module.css";
 
-const Titulo = (titulo, ) => {
+function Titulo ({ titulo }) {
     return (
         <>
-            <h1> {titulo} </h1>
+            <h1> { titulo } </h1>
+            
         </>
     );
 }
