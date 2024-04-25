@@ -1,0 +1,35 @@
+.page-home{
+    background-color: var(--lilas-fundo);
+    width: 100%;
+    height: 85vh;
+
+}
+
+.section-inicio{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    border: 1px solid;
+}
+
+.section-inicio .title{
+    font-size: 64px;
+    line-height: 104px;
+    font-weight: 900;
+    letter-spacing: -0.1rem;
+    color: var(--texto-cinza-escuro);
+}
+
+.section-inicio .title .title-roxo{
+    color: var(--roxo-principal);
+}
+
+.section-inicio .image{
+    height: fit-content;
+}
+
+.section-inicio .image .img-inicio{
+    height: 500px;
+}
