@@ -4,13 +4,16 @@ import Input from "../../components/input/Input";
 import styles from "./Cadastro.module.css"
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import Imagem from "../../utils/assets/cadastro.svg";
+import Logo from "../../components/logo/Logo";
 
 const Cadastro = () => {
     return (
         <>
 
             <div className={styles["tela-cadastro"]}>
+             
                 <div className={styles["container-imagem-cadastro"]}>
+                <div><Logo/></div>
                     <img className={styles["imagem-cadastro"]} src={Imagem} alt="imagem cadastro" />
                 </div>
                 <div className={styles["formulario-cadastro"]}>
@@ -29,6 +32,9 @@ const Cadastro = () => {
                                 <Button titulo="Voltar" cor={"branco"} icone={<HiOutlineArrowLeft />}></Button>
                                 <Button titulo="Avançar" cor={"roxo"}  ></Button>
                             </div>
+                        </div>
+                        <div className={styles["text-entrar"]}>
+                    <span>Já possui uma conta? <a className={styles["link-entrar"]}href="#">Entrar</a></span>
                         </div>
                     </div>
                 </div>

@@ -35,7 +35,7 @@
 }
 
 .imagem-cadastro {
-    max-height: 600px;
+    max-height: 550px;
     width: auto;
     height: auto;
 }
@@ -45,4 +45,18 @@
     display: grid;
     justify-content: center;
     margin: 0 auto;
+    padding: 30px;
+}
+
+.text-entrar{
+padding: 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.link-entrar{
+text-decoration: none;
+font-weight: bold;
+color: black;
 }
