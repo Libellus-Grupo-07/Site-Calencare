@@ -12,16 +12,16 @@ const Navbar = ({ tipo }) => {
             <header>
                 <div className={styles["nav"]}>
                     <div className={styles["logo"]}>
-                        <img className={styles["img-logo"]} src={Logo} alt="Logo da Calencare" />
+                        <img className={styles["img-logo"]} src={Logo} alt="Logo da Calencare" onClick={() => navigate("#inicio")}/>
                     </div>
                     <ul className={styles["list"]}>
                         <li className={styles["list-item"]}>
-                            <span className={styles["link-item"]}> Início </span> </li>
+                            <span className={styles["link-item"]} onClick={() => navigate("#inicio")}> Início </span> </li>
                         <li className={styles["list-item"]}>
-                            <span className={styles["link-item"]}> Produto </span>
+                            <span className={styles["link-item"]} onClick={() => navigate("#produto")}> Produto </span>
                         </li>
                         <li className={styles["list-item"]}>
-                            <span className={styles["link-item"]}> Benefícios </span>
+                            <span className={styles["link-item"]} onClick={() => navigate("#beneficios")}> Benefícios </span>
                         </li>
                         <li className={styles["list-item"]}>
                             <span className={styles["link-item"]}>Preços</span>
