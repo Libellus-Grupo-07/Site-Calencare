@@ -15,6 +15,8 @@ function Rotas() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="cadastro" element={<Cadastro />} />
+          <Route path="cadastro/2" element={<Cadastro />} />
+          <Route path="cadastro/3" element={<Cadastro />} />
           <Route path="login" element={<Login />} />
           <Route path="*" element={<NotFound/>} />
           <Route path="cadastroEtapa1" element={<CadastroEtapa1 />} />
