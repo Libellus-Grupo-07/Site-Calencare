@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Input.module.css";
 
-const Input = ({ valor, titulo, type, id }) => {
+const Input = ({ valor, titulo, type }) => {
     return (
         <>
             <div className={styles["componet-input"]}>
@@ -9,10 +9,10 @@ const Input = ({ valor, titulo, type, id }) => {
                     <span className={styles["titulo-input"]}>{titulo}</span>
                 </label>
                 <input
-                    id={id}
                     type={type}
                     value={valor}
                     placeholder={titulo}
+                    required
 
                 />
             </div>

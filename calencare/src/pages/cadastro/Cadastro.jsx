@@ -1,5 +1,4 @@
 import React from "react";
-import { toast } from "react-toastify"; // Importa toast para exibir mensagens de sucesso ou erro
 import 'react-toastify/dist/ReactToastify.css';
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
@@ -18,7 +17,7 @@ import { useForm } from "../../hooks/useForm";
 const Cadastro = () => {
     const formComponents = [<CadastroEtapa1 />, <CadastroEtapa2 />, <CadastroEtapa3 />, <CadastroEtapa4 />]
 
-    const { currentStep, currentComponent, changeStep, isLastStep  } = useForm(formComponents)
+    const { currentStep, currentComponent, changeStep, isLastStep } = useForm(formComponents)
 
     return (
         <>
@@ -31,19 +30,25 @@ const Cadastro = () => {
                     </div>
                     <div className={styles["formulario-cadastro"]}>
                         <div className={styles["engloba-formulario"]}>
-                            <h1> Cadastro </h1>
+                            <div className="texto">
+                                <h1> Cadastro </h1>
+                                <p>Informe os {currentStep == 2 ? "dias" : "dados"} da <b>{currentStep < 3 ? "empresa" : currentStep == 2 ? "funcionamento" : "usuário"}</b> para começar a realizar os agendamentos.</p>
+                            </div>
                             <div className={styles["inputs-container"]}>
-                                {currentComponent}
-                            </div>
-                            <div className={styles["container-buttons"]}>
+                                <div className={styles["form"]}>
+                                    {currentComponent}
+                                </div>
+                                <div className={styles["container-buttons"]}>
                                     <Button funcaoButton={() => changeStep(currentStep - 1, null)} titulo="Voltar" cor={"branco"} icone={<HiOutlineArrowLeft />}></Button>
-                                {!isLastStep ? (
-                                    <Button funcaoButton={(e) => changeStep(currentStep + 1, e)} titulo="Avançar" cor={"roxo"}  ></Button>) : (
-                                    <Button titulo="Cadastrar" cor={"roxo"}  ></Button>)}
+                                    {!isLastStep ? (
+                                        <Button funcaoButton={(e) => changeStep(currentStep + 1, e)} titulo="Avançar" cor={"roxo"}  ></Button>) : (
+                                        <Button titulo="Cadastrar" cor={"roxo"}  ></Button>)}
+                                </div>
                             </div>
-                        </div>
-                        <div className={styles["text-entrar"]}>
-                            <span>Já possui uma conta? <a className={styles["link-entrar"]} href="#">Entrar</a></span>
+
+                            <div className={styles["text-entrar"]}>
+                                <span>Já possui uma conta? <a className={styles["link-entrar"]} href="#">Entrar</a></span>
+                            </div>
                         </div>
                     </div>
                 </div>
