@@ -8,7 +8,7 @@ import { HiOutlineArrowLeft } from "react-icons/hi";
 import Imagem from "../../utils/assets/cadastro.svg";
 import Logo from "../../components/logo/Logo";
 import CadastroEtapa1 from "../../components/cadastro-etapa-1/CadastroEtapa1";
-import CadastroEtapa2 from "../../components/cadastro-etapa-3/CadastroEtapa3";
+import CadastroEtapa2 from "../../components/cadastro-etapa-2/CadastroEtapa2";
 import CadastroEtapa3 from "../../components/cadastro-etapa-3/CadastroEtapa3";
 import CadastroEtapa4 from "../../components/cadastro-etapa-4/CadastroEtapa4";
 

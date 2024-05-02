@@ -7,6 +7,7 @@ import NotFound from "./pages/notfound/NotFound";
 import CadastroEtapa1 from "./components/cadastro-etapa-1/CadastroEtapa1";
 import CadastroEtapa2 from "./components/cadastro-etapa-2/CadastroEtapa2";
 import CadastroEtapa3 from "./components/cadastro-etapa-3/CadastroEtapa3";
+import CadastroEtapa4 from "./components/cadastro-etapa-4/CadastroEtapa4";
 
 function Rotas() {
   return (
@@ -21,7 +22,8 @@ function Rotas() {
           <Route path="*" element={<NotFound/>} />
           <Route path="cadastroEtapa1" element={<CadastroEtapa1 />} />
           <Route path="cadastroEtapa2" element={<CadastroEtapa2 />} />
-          <Route path="cadastroEtapa3" element={<CadastroEtapa3 />} />
+          <Route path="cadastroEtapa3" element={<CadastroEtapa3 />} /> 
+          <Route path="cadastroEtapa4" element={<CadastroEtapa4 />} />
 
           
           

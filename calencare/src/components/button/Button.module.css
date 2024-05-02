@@ -13,6 +13,7 @@ button{
     background-color: var(--roxo-principal);
     color: white;
     border-color: var(--roxo-principal);
+    border: none;
 }
 
 .branco{
