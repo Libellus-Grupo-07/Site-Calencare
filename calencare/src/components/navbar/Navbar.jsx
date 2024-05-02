@@ -1,24 +1,19 @@
- import React from "react";
- import Logo from "../../utils/assets/logo_calencare.png";
- import styles from "./Navbar.module.css";
+import React from "react";
+import Logo from "../../utils/assets/logo_calencare.png";
+import styles from "./Navbar.module.css";
+import Button from "../button/Button"
+import { useNavigate } from "react-router-dom"
 
 const Navbar = ({ tipo }) => {
-    return(
-    <nav className={styles["navbar"]}>
-    <img src={Logo} className={styles["logo-inicio"]} alt="Logo Início"/>
-    </nav>
-);
-};
- export default Navbar;
 
-<<<<<<< HEAD
-=======
+    const navigate = useNavigate();
+
     return (
         <>
             <header>
                 <div className={styles["nav"]}>
                     <div className={styles["logo"]}>
-                        <img className={styles["img-logo"]} src={Logo} alt="Logo da Calencare" onClick={() => navigate("#inicio")}/>
+                        <img className={styles["img-logo"]} src={Logo} alt="Logo da Calencare" onClick={() => navigate("#inicio")} />
                     </div>
                     <ul className={styles["list"]}>
                         <li className={styles["list-item"]}>
@@ -35,12 +30,12 @@ const Navbar = ({ tipo }) => {
                     </ul>
                     <div className={styles["group-button"]}>
                         <span className={styles["link-item"]}> Entrar </span>
-                        <Button funcaoButton={() => navigate("/cadastro")}  titulo="Cadastre-se" cor="roxo" />
+                        <Button funcaoButton={() => navigate("/cadastro")} titulo="Cadastre-se" cor="roxo" />
                     </div>
                 </div>
             </header>
         </>
     );
 }
->>>>>>> origin/feat-home
 
+export default Navbar;
