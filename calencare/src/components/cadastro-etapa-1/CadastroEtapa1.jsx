@@ -10,11 +10,9 @@ const CadastroEtapa1 = () => {
                     <p>Informe os dados da <b>empresa</b> para começar a realizar os agendamentos.</p>
                         <Input titulo={"Razão Social"}></Input>
                         <Input titulo={"CNPJ"}></Input>
-                        <Input titulo={"CEP"}></Input>
-                        <div className={styles["container-adrress"]}>
-                            <Input titulo={"Número"}></Input>
-                            <Input titulo={"Complemento"}></Input>
-                        </div>
+                        <Input titulo={"Telefone da Empresa"}></Input>
+                        <Input titulo={"Email da Empresa"}></Input>
+                        
                     </div>
                 </div>
 

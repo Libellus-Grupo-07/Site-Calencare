@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Switch } from 'antd';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { Box, Typography } from '@mui/material';
 
 const DiaDaSemanaComponente = ({ diaSemana, horario1, horario2, onChange }) => {
   const [isHorario1, setIsHorario1] = useState(true);
@@ -23,13 +25,11 @@ const DiaDaSemanaComponente = ({ diaSemana, horario1, horario2, onChange }) => {
       <Typography variant="h6">{diaSemana}</Typography>
       <Box display="flex" alignItems="center">
         <Switch checked={isHorario1} onChange={handleSwitchChange} />
-        <TimePicker
-          label="Horário"
-          value={horarioSelecionado}
-          onChange={handleTimePickerChange}
-          ampm={false}
-          inputFormat="HH:mm"
-        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DemoContainer components={['TimePicker']}>
+        <TimePicker label="Basic time picker" />
+      </DemoContainer>
+    </LocalizationProvider>
       </Box>
     </div>
   );
