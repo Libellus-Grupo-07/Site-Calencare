@@ -1,16 +1,10 @@
-.container-adrress {
-    display: flex;
-    width: 100%;
-    margin-right: 10px;
-    column-gap: 15px;
-    padding: 0;
-    margin: 0;
-}
+
 
 .container-buttons {
     display: flex;
     column-gap: 15px;
-    margin-top: 15px;
+    margin-top: 24px;
+    justify-content: flex-end;
 }
 
 .container-cadastro {
@@ -27,6 +21,10 @@
 
 .container-imagem-cadastro {
     width: 50vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .formulario-cadastro {
@@ -34,10 +32,16 @@
     background-color: var(--branco);
 }
 
+.logo-cadastro{
+    width: 100%;
+}
+
 .imagem-cadastro {
-    max-height: 600px;
+    max-height: 50vw;
     width: auto;
     height: auto;
+    margin: 0 auto;
+   
 }
 
 .engloba-formulario {
@@ -45,4 +49,18 @@
     display: grid;
     justify-content: center;
     margin: 0 auto;
+    padding: 30px;
+}
+
+.text-entrar{
+padding: 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.link-entrar{
+text-decoration: none;
+font-weight: bold;
+color: black;
 }

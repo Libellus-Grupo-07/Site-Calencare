@@ -8,5 +8,4 @@ const Button = ({ funcaoButton, titulo, cor, icone}) => {
         </>
     );
 }
-
 export default Button;

@@ -1,0 +1,20 @@
+
+.container-cadastro {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.tela-cadastro {
+    display: flex;
+    width: 100%;
+}
+
+.container-adrress {
+    display: flex;
+    width: 100%;
+    column-gap: 15px;
+    padding: 0;
+    margin: 0;
+}
