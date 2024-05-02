@@ -1,5 +1,5 @@
  import React from "react";
- import Logo from "../logo/Logo";
+ import Logo from "../../utils/assets/logo_calencare.png";
  import styles from "./Navbar.module.css";
 
 const Navbar = ({ tipo }) => {
