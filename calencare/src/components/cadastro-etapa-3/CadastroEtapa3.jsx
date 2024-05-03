@@ -6,6 +6,8 @@ import DiaDaSemanaComponente from "../input-funcionamento/InputFuncionamento"
 
 
 const CadastroEtapa3 = () => {
+
+  
   return (
 
     <div className={styles["tela-cadastro"]}>

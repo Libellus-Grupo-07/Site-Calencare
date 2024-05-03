@@ -9,8 +9,19 @@ const CadastroEtapa2 = () => {
     const  [Cidade, setCidade] = useState("")
     const  [UF, setUF] = useState("")
 
-    
-
+    const alertas = () =>{
+       if(Logradouro.length == 0){
+        toast.error("O logradouro deve ser preenchido")
+       }
+       if(Bairro.length == 0){
+        toast.error("O Bairro deve ser preenchido")
+       }
+       if(Cidade.length == 0){
+        toast.error("A cidade deve ser preenchida")
+       }
+       if(UF.length == 0){
+        toast.error("A UF deve ser preenchida")
+       }
 
 
 
@@ -37,6 +48,7 @@ const CadastroEtapa2 = () => {
         </div>
 
     );
+}
 }
 
 export default CadastroEtapa2;

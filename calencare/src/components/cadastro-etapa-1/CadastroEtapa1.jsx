@@ -13,6 +13,15 @@ const CadastroEtapa1 = () => {
        if(razaoSocial.length == 0){
         toast.error("A Razão Social deve ser preenchida")
        }
+       if(CNPJ.length == 0){
+        toast.error("O CNPJ deve ser preenchido")
+       }
+       if(TelefoneDaEmpresa.length == 0){
+        toast.error("O telefone deve ser preenchido")
+       }
+       if(EmailDaEmpresa == 0){
+        toast.error("O Email da empresa deve ser preenchido")
+       }
     }
 
     return (
