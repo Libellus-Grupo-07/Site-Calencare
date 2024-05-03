@@ -3,14 +3,11 @@ input{
     height: 40px;
     border-radius: 100px;
     border: 1.5px solid var(--texto-cinza);
-    
 }
 
 .componet-input{
     display: flex;
     flex-direction: column;
-    margin-top: 16px;
-    margin-right: 24px;
     row-gap: 8px;
     width: 100%;
 }

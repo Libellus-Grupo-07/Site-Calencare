@@ -6,23 +6,23 @@ import DiaDaSemanaComponente from "../input-funcionamento/InputFuncionamento"
 
 
 const CadastroEtapa3 = () => {
-    return (
 
-        <div className={styles["tela-cadastro"]}>
-                    <div className={styles["container-cadastro"]}>
-                        
-                    <p>Informe os dados da <b>funcionamento</b> para começar a realizar os agendamentos.</p>
-                    <CustomSwitch/>
-                    <DiaDaSemanaComponente
-  diaSemana="Segunda-feira"
-  horario1={new Date()}
-  horario2={new Date()}
-  onChange={(horario) => console.log('Horário selecionado:', horario)}
-/>
-                    </div>
-                    </div>
+  
+  return (
 
-);
+    <div className={styles["tela-cadastro"]}>
+      <div className={styles["container-cadastro"]}>
+        <CustomSwitch />
+        <DiaDaSemanaComponente
+          diaSemana="Segunda-feira"
+          horario1={new Date()}
+          horario2={new Date()}
+          onChange={(horario) => console.log('Horário selecionado:', horario)}
+        />
+      </div>
+    </div>
+
+  );
 }
 
 export default CadastroEtapa3;
