@@ -1,0 +1,48 @@
+header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(239, 232, 245, 0.95);
+  position: fixed;
+  backdrop-filter: blur(4px);
+  z-index: 1;
+
+}
+
+.nav {
+  width: 90%;
+  padding: 32px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header .img-logo {
+  height: 40px;
+}
+
+header .list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  column-gap: 64px;
+}
+
+header .link-item {
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.15s all ease-in-out;
+  color: var(--texto-cinza-escuro);
+  font-family: "Poppins";
+}
+
+header .link-item:hover {
+  color: var(--roxo-principal);
+}
+
+header .group-button {
+  display: flex;
+  column-gap: 24px;
+  align-items: center;
+}
