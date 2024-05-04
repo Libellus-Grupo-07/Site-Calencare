@@ -2,7 +2,6 @@
   display: flex;
   width: 100%;
   height: 100vh;
-  overflow-y: hidden;
 }
 
 .formulario-login {
@@ -16,14 +15,16 @@
   row-gap: 16px;
 }
 
-.background, .background-imagem {
+.background,
+.background-imagem {
   height: auto;
 }
 
-.background img {
+.background .img-background {
   position: absolute;
   bottom: 0%;
   left: 0%;
+  z-index: 1;
 }
 
 .background-imagem img {
@@ -51,6 +52,8 @@
   flex-direction: column;
   align-items: flex-start;
   row-gap: 16px;
+  z-index: 9999;
+  border: 1px solid;
 }
 
 .engloba-formulario {
@@ -84,7 +87,7 @@
 }
 
 .logo-login {
-   width: 90%;
+  width: 90%;
   margin: 0 auto;
   margin-top: 32px;
   padding-left: 48px;

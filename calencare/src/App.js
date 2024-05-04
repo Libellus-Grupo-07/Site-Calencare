@@ -1,10 +1,14 @@
-import Home from './pages/home/Home';
-import Rotas from './routes';
-
+import Home from "./pages/home/Home";
+import Rotas from "./routes";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
-   <Rotas/>
+    <>
+      <Rotas />
+      <ToastContainer />
+    </>
   );
 }
 
