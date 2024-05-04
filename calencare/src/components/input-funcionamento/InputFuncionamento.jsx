@@ -31,52 +31,55 @@ const DiaDaSemanaComponente = ({ diaSemana, horario1, horario2, onChange }) => {
   };
 
   return (
-    <div>
-      <Box display="flex" alignItems="center">
-      <Typography variant="h6">{diaSemana}</Typography>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-      <Switch
-        onClick={handleButtonClick}
-        style={{
-          backgroundColor: isSelected ? 'blue' : 'green',
-          color: 'white',
-          borderColor: isSelected ? 'blue' : 'green',
-          marginRight: '8px', // Adicionando margem à direita para o espaçamento
-        }}
-      >
-        Meu Botão
-      </Switch>
-      <span style={{ visibility: isSelected ? 'visible' : 'hidden' }}>
-        Aberto
-      </span>
-    </div>
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['TimePicker', 'TimePicker']}>
-        <TimePicker
-          label="Início"
-          defaultValue={dayjs('2022-04-17T15:30')}
-        />
-        <TimePicker
-          label="Fim"
-          //value={value}
-          //onChange={(newValue) => setValue(newValue)}
+    <Box display="flex" alignItems="center" className={styles["container-cadastro"]}>
+        <div style={{ marginRight: '16px'}}>
+        <Typography style={{fontSize: '17px', fontWeight: 'bold' }} variant="h6" >{diaSemana}</Typography>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Switch
+            onClick={handleButtonClick}
+            style={{
+              backgroundColor: isSelected ? '#9f35f0' : '#C1C1C1',
+              color: 'white',
+              borderColor: isSelected ? '#9f35f0' : '#C1C1C1',
+              marginRight: '8px', // Adicionando margem à direita para o espaçamento
+            }}
+          >
+          </Switch>
+          <span style={{
+            visibility: isSelected ? 'visible' : 'hidden',
+            color: '#9f35f0'
+          }}>
+            Aberto
+          </span>
+        </div>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={['TimePicker', 'TimePicker']}>
+            <TimePicker
+              label="Início"
+              defaultValue={dayjs('2022-04-17T15:30')}
+            />
+            <TimePicker
+              label="Fim"
+            //value={value}
+            //onChange={(newValue) => setValue(newValue)}
 
-//           <TimePicker
-//   label="Uncontrolled picker"
-//   defaultValue={dayjs('2022-04-17T15:30')}
-// />
-// <TimePicker
-//   label="Controlled picker"
-//   value={value}
-//   onChange={(newValue) => setValue(newValue)}
-// />
-        />
-      </DemoContainer>
-    </LocalizationProvider>
+            //           <TimePicker
+            //   label="Uncontrolled picker"
+            //   defaultValue={dayjs('2022-04-17T15:30')}
+            // />
+            // <TimePicker
+            //   label="Controlled picker"
+            //   value={value}
+            //   onChange={(newValue) => setValue(newValue)}
+            // />
+            />
+          </DemoContainer>
+        </LocalizationProvider>
       </Box>
-    </div>
+    
 
-  
+
   );
 };
 
