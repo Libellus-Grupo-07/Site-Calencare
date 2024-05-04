@@ -9,8 +9,9 @@ button{
    justify-content: center;
    column-gap: 8px;
    letter-spacing: -0.05rem;
-   font-weight: 600;
+   font-weight: 500;
    cursor: pointer;
+   transition: 0.3s all linear;
 }
 
 .roxo{
@@ -20,8 +21,20 @@ button{
     border: none;
 }
 
+.roxo:hover{
+    background-color: transparent;
+    color: var(--roxo-principal);
+    border: 1.5px solid var(--roxo-principal);
+}
+
 .branco{
     background-color: var(--branco);
     border: 1.5px solid;
     color: var(--texto-cinza);
+}
+
+.branco:hover{
+    border: 1.5px solid var(--texto-preto);
+    background-color: var(--texto-preto);
+    color: var(--branco);
 }
