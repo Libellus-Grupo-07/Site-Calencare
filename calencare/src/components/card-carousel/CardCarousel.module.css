@@ -2,15 +2,16 @@
     width: 100%;
     height: fit-content;
     padding: 24px 0;
-    padding-bottom: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 64px;
 }
 
 .card-carousel .image-carousel{
     width: 55%;
     padding-left: 1rem;
+    z-index: 999;
 }
 
 .card-carousel .image-carousel img{
@@ -25,6 +26,14 @@
     display: grid;
     align-items: flex-start;
     justify-content: flex-start;
+}
+
+.card-carousel .text-carousel .image-fundo{
+    height: 440px;
+    position: absolute;
+    right: 90%;
+    bottom: 10%;
+    z-index: 1;
 }
 
 .card-carousel .text-carousel .text{

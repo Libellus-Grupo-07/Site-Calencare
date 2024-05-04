@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styles from "./Home.module.css";
 import Titulo from "../../components/titulo/Titulo";
 import Navbar from "../../components/navbar/Navbar";
@@ -13,18 +13,36 @@ import { SiGooglecalendar, SiSpring, SiMicrosoftsqlserver } from "react-icons/si
 import { FaReact } from "react-icons/fa6";
 import CardPrecos from './../../components/card-precos/CardPrecos';
 import CarouselProduto from './../../components/carousel-produto/CarouselProduto';
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const sectionInicio = useRef()
+  const sectionProduto = useRef()
+  const sectionBeneficios = useRef()
+  const sectionPrecos = useRef()
+
+  const irParaInicio = () => sectionInicio.current.scrollIntoView()
+  const irParaProduto = () => sectionProduto.current.scrollIntoView()
+  const irParaBeneficios = () => sectionBeneficios.current.scrollIntoView()
+  const irParaPrecos = () => sectionPrecos.current.scrollIntoView()
+
+
   return (
     <>
       <div className={styles["page-home"]}>
-        <Navbar />
-        <section className={styles["section-inicio"]} id="inicio">
+        <Navbar
+        irParaInicio={irParaInicio}
+        irParaProduto={irParaProduto}
+        irParaBeneficios={irParaBeneficios}
+        irParaPrecos={irParaPrecos}
+        />
+        <section className={styles["section-inicio"]} ref={sectionInicio}>
           <div className={styles["container-inicio"]}>
             <div className={styles["text"]}>
               <h1 className={styles["title"]}> Organizando seu negócio, sempre <br /> que <span className={styles["title-roxo"]}> você </span> quiser </h1>
               <div className={styles["button"]}>
-                <Button titulo="Começar" cor="roxo" />
+                <Button titulo="Começar" cor="roxo" funcaoButton={() => navigate("/cadastro")}/>
               </div>
             </div>
             <div className={styles["image"]}>
@@ -32,7 +50,7 @@ const Home = () => {
             </div>
           </div>
         </section>
-        <section className={styles["section-produto"]} id="produto">
+        <section className={styles["section-produto"]} ref={sectionProduto}>
           <div className={styles["container-produto"]}>
             <Titulo titulo="Produto" />
             <div className="carousel">
@@ -40,7 +58,7 @@ const Home = () => {
             </div>
           </div>
         </section>
-        <section className={styles["section-beneficios"]} id="beneficios">
+        <section className={styles["section-beneficios"]} ref={sectionBeneficios}>
           <div className={styles["beneficios"]}>
             <Titulo titulo="Benefícios" />
             <div className={styles["container-cards"]}>
@@ -101,14 +119,15 @@ const Home = () => {
             </div>
           </div>
         </section>
-        <section className={styles["section-precos"]}>
+        <section className={styles["section-precos"]} ref={sectionPrecos}>
           <Titulo titulo="Preços" />
           <div className={styles["container-precos"]}>
             <CardPrecos
               classe="branco"
-              nome="Plano Básico"
+              nome="Plano Mensal"
               texto="A escolha perfeita para aquele que mora sozinho."
               preco="39,99"
+              periodo="mês"
               vantagem1="XXXXXX"
               vantagem2="XXXXXX"
               vantagem3="XXXXXX"
@@ -116,9 +135,10 @@ const Home = () => {
             />
             <CardPrecos
               classe="preto"
-              nome="Plano Profissional"
+              nome="Plano Trimestral"
               texto="A escolha perfeita para aquele que mora sozinho."
-              preco="69,99"
+              preco="99,99"
+              periodo="trimestre"
               vantagem1="XXXXXX"
               vantagem2="XXXXXX"
               vantagem3="XXXXXX"
@@ -126,9 +146,10 @@ const Home = () => {
             />
             <CardPrecos
               classe="branco"
-              nome="Plano Empreendedor"
+              nome="Plano Anual"
               texto="A escolha perfeita para aquele que mora sozinho."
-              preco="109,99"
+              preco="459,99"
+              periodo="ano"
               vantagem1="XXXXXX"
               vantagem2="XXXXXX"
               vantagem3="XXXXXX"
