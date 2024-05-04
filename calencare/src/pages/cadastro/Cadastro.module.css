@@ -1,81 +1,83 @@
 .container-buttons {
-    width: 100%;
-    display: flex;
-    column-gap: 15px;
-    margin-top: 24px;
-    justify-content: flex-end;
+  width: 100%;
+  display: flex;
+  column-gap: 15px;
+  margin-top: 24px;
+  justify-content: flex-end;
 }
 
 .container-cadastro {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .tela-cadastro {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .container-imagem-cadastro {
-    width: 50vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+  width: 50vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.inputs-container{
-    width: 100%;
+.inputs-container {
+  width: 100%;
 }
 
 .formulario-cadastro {
-    width: 50vw;
-    background-color: var(--branco);
-    height: 100vh;
-    display: flex;
-    align-items: center;
+  width: 50vw;
+  background-color: var(--branco);
+  height: 100vh;
+  display: flex;
+  align-items: center;
 }
 
-.form{
-    width:100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.logo-cadastro{
-    width: 100%;
+.logo-cadastro {
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 32px;
+  padding-left: 48px;
 }
 
 .imagem-cadastro {
-    max-height: 500px;
-    width: auto;
-    height: auto;
-    margin: 0 auto;
-   
+  max-height: 500px;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
 }
 
 .engloba-formulario {
-    width: 80%;
-    display: flex;
-    justify-content: space-between;
-    margin: 0 auto;
-    flex-direction: column;
-    row-gap: 16px;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  flex-direction: column;
+  row-gap: 16px;
 }
 
-.text-entrar{
-display: flex;
-justify-content: center;
-align-items: center;
-font-size: 14px;
+.text-entrar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
 }
 
-.link-entrar{
-cursor: pointer;
+.link-entrar {
+  cursor: pointer;
 }
 
-p{
-    font-size: 14px;
+p {
+  font-size: 14px;
 }

@@ -38,6 +38,10 @@ footer .container .content .title {
 
 footer .container .image .img-footer {
   height: 300px;
+  width: 100%;
+  border-radius: 1rem;
+  filter: drop-shadow(16px 16px 0px #C1C1C1);
+  z-index: 1;
 }
 
 footer .copyright {

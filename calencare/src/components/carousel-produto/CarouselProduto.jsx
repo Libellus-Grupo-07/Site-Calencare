@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-import ReactDOM from 'react-dom';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import styles from "./CarouselProduto.module.css";
 import imgCarrossel1 from "./../../utils/assets/carrossel_1.png";
 import imgCarrossel2 from "./../../utils/assets/carrossel_2.png";
 import imgCarrossel3 from "./../../utils/assets/carrossel_3.png";
 import { Carousel } from 'react-responsive-carousel';
+import CardCarousel from './../card-carousel/CardCarousel';
 
 class CarouselProduto extends Component {
-    
+
     render() {
 
         const indicatorStyles = {
@@ -29,7 +28,8 @@ class CarouselProduto extends Component {
                 showStatus={false}
                 showArrows={false}
                 autoPlay={true}
-                interval={1000}
+                interval={2000}
+                infiniteLoop={true}
                 renderIndicator={(onClickHandler, isSelected, index, label) => {
                     if (isSelected) {
                         return (
@@ -53,39 +53,18 @@ class CarouselProduto extends Component {
                     )
                 }}
             >
-                <div className={styles["card-carousel"]}>
-                    <div className={styles["image-carousel"]}>
-                        <img src={imgCarrossel1} alt="Tela de Adicionar Profissional" />
-                    </div>
-                    <div className={styles["text-carousel"]}>
-                        <span className={styles["text"]}>
-
-                        Adicione e faça a gestão dos seus funcionários
-                        </span>
-                    </div>
-                </div>
-                <div className={styles["card-carousel"]}>
-                    <div className={styles["image-carousel"]}>
-                        <img src={imgCarrossel2} alt="Tela de Agenda da Semana" />
-                    </div>
-                    <div className={styles["text-carousel"]}>
-                        <span className={styles["text"]}>
-
-                        Adicione e faça a gestão dos seus funcionários
-                        </span>
-                    </div>
-                </div>
-                <div className={styles["card-carousel"]}>
-                    <div className={styles["image-carousel"]}>
-                        <img src={imgCarrossel3} alt="Tela de Dashboard de Agendamentos" />
-                    </div>
-                    <div className={styles["text-carousel"]}>
-                        <span className={styles["text"]}>
-
-                        Adicione e faça a gestão dos seus funcionários
-                        </span>
-                    </div>
-                </div>
+                <CardCarousel
+                    imagem={imgCarrossel1}
+                    texto="Adicione e faça a gestão dos seus funcionários"
+                />
+                <CardCarousel
+                    imagem={imgCarrossel2}
+                    texto="Adicione e visualize seus agendamentos de forma eficiênte"
+                />
+                <CardCarousel
+                    imagem={imgCarrossel3}
+                    texto="Realize o controle e visualize de forma gráfica suas finança"
+                />
             </Carousel>
         );
     }
