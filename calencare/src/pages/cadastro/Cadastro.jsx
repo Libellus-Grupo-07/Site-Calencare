@@ -13,11 +13,14 @@ import CadastroEtapa4 from "../../components/cadastro-etapa-4/CadastroEtapa4";
 
 // hooks
 import { useForm } from "../../hooks/useForm";
+import { useNavigate } from "react-router-dom";
 
 const Cadastro = () => {
     const formComponents = [<CadastroEtapa1 />, <CadastroEtapa2 />, <CadastroEtapa3 />, <CadastroEtapa4 />]
 
     const { currentStep, currentComponent, changeStep, isLastStep } = useForm(formComponents)
+
+    const navigate = useNavigate()
 
     return (
         <>
@@ -32,7 +35,7 @@ const Cadastro = () => {
                         <div className={styles["engloba-formulario"]}>
                             <div className="texto">
                                 <h1> Cadastro </h1>
-                                <p>Informe os {currentStep == 2 ? "dias" : "dados"} da <b>{currentStep < 3 ? "empresa" : currentStep == 2 ? "funcionamento" : "usuário"}</b> para começar a realizar os agendamentos.</p>
+                                <p>Informe os {currentStep == 2 ? "dias" : "dados"} da <b>{currentStep < 2 ? "empresa" : currentStep == 2 ? "funcionamento" : "usuário"}</b> para começar a realizar os agendamentos.</p>
                             </div>
                             <div className={styles["inputs-container"]}>
                                 <div className={styles["form"]}>
@@ -47,7 +50,7 @@ const Cadastro = () => {
                             </div>
 
                             <div className={styles["text-entrar"]}>
-                                <span>Já possui uma conta? <a className={styles["link-entrar"]} href="#">Entrar</a></span>
+                                <span>Já possui uma conta? <b className={styles["link-entrar"]} onClick={() => navigate("/login")}>Entrar</b></span>
                             </div>
                         </div>
                     </div>

@@ -12,12 +12,26 @@ const CadastroEtapa3 = () => {
 
     <div className={styles["tela-cadastro"]}>
       <div className={styles["container-cadastro"]}>
-        <CustomSwitch />
         <DiaDaSemanaComponente
-          diaSemana="Segunda-feira"
-          horario1={new Date()}
-          horario2={new Date()}
-          onChange={(horario) => console.log('Horário selecionado:', horario)}
+          diaSemana="Segunda"
+        />
+        <DiaDaSemanaComponente
+          diaSemana="Terça"
+        />
+        <DiaDaSemanaComponente
+          diaSemana="Quarta"
+        />
+        <DiaDaSemanaComponente
+          diaSemana="Quinta"
+        />
+        <DiaDaSemanaComponente
+          diaSemana="Sexta"
+        />
+        <DiaDaSemanaComponente
+          diaSemana="Sábado"
+        />
+        <DiaDaSemanaComponente
+          diaSemana="Domingo"
         />
       </div>
     </div>

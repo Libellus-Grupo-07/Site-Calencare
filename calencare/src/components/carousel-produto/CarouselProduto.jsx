@@ -8,7 +8,7 @@ import imgCarrossel3 from "./../../utils/assets/carrossel_3.png";
 import { Carousel } from 'react-responsive-carousel';
 
 class CarouselProduto extends Component {
-    
+
     render() {
 
         const indicatorStyles = {
@@ -29,7 +29,8 @@ class CarouselProduto extends Component {
                 showStatus={false}
                 showArrows={false}
                 autoPlay={true}
-                interval={1000}
+                interval={2000}
+                infiniteLoop={true}
                 renderIndicator={(onClickHandler, isSelected, index, label) => {
                     if (isSelected) {
                         return (
@@ -59,8 +60,7 @@ class CarouselProduto extends Component {
                     </div>
                     <div className={styles["text-carousel"]}>
                         <span className={styles["text"]}>
-
-                        Adicione e faça a gestão dos seus funcionários
+                            Adicione e faça a gestão dos seus funcionários
                         </span>
                     </div>
                 </div>
@@ -70,8 +70,7 @@ class CarouselProduto extends Component {
                     </div>
                     <div className={styles["text-carousel"]}>
                         <span className={styles["text"]}>
-
-                        Adicione e faça a gestão dos seus funcionários
+                            Adicione e visualize seus agendamentos de forma eficiênte
                         </span>
                     </div>
                 </div>
@@ -81,8 +80,7 @@ class CarouselProduto extends Component {
                     </div>
                     <div className={styles["text-carousel"]}>
                         <span className={styles["text"]}>
-
-                        Adicione e faça a gestão dos seus funcionários
+                            Realize o controle e visualize de forma gráfica suas finanças
                         </span>
                     </div>
                 </div>
