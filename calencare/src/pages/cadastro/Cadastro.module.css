@@ -1,16 +1,9 @@
-.container-adrress {
-    display: flex;
-    width: 100%;
-    margin-right: 10px;
-    column-gap: 15px;
-    padding: 0;
-    margin: 0;
-}
-
 .container-buttons {
+    width: 100%;
     display: flex;
     column-gap: 15px;
-    margin-top: 15px;
+    margin-top: 24px;
+    justify-content: flex-end;
 }
 
 .container-cadastro {
@@ -27,22 +20,62 @@
 
 .container-imagem-cadastro {
     width: 50vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputs-container{
+    width: 100%;
 }
 
 .formulario-cadastro {
     width: 50vw;
     background-color: var(--branco);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.form{
+    width:100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-cadastro{
+    width: 100%;
 }
 
 .imagem-cadastro {
-    max-height: 600px;
+    max-height: 500px;
     width: auto;
     height: auto;
+    margin: 0 auto;
+   
 }
 
 .engloba-formulario {
     width: 80%;
-    display: grid;
-    justify-content: center;
+    display: flex;
+    justify-content: space-between;
     margin: 0 auto;
+    flex-direction: column;
+    row-gap: 16px;
+}
+
+.text-entrar{
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 14px;
+}
+
+.link-entrar{
+cursor: pointer;
+}
+
+p{
+    font-size: 14px;
 }

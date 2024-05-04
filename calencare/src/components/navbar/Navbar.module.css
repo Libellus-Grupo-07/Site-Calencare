@@ -3,6 +3,11 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgba(239, 232, 245, 0.95);
+  position: fixed;
+  backdrop-filter: blur(4px);
+  z-index: 1;
+
 }
 
 .nav {
@@ -14,7 +19,7 @@ header {
 }
 
 header .img-logo {
-  height: 48px;
+  height: 40px;
 }
 
 header .list {
