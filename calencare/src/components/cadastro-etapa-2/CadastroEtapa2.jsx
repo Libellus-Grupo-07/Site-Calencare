@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Input from "../input/Input";
 import styles from "./CadastroEtapa2.module.css"
 import { toast } from "react-toastify"; // Importa toast para exibir mensagens de sucesso ou erro
@@ -22,6 +22,7 @@ const CadastroEtapa2 = () => {
        if(UF.length == 0){
         toast.error("A UF deve ser preenchida")
        }
+    }
 
 
 
@@ -49,7 +50,7 @@ const CadastroEtapa2 = () => {
 
     );
 }
-}
+
 
 export default CadastroEtapa2;
 
