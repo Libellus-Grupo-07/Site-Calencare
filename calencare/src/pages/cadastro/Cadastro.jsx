@@ -43,9 +43,16 @@ const Cadastro = () => {
                                 </div>
                                 <div className={styles["container-buttons"]}>
                                     <Button funcaoButton={() => changeStep(currentStep - 1, null)} titulo="Voltar" cor={"branco"} icone={<HiOutlineArrowLeft />}></Button>
-                                    {!isLastStep ? (
-                                        <Button funcaoButton={(e) => changeStep(currentStep + 1, e)} titulo="Avançar" cor={"roxo"}  ></Button>) : (
-                                        <Button titulo="Cadastrar" cor={"roxo"}  ></Button>)}
+                                    {!isLastStep ? 
+                                        <Button
+                                            funcaoButton={(e) => changeStep(currentStep + 1, e)}
+                                            titulo="Avançar"
+                                            cor={"roxo"}
+                                        /> : 
+                                        <Button
+                                            titulo="Cadastrar"
+                                            cor={"roxo"}
+                                        />}
                                 </div>
                             </div>
 

@@ -25,6 +25,10 @@
   color: var(--roxo-principal);
 }
 
+#preto .card-price .card-price-text {
+  color: var(--texto-branco);
+}
+
 #branco {
   background-color: var(--branco);
 }
@@ -51,7 +55,9 @@
   color: var(--texto-branco);
 }
 
-
+#branco .card-price .card-price-text {
+  color: var(--texto-preto);
+}
 
 .card-precos {
   width: 20vw;

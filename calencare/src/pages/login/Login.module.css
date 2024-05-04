@@ -84,8 +84,10 @@
 }
 
 .logo-login {
-  width: 100%;
-  cursor: pointer;
+   width: 90%;
+  margin: 0 auto;
+  margin-top: 32px;
+  padding-left: 48px;
 }
 
 .container-imagem-login {

@@ -24,6 +24,8 @@
   font-family: "Poppins";
   margin: 0;
   padding: 0;
+  scroll-behavior: auto;
+  scroll-behavior: smooth;
 }
 
 *::-webkit-scrollbar{
