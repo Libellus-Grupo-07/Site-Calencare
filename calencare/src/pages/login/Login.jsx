@@ -11,25 +11,46 @@ import imgFundo from './../../utils/assets/bolinha_login.svg';
 import imgFundoImagem from './../../utils/assets/bolinha_imagem_login.svg';
 import api from "../../api";
 
+const validar = (valor, nome ) => {
+    if (valor === "") {
+        toast.error(`O campo ${nome} deve ser preenchido!`)
+        return false;
+    }
+
+    return true;
+}
+
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
 
     const logar = () => {
-        let body = {
-            email,
-            senha
-        }
+        let emailPreenchido = validar(email, "Email");
+        console.log(emailPreenchido)
+        if (emailPreenchido && validar(senha, "Senha")) {
+            let body = {
+                email,
+                senha
+            }
 
-        api.post("/funcionarios/login", body).then((response) => {
-            console.log(response);
-            navigate("/inicio");
-            toast.success("Login realizado com sucesso");
-        }).catch(() => {
-            toast.error("Email e/ou senha incorretos")
-            console.log("houve um erro ao tentar logar")
-        });
+            api.post("/funcionarios/login", body).then((response) => {
+                console.log(response)
+                const { data } = response
+                sessionStorage.setItem("idUser", data.userId)
+                navigate("/inicio");
+                toast.success("Login realizado com sucesso");
+            }).catch(function (error) {
+                console.error(error);
+                const { code } = error;
+
+                if (code === "ERR_NETWORK") {
+                    toast.error("Houve um erro ao tentar logar. Tente novamente mais tarde.");
+                } else if (code === "ERR_BAD_REQUEST") {
+                    toast.error("Email e/ou senha incorretos")
+                }
+            });
+        }
     }
 
     return (

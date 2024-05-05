@@ -52,7 +52,7 @@ const Home = () => {
         </section>
         <section className={styles["section-produto"]} ref={sectionProduto}>
           <div className={styles["container-produto"]}>
-            <Titulo titulo="Produto" />
+            <Titulo tamanho="lg" titulo="Produto" />
             <div className="carousel">
               <CarouselProduto/>
             </div>
@@ -60,7 +60,7 @@ const Home = () => {
         </section>
         <section className={styles["section-beneficios"]} ref={sectionBeneficios}>
           <div className={styles["beneficios"]}>
-            <Titulo titulo="Benefícios" />
+            <Titulo tamanho="lg" titulo="Benefícios" />
             <div className={styles["container-cards"]}>
               <CardBeneficios
                 titulo="Atendimento Otimizados"
@@ -81,7 +81,7 @@ const Home = () => {
             </div>
           </div>
           <div className={styles["tecnologias"]}>
-            <Titulo titulo="Tecnologias Utilizadas" />
+            <Titulo tamanho="lg" titulo="Tecnologias Utilizadas" />
             <div className={styles["container-cards"]}>
               <div className={styles["card-tecnologias"]}>
                 <div className={styles["icon"]}>
@@ -120,7 +120,7 @@ const Home = () => {
           </div>
         </section>
         <section className={styles["section-precos"]} ref={sectionPrecos}>
-          <Titulo titulo="Preços" />
+          <Titulo tamanho="lg" titulo="Preços" />
           <div className={styles["container-precos"]}>
             <CardPrecos
               classe="branco"

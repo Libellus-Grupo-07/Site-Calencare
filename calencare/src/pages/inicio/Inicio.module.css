@@ -1,0 +1,108 @@
+.section-inicio {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  column-gap: 20vw;
+}
+
+.section-inicio .container-inicio {
+  width: 100%;
+  padding: 24px 0;
+}
+
+.section-inicio .container-inicio .content-inicio {
+  width: 70vw;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+  justify-content: flex-start;
+}
+
+.section-inicio .container-inicio .content-inicio .titulo-inicio {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-inicio .container-inicio .content-inicio .group-kpis {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-inicio .container-inicio .content-inicio .container-agendamentos{
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.section-inicio .container-inicio .content-inicio .container-agendamentos .proximos-agendamentos{
+  width: 60%;
+  height: 318px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  row-gap: 16px;
+}
+
+
+.section-inicio .container-inicio .content-inicio .container-agendamentos .proximos-agendamentos .titulo, .section-inicio .container-inicio .content-inicio .container-agendamentos .agendamentos-em-andamento .titulo{
+  width: 100%;
+}
+
+.section-inicio .container-inicio .content-inicio .container-agendamentos .proximos-agendamentos .group-proximos-agendamentos{
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 24px;
+}
+
+.section-inicio .container-inicio .content-inicio .container-agendamentos .proximos-agendamentos .text-sem-agendamentos{
+  font-size: 16px;
+  letter-spacing: -0.05rem;
+  font-weight: 500;
+  color: var(--texto-cinza);
+  width: 100%;
+  height: 100% ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-inicio .container-inicio .content-inicio .container-agendamentos .agendamentos-em-andamento{
+  background-color: var(--preto);
+  width: 35%;
+  padding: 24px;
+  height: 320px;
+  min-height: 320px;
+  border: none;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  row-gap: 16px;
+}
+
+.section-inicio .container-inicio .content-inicio .container-agendamentos .agendamentos-em-andamento .text-sem-agendamentos{
+  width: 100%;
+  height: 100% ;
+  color: var(--cinza-claro);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+

@@ -9,6 +9,7 @@ import CadastroEtapa2 from "./components/cadastro-etapa-2/CadastroEtapa2";
 import CadastroEtapa3 from "./components/cadastro-etapa-3/CadastroEtapa3";
 import CadastroEtapa4 from "./components/cadastro-etapa-4/CadastroEtapa4";
 import Inicio from "./pages/inicio/Inicio";
+import Perfil from "./pages/perfil/Perfil";
 
 function Rotas() {
   return (
@@ -20,6 +21,7 @@ function Rotas() {
           <Route path="cadastro" element={<Cadastro />} />
           <Route path="login" element={<Login />} />
           <Route path="inicio" element={<Inicio />} />
+          <Route path="perfil" element={<Perfil />} />
         </Routes>
       </BrowserRouter>
     </>
