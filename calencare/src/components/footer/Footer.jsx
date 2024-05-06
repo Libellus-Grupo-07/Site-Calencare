@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Footer.module.css";
 import Button from './../button/Button';
 import { FaFacebook, FaLinkedinIn, FaInstagram, FaXTwitter } from "react-icons/fa6";
-import imgFooter from "./../../utils/assets/img_agenda.png"
+import imgFooter from "./../../utils/assets/img_footer.png"
 import logoBranca from "./../../utils/assets/logo_calencare_branca.png";
 
 const Footer = () => {
@@ -16,7 +16,7 @@ const Footer = () => {
                         <Button titulo="Cadastre-se" cor="roxo" />
                     </div>
                     <div className={styles["image"]}>
-                        <img src={imgFooter} alt="Notebook com tela de agenda da Calencare" className={styles["img-footer"]} />
+                        <img src={imgFooter} alt="Tela de início da Calencare com visão geral dos agendamentos do dia" className={styles["img-footer"]} />
                     </div>
                 </div>
                 <div className={styles["copyright"]}>

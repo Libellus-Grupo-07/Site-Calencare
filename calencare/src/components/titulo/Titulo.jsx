@@ -1,11 +1,10 @@
 import React from "react";
-import "./Titulo.module.css";
+import styles from "./Titulo.module.css";
 
-function Titulo ({ titulo }) {
+function Titulo ({ titulo, tamanho, cor }) {
     return (
         <>
-            <h1> { titulo } </h1>
-            
+            <h1 className={styles[`${tamanho}`]} id={styles[cor]}> { titulo } </h1>
         </>
     );
 }

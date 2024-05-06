@@ -1,4 +1,7 @@
-
+.tela-cadastro {
+    display: flex;
+    width: 100%;
+}
 .container-cadastro {
     width: 100%;
     display: flex;
@@ -7,10 +10,7 @@
     padding: 0;
     margin: 0;
     row-gap: 16px;
-
 }
-
-    
 
 .container-adrress {
     display: flex;

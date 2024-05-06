@@ -10,7 +10,7 @@ export function useForm(steps) {
         console.log(i)
         if (e) e.preventDefault();
 
-        if(i == -1){
+        if(i === -1){
             navigate(-1)
         }
 

@@ -2,8 +2,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 :root {
-  --roxo-principal: #9f35f0;
-  --roxo-opacidade-15: rgba(159, 53, 240 0.15);
+  --roxo-principal: rgb(159, 53, 240);
+  --roxo-opacidade-15: rgba(159, 53, 240, 0.15);
   --roxo-secundario: #8758ea;
   --roxo-secundario-opacidade-15: rgba(135, 88, 234, 0.25);
   --azul-principal: #35f0e9;
@@ -24,12 +24,24 @@
   font-family: "Poppins";
   margin: 0;
   padding: 0;
+  scroll-behavior: auto;
+  scroll-behavior: smooth;
+}
+
+*::-webkit-scrollbar{
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-thumb{
+  background: var(--roxo-principal);
+  border-radius: 1rem;
 }
 
 body {
   background: var(--branco-secundario);
-  background-image: url(./assets/bolinhas_fundo.svg);
-  background-size: cover;
+  /* background-image: url(./assets/bolinhas_fundo.svg); */
+  /* background-size: cover; */
 }
 
 .title-roxo{
