@@ -28,7 +28,7 @@ button{
 }
 
 .branco{
-    background-color: var(--branco);
+    background-color: transparent;
     border: 1.5px solid;
     color: var(--texto-cinza);
 }

@@ -1,7 +1,11 @@
 import React from "react";
 import styles from "./Input.module.css";
 
-const Input = ({ valor, titulo, type }) => {
+const Input = ({ valor, titulo, type, alterarValor,validarEntrada, funcao }) => {
+    const mudarValor = (e) => {
+        alterarValor(e.target.value);
+    }
+
     return (
         <>
             <div className={styles["componet-input"]}>
@@ -12,8 +16,11 @@ const Input = ({ valor, titulo, type }) => {
                     type={type}
                     value={valor}
                     placeholder={titulo}
+                    onChange={(e) => mudarValor(e)}
+                    onInput={validarEntrada ? (e) => validarEntrada(e) : null}
+                    onKeyUp={funcao}
                     required
-
+                    
                 />
             </div>
 

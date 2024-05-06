@@ -1,0 +1,45 @@
+.card-kpi {
+  background-color: var(--branco);
+  width: max-content;
+  border: 1.5px solid rgba(0, 0, 0, 0.15);
+  border-radius: 1rem;
+  display: flex;
+  padding: 18px;
+  column-gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-kpi .icon-kpi {
+  width: 60px;
+  height: 60px;
+  background-color: var(--roxo-opacidade-15);
+  border: none;
+  border-radius: 6rem;
+  font-size: 36px;
+  color: var(--roxo-principal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-kpi .text-kpi {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0;
+}
+
+.card-kpi .text-kpi .label-kpi {
+    width: 188px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--texto-cinza);
+  letter-spacing: -0.03rem;
+}
+
+.card-kpi .text-kpi .value-kpi {
+  font-size: 21px;
+  color: var(--texto-preto);
+  font-weight: 900;
+  letter-spacing: -0.03rem;
+}

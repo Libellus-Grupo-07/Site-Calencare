@@ -16,13 +16,15 @@
 .tela-cadastro {
   display: flex;
   width: 100%;
+  height: max-content;
 }
 
 .container-imagem-cadastro {
   width: 50vw;
-  height: 100vh;
   display: flex;
   flex-direction: column;
+    background-color: var(--lilas-fundo);
+
 }
 
 .inputs-container {
@@ -31,10 +33,11 @@
 
 .formulario-cadastro {
   width: 50vw;
-  background-color: var(--branco);
-  height: 100vh;
+  background: var(--branco-secundario);
   display: flex;
   align-items: center;
+    padding: 24px 0;
+
 }
 
 .form {

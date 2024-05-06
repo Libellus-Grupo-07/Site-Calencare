@@ -63,7 +63,7 @@ class CarouselProduto extends Component {
                 />
                 <CardCarousel
                     imagem={imgCarrossel3}
-                    texto="Realize o controle e visualize de forma gráfica suas finança"
+                    texto="Realize o controle e visualize de forma gráfica suas finanças"
                 />
             </Carousel>
         );

@@ -1,0 +1,36 @@
+input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+.container-cadastro {
+  display: "flex";
+  justify-content: "flex-start";
+  align-items: "center";
+}
+
+.titulo {
+ 
+}
+
+.btn-fechado,
+.input-time {
+  width: 100%;
+  height: 100%;
+  border: 2px solid;
+  border-radius: 5rem;
+  font-weight: 700;
+  letter-spacing: -0.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-fechado {
+  border-color: var(--texto-cinza);
+  color: var(--texto-cinza);
+}
+
+.input-time {
+  border-color: var(--texto-preto);
+  color: var(--texto-preto);
+}

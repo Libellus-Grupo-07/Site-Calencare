@@ -1,50 +1,83 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../input/Input";
 import styles from "./CadastroEtapa2.module.css"
 import { toast } from "react-toastify"; // Importa toast para exibir mensagens de sucesso ou erro
+import api from "../../api";
 
-const CadastroEtapa2 = () => {
-    const  [Logradouro, setLogradouro] = useState("")
-    const  [Bairro, setBairro] = useState("")
-    const  [Cidade, setCidade] = useState("")
-    const  [UF, setUF] = useState("")
+const CadastroEtapa2 = ({
+    Cep, setCep,
+    Logradouro, setLogradouro,
+    Bairro, setBairro,
+    Cidade, setCidade,
+    UF, setUF,
+    Numero, setNumero,
+    Complemento, setComplemento
+}) => {
+    const [disabled, setDisabled] = useState();
 
-    const alertas = () =>{
-       if(Logradouro.length == 0){
-        toast.error("O logradouro deve ser preenchido")
-       }
-       if(Bairro.length == 0){
-        toast.error("O Bairro deve ser preenchido")
-       }
-       if(Cidade.length == 0){
-        toast.error("A cidade deve ser preenchida")
-       }
-       if(UF.length == 0){
-        toast.error("A UF deve ser preenchida")
-       }
+    const buscarCep = () => {
+        if (Cep.length >= 8) {
+            api.post(`/enderecos/address/${Cep}`).then((response) => {
+                const { data } = response;
+                const { logradouro, bairro, localidade, uf } = data;
+                setLogradouro(logradouro);
+                setBairro(bairro);
+                setCidade(localidade);
+                setUF(uf);
+
+            }).catch((error) => {
+                console.log("Houve um erro ao buscar o CEP");
+                console.log(error);
+            });
+        }
     }
-
-
 
     return (
 
         <div className={styles["tela-cadastro"]}>
             <div className={styles["container-cadastro"]}>
-                <Input titulo={"Logradouro"}></Input>
-                <Input titulo={"Bairro"}></Input>
+                <Input
+                    valor={Cep}
+                    alterarValor={setCep}
+                    titulo={"CEP"}
+                    funcao={() => buscarCep()}
+                />
+                <Input
+                    valor={Logradouro}
+                    alterarValor={setLogradouro}
+                    titulo={"Logradouro"}
+                />
                 <div className={styles["container-adrress"]}>
-                <Input titulo={"Cidade"}></Input>
-                <div className={styles["uf"]}>
-                <Input titulo={"UF"}></Input>
+                    <Input
+                        valor={Numero}
+                        alterarValor={setNumero}
+                        titulo={"Número"}
+                    />
+                    <Input
+                        valor={Complemento}
+                        alterarValor={setComplemento}
+                        titulo={"Complemento"}
+                    />
                 </div>
-                </div>
-               
+                <Input
+                    valor={Bairro}
+                    alterarValor={setBairro}
+                    titulo={"Bairro"}
+                />
                 <div className={styles["container-adrress"]}>
-                    <Input titulo={"Número"}></Input>
-                    <Input titulo={"Complemento"}></Input>
+                    <Input
+                        valor={Cidade}
+                        alterarValor={setCidade}
+                        titulo={"Cidade"}
+                    />
+                    <div className={styles["uf"]}>
+                        <Input
+                            valor={UF}
+                            alterarValor={setUF}
+                            titulo={"UF"}
+                        />
+                    </div>
                 </div>
-
-
             </div>
         </div>
 

@@ -8,6 +8,8 @@ import CadastroEtapa1 from "./components/cadastro-etapa-1/CadastroEtapa1";
 import CadastroEtapa2 from "./components/cadastro-etapa-2/CadastroEtapa2";
 import CadastroEtapa3 from "./components/cadastro-etapa-3/CadastroEtapa3";
 import CadastroEtapa4 from "./components/cadastro-etapa-4/CadastroEtapa4";
+import Inicio from "./pages/inicio/Inicio";
+import Perfil from "./pages/perfil/Perfil";
 
 function Rotas() {
   return (
@@ -15,18 +17,11 @@ function Rotas() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="cadastro" element={<Cadastro />} />
-          <Route path="cadastro/2" element={<Cadastro />} />
-          <Route path="cadastro/3" element={<Cadastro />} />
-          <Route path="login" element={<Login />} />
           <Route path="*" element={<NotFound/>} />
-          <Route path="cadastroEtapa1" element={<CadastroEtapa1 />} />
-          <Route path="cadastroEtapa2" element={<CadastroEtapa2 />} />
-          <Route path="cadastroEtapa3" element={<CadastroEtapa3 />} /> 
-          <Route path="cadastroEtapa4" element={<CadastroEtapa4 />} />
-
-          
-          
+          <Route path="cadastro" element={<Cadastro />} />
+          <Route path="login" element={<Login />} />
+          <Route path="inicio" element={<Inicio />} />
+          <Route path="perfil" element={<Perfil />} />
         </Routes>
       </BrowserRouter>
     </>
