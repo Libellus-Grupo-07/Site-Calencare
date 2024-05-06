@@ -25,6 +25,14 @@ export function transformarDataBd(dataString) {
   return `${ano}-${mes}-${dia}`;
 }
 
+export function transformarHora(horaString) {
+  const data = new Date(0, 0, 0, horaString.toString().slice(0, 2), horaString.toString().slice(3, 5));
+  const hora = data.getHours().toString();
+  const minutos = data.getMinutes().toString().padStart(2, "0");
+  const segundos = data.getSeconds().toString().padStart(2, "0");
+  return `${hora}:${minutos}:${segundos}`;
+}
+
 export const inputSomenteTexto = (e) => {
   e.target.value = e.target.value.replace(/[^A-Za-zÀ-ú\s]/g, "");
 };

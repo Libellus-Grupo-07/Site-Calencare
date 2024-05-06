@@ -9,7 +9,7 @@ import CadastroEtapa1 from "../../components/cadastro-etapa-1/CadastroEtapa1";
 import CadastroEtapa2 from "../../components/cadastro-etapa-2/CadastroEtapa2";
 import CadastroEtapa3 from "../../components/cadastro-etapa-3/CadastroEtapa3";
 import CadastroEtapa4 from "../../components/cadastro-etapa-4/CadastroEtapa4";
-import { isVazio, aberturaMaiorFechamento } from "../../utils/global";
+import { isVazio, aberturaMaiorFechamento, transformarHora } from "../../utils/global";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
@@ -18,6 +18,7 @@ import { useForm } from "../../hooks/useForm";
 import { useNavigate } from "react-router-dom";
 
 const Cadastro = () => {
+    const hora = new Date();
     const [id, setId] = useState(0);
     const [dtCriacao, setDtCriacao] = useState(new Date());
     const [razaoSocial, setRazaoSocial] = useState("")
@@ -39,32 +40,32 @@ const Cadastro = () => {
     const [senha, setSenha] = useState("")
 
     const [diaSegundaAberto, setDiaSegundaAberto] = useState(true);
-    const [horario1Segunda, setHorario1Segunda] = useState(new Date())
-    const [horario2Segunda, setHorario2Segunda] = useState(new Date())
+    const [horario1Segunda, setHorario1Segunda] = useState(hora)
+    const [horario2Segunda, setHorario2Segunda] = useState(hora)
 
     const [diaTercaAberto, setDiaTercaAberto] = useState(true);
-    const [horario1Terca, setHorario1Terca] = useState(new Date())
-    const [horario2Terca, setHorario2Terca] = useState(new Date())
+    const [horario1Terca, setHorario1Terca] = useState(hora)
+    const [horario2Terca, setHorario2Terca] = useState(hora)
 
     const [diaQuartaAberto, setDiaQuartaAberto] = useState(true);
-    const [horario1Quarta, setHorario1Quarta] = useState(new Date())
-    const [horario2Quarta, setHorario2Quarta] = useState(new Date())
+    const [horario1Quarta, setHorario1Quarta] = useState(hora)
+    const [horario2Quarta, setHorario2Quarta] = useState(hora)
 
     const [diaQuintaAberto, setDiaQuintaAberto] = useState(true);
-    const [horario1Quinta, setHorario1Quinta] = useState(new Date())
-    const [horario2Quinta, setHorario2Quinta] = useState(new Date())
+    const [horario1Quinta, setHorario1Quinta] = useState(hora)
+    const [horario2Quinta, setHorario2Quinta] = useState(hora)
 
     const [diaSextaAberto, setDiaSextaAberto] = useState(true);
-    const [horario1Sexta, setHorario1Sexta] = useState(new Date())
-    const [horario2Sexta, setHorario2Sexta] = useState(new Date())
+    const [horario1Sexta, setHorario1Sexta] = useState(hora)
+    const [horario2Sexta, setHorario2Sexta] = useState(hora)
 
     const [diaSabadoAberto, setDiaSabadoAberto] = useState(true);
-    const [horario1Sabado, setHorario1Sabado] = useState(new Date())
-    const [horario2Sabado, setHorario2Sabado] = useState(new Date())
+    const [horario1Sabado, setHorario1Sabado] = useState(hora)
+    const [horario2Sabado, setHorario2Sabado] = useState(hora)
 
     const [diaDomingoAberto, setDiaDomingoAberto] = useState(true);
-    const [horario1Domingo, setHorario1Domingo] = useState(new Date())
-    const [horario2Domingo, setHorario2Domingo] = useState(new Date())
+    const [horario1Domingo, setHorario1Domingo] = useState(hora)
+    const [horario2Domingo, setHorario2Domingo] = useState(hora)
 
     const [empresa, setEmpresa] = useState({});
 
@@ -262,7 +263,7 @@ const Cadastro = () => {
     }
 
     const cadastrarEmpresa2 = () => {
-        api.post(`/enderecos/${empresa.id}/${cep}/${numero}`).then((response) => {
+        api.post(`/enderecos/${id}/${cep}/${numero}`).then((response) => {
             console.log(response);
             return true
 
@@ -324,10 +325,16 @@ const Cadastro = () => {
         for (let i = 0; i < dias.length; i++) {
             let body = {
                 "diaSemana": dias[i].diaSemana,
-                "inicio": dias[i].inicio,
-                "fim": dias[i].fim,
+                "inicio": dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].inicio),
+                "fim": dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].fim),
                 "status": dias[i].status,
-                "empresa": empresa
+                "empresa": {
+                    id,
+                    razaoSocial,
+                    cnpj,
+                    telefonePrincipal,
+                    emailPrincipal
+                }
             };
 
             api.post("/horarios-funcionamento", body).then((response) => {
@@ -347,7 +354,13 @@ const Cadastro = () => {
             telefone,
             email,
             senha,
-            empresa
+            "empresa": {
+                id,
+                razaoSocial,
+                cnpj,
+                telefonePrincipal,
+                emailPrincipal
+            }
         }
 
         api.post("/funcionarios", body).then((response) => {
@@ -368,15 +381,9 @@ const Cadastro = () => {
 
     const avancar = (e) => {
         if (validacoes[currentStep]()) {
+            funcoes[currentStep]();
             changeStep(currentStep + 1, e)
         }
-    }
-
-    const cadastrar = () => {
-        cadastrarEmpresa1();
-        cadastrarEmpresa2();
-        cadastrarEmpresa3();
-        cadastrarEmpresa4();
     }
 
     return (
@@ -406,7 +413,7 @@ const Cadastro = () => {
                                         cor={"roxo"}
                                     /> :
                                     <Button
-                                        funcaoButton={() => cadastrar()}
+                                        funcaoButton={(e) => avancar(e)}
                                         titulo="Cadastrar"
                                         cor={"roxo"}
                                     />}
