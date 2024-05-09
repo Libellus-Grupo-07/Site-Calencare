@@ -5,7 +5,7 @@ import { FaAngleRight } from "react-icons/fa6";
 const Row = ({ titulo, valor, funcao }) => {
     return (
         <>
-            <div className={styles["row"]}>
+            <div className={styles["row"]} onClick={funcao}>
                 <div className={styles["text-title"]}>
                     <span className={styles["title"]}>
                         { titulo }

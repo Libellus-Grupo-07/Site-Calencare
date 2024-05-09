@@ -9,12 +9,28 @@ export function isVazio(campo, nome) {
   return false;
 }
 
+export function transformarDouble(dataString) {
+  const valor = dataString.toString();
+  return parseFloat(valor).toFixed(2).replace(".", ",");
+}
+
 export function transformarData(dataString) {
   const data = new Date(dataString);
   const dia = data.getDate().toString().padStart(2, "0");
   const mes = (data.getMonth() + 1).toString().padStart(2, "0");
   const ano = data.getFullYear();
   return `${dia}/${mes}/${ano}`;
+}
+
+export function transformarDataHora(dataString) {
+  const data = new Date(dataString);
+  const dia = data.getDate().toString().padStart(2, "0");
+  const mes = (data.getMonth() + 1).toString().padStart(2, "0");
+  const ano = data.getFullYear().toString().substring(2, 4);
+  const hora = data.getHours().toString().padStart(2, "0");
+  const minutos = data.getMinutes().toString().padStart(2, "0");
+  const segundos = data.getSeconds().toString().padStart(2, "0");
+  return `${dia}/${mes}/${ano} ${hora}:${minutos}`;
 }
 
 export function transformarDataBd(dataString) {
@@ -26,8 +42,14 @@ export function transformarDataBd(dataString) {
 }
 
 export function transformarHora(horaString) {
-  const data = new Date(0, 0, 0, horaString.toString().slice(0, 2), horaString.toString().slice(3, 5));
-  const hora = data.getHours().toString();
+  const data = new Date(
+    0,
+    0,
+    0,
+    horaString.toString().slice(0, 2),
+    horaString.toString().slice(3, 5)
+  );
+  const hora = data.getHours().toString().padStart(2, "0");
   const minutos = data.getMinutes().toString().padStart(2, "0");
   const segundos = data.getSeconds().toString().padStart(2, "0");
   return `${hora}:${minutos}:${segundos}`;

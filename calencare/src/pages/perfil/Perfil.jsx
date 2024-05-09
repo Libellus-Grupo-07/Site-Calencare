@@ -5,15 +5,18 @@ import api from "../../api";
 import Titulo from './../../components/titulo/Titulo';
 import Button from "../../components/button/Button";
 import { Delete, IconlyProvider, Logout } from "react-iconly";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import imgPerfil from "./../../utils/assets/perfil_padrao.svg";
 import Row from './../../components/row/Row';
 import { transformarData } from "../../utils/global";
+import { toast } from "react-toastify";
+import Swal from 'sweetalert2'
 
 const Perfil = () => {
+
     const navigate = useNavigate();
 
-    const idUser = sessionStorage.getItem("idUser");
+    const { idUser } = useParams();
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
@@ -31,6 +34,51 @@ const Perfil = () => {
         sessionStorage.removeItem("idUser");
         sessionStorage.removeItem("sessaoPerfil");
         navigate(url);
+    }
+
+    const excluir = () => {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: styles["btn-roxo"],
+                cancelButton: styles["btn-branco"],
+                title: styles["title"],
+                text: styles["text"],
+
+            },
+            buttonsStyling: false
+        });
+        swalWithBootstrapButtons.fire({
+            title: "Exclusão de Conta",
+            text: "Você realmente deseja excluir a sua conta?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim",
+            cancelButtonText: "Não",
+            showCloseButton: true,
+            reverseButtons: true,
+            width: "32vw"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                api.delete(`/funcionarios/${idUser}`).then((response) => {
+                    swalWithBootstrapButtons.fire({
+                        title: "Exclusão de Conta",
+                        text: "Sua conta foi excluída com sucesso.",
+                        icon: "success"
+                    });
+                    sessionStorage.removeItem("idUser");
+                    sair("/login");
+                }).catch((error) => {
+                    swalWithBootstrapButtons.fire({
+                        title: "Exclusão de Conta",
+                        text: "Não foi possível excluir sua conta.",
+                        icon: "error"
+                    });
+                    console.error("Houve um erro ao tentar excluir a conta")
+                    console.log(error)
+                })
+            }
+        });
+
     }
 
     useEffect(() => {
@@ -58,9 +106,10 @@ const Perfil = () => {
                     <div className={styles["content-perfil"]}>
                         <div className={styles["header"]}>
                             <div className={styles["group-button"]}>
-                                {/* <Button
+                                <Button
                                     cor="branco"
                                     titulo={"Excluir conta"}
+                                    funcaoButton={() => excluir()}
                                     icone={
                                         <IconlyProvider
                                             stroke="bold"
@@ -69,7 +118,7 @@ const Perfil = () => {
                                             <Delete />
                                         </IconlyProvider>
                                     }
-                                /> */}
+                                />
                                 <Button
                                     funcaoButton={() => sair("/login")}
                                     cor={"roxo"}
@@ -122,14 +171,17 @@ const Perfil = () => {
                                 <Row
                                     titulo="Nome"
                                     valor={nome}
+                                    funcao={() => navigate(`/editar-perfil/${idUser}`)}
                                 />
                                 <Row
                                     titulo="Telefone"
                                     valor={telefone}
+                                    funcao={() => navigate(`/editar-perfil/${idUser}`)}
                                 />
                                 <Row
                                     titulo="Email"
                                     valor={email}
+                                    funcao={() => navigate(`/editar-perfil/${idUser}`)}
                                 />
                                 <Row
                                     titulo="Data de Cadastro"

@@ -2,7 +2,11 @@ input{
     padding: 0px 25px;
     height: 40px;
     border-radius: 100px;
+    font-size: 14.5px;
     border: 1.5px solid var(--texto-cinza);
+    letter-spacing: -0.03rem;
+    color: var(--texto-preto);
+    font-weight: 500;
 }
 
 .componet-input{
