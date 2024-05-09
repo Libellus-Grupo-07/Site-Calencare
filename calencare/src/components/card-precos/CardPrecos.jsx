@@ -10,7 +10,7 @@ const CardPrecos = ({ classe, nome, texto, preco, periodo, vantagem1, vantagem2,
             {/* <div className={styles[`card-precos`]}> */}
                 <div className={styles["card-text"]}>
                     <span className={styles["card-name"]}> {nome} </span>
-                    <span className={styles["card-description"]}> {texto} </span>
+                    {/* <span className={styles["card-description"]}> {texto} </span> */}
                     <span className={styles["card-price"]}>
                         R$ {preco} 
                         <span className={styles["card-price-text"]}> / por {periodo} </span>

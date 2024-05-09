@@ -1,0 +1,116 @@
+.card-agendamento {
+  padding: 24px 8px;
+  width: 440px;
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(
+        100deg,
+        rgba(241, 170, 54, 1) 0%,
+        rgba(149, 49, 224, 1) 100%
+      )
+      border-box;
+  border: 1px solid transparent;
+  border-top-width: 7px;
+  border-radius: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+.card-agendamento .informations-agendamento {
+  width: 85%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-agendamento
+  .informations-agendamento
+  .photo-funcionario
+  .img-funcionario {
+  width: 72px;
+  height: 72px;
+  border-radius: 1rem;
+}
+
+.card-agendamento .informations-agendamento .text-agendamento {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.card-agendamento
+  .informations-agendamento
+  .text-agendamento
+  .info-agendamento {
+  width: 20vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-agendamento
+  .informations-agendamento
+  .text-agendamento
+  .info-agendamento
+  .text-funcionario {
+  font-size: 18px;
+  color: var(--roxo-principal);
+  font-weight: 700;
+  letter-spacing: -0.05rem;
+}
+
+.card-agendamento
+  .informations-agendamento
+  .text-agendamento
+  .info-agendamento
+  .text-horario {
+  font-family: "Work Sans";
+  font-size: 14px;
+  color: var(--roxo-principal);
+  background-color: rgba(149, 49, 224, 0.15);
+  padding: 8px 16px;
+  border-radius: 5rem;
+  font-weight: 600;
+  letter-spacing: -0.05rem;
+}
+
+.card-agendamento .informations-agendamento .text-agendamento .info-servico {
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.card-agendamento
+  .informations-agendamento
+  .text-agendamento
+  .info-servico
+  .text-cliente {
+  font-size: 16px;
+  color: var(--texto-preto);
+  font-weight: 600;
+  letter-spacing: -0.05rem;
+}
+
+.card-agendamento
+  .informations-agendamento
+  .text-agendamento
+  .info-servico
+  .text-servico {
+  font-size: 16px;
+  color: var(--texto-cinza);
+  font-weight: 400;
+  letter-spacing: -0.05rem;
+}
+
+.card-agendamento .group-buttons {
+  width: 88%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1.5px solid rgba(0, 0, 0, 0.25);
+  column-gap: 8px;
+}

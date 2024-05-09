@@ -10,6 +10,7 @@ import CadastroEtapa3 from "./components/cadastro-etapa-3/CadastroEtapa3";
 import CadastroEtapa4 from "./components/cadastro-etapa-4/CadastroEtapa4";
 import Inicio from "./pages/inicio/Inicio";
 import Perfil from "./pages/perfil/Perfil";
+import EditarPerfil from "./pages/editar-perfil/EditarPerfil";
 
 function Rotas() {
   return (
@@ -21,7 +22,8 @@ function Rotas() {
           <Route path="cadastro" element={<Cadastro />} />
           <Route path="login" element={<Login />} />
           <Route path="inicio" element={<Inicio />} />
-          <Route path="perfil" element={<Perfil />} />
+          <Route path="perfil/:idUser" element={<Perfil />} />
+          <Route path="editar-perfil/:idUser" element={<EditarPerfil />} />
         </Routes>
       </BrowserRouter>
     </>
