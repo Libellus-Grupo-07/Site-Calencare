@@ -9,7 +9,7 @@ import { CiMoneyBill } from "react-icons/ci";
 import { Icon } from '@iconify-icon/react';
 import CardKpi from "../../components/card-kpi/CardKpi";
 import CardAgendamento from './../../components/card-agendamento/CardAgendamento';
-import { transformarDataBd } from "../../utils/global";
+import { transformarDataBd, transformarDouble } from "../../utils/global";
 
 const Inicio = () => {
     const navigate = useNavigate();
@@ -44,7 +44,7 @@ const Inicio = () => {
             console.log("Houve um erro ao tentar buscar quantidade de agendamentos do dia");
             console.log(error);
         })
-        
+
         api.get(`/agendamentos/lucro?data=${data}`).then((response) => {
             const { data } = response;
             console.log("potencial lucro")
@@ -111,7 +111,7 @@ const Inicio = () => {
                                         icon="fluent:money-16-regular" width="40" height="40" />
                                 }
                                 legenda={"Potencial Lucro Para Hoje"}
-                                valor={potencialLucroDia.length == 0 ? "R$ 0,00" : "R$" + potencialLucroDia}
+                                valor={potencialLucroDia.length == 0 ? "R$ 0,00" : "R$" + transformarDouble(potencialLucroDia)}
                             />
                             <CardKpi
                                 icon={
@@ -140,16 +140,16 @@ const Inicio = () => {
                                             {
                                                 proximosAgendamentos.map((agendamento, index) => (
                                                     <div key={index}>
-                                                        <b> Agendamento </b>
-                                                        {/* <CardAgendamento
-                                                        cor={"branco"}
-                                                        nomeFuncionario={agendamento}
-                                                        dataHora={}
-                                                        nomeCliente={}
-                                                        nomeServico={}
-                                                        precoServico={}
-                                                    /> */}
+                                                        <CardAgendamento
+                                                                cor={"branco"}
+                                                            nomeFuncionario={agendamento.nomeFuncionario}
+                                                            dataHora={agendamento.dtHora}
+                                                            nomeCliente={agendamento.nomeCliente}
+                                                            nomeServico={agendamento.nomeServico}
+                                                            precoServico={agendamento.preco}
+                                                        />
                                                     </div>
+                                                    
                                                 ))
                                             }
                                         </div>

@@ -246,31 +246,41 @@ const Cadastro = () => {
             telefonePrincipal,
             emailPrincipal
         }
+        var deuRuim = false;
 
         api.post("/empresas", body).then((response) => {
-            console.log("cadastro de empresa feito com sucesso")
-            console.log(response);
             const { data } = response;
             const { id, dtCriacao } = data;
             setId(id);
             setDtCriacao(dtCriacao)
 
-        }).catch(() => {
-            toast.error("Houve um erro ao cadastrar a empresa")
-            console.log("houve um erro ao tentar cadastrar a empresa")
+        }).catch((error) => {
+            console.log(error)
+            const { response } = error;
+            const { status } = response;
 
+            if (status === 409) {
+                toast.error("O CNPJ informado, já foi cadastrado!")
+            }
+
+            deuRuim = true;
         });
+
+        return deuRuim;
     }
 
     const cadastrarEmpresa2 = () => {
+        var deuRuim = false;
         api.post(`/enderecos/${id}/${cep}/${numero}`).then((response) => {
             console.log(response);
-            return true
-
         }).catch((error) => {
             toast.error("Houve um erro ao tentar cadastrar o endereço")
             console.log(error)
+            deuRuim = true;
+
         });
+
+        return deuRuim
     }
 
     const cadastrarEmpresa3 = () => {
@@ -321,6 +331,7 @@ const Cadastro = () => {
                 status: diaDomingoAberto ? 1 : 0
             }
         ];
+        var deuRuim = false;
 
         for (let i = 0; i < dias.length; i++) {
             let body = {
@@ -344,11 +355,15 @@ const Cadastro = () => {
                 console.log("houve um erro ao tentar cadastrar o horario de funcionamento");
                 toast.error("houve um erro ao tentar cadastrar o horario de funcionamento dia:" + body.diaSemana);
                 console.log(error);
+                deuRuim = true;
             })
         }
+
+        return deuRuim;
     }
 
     const cadastrarEmpresa4 = () => {
+        var deuRuim = false;
         let body = {
             nome,
             telefone,
@@ -368,11 +383,14 @@ const Cadastro = () => {
             console.log(response);
             toast.success("Cadastro realizado com sucesso!");
             navigate("/login");
-
         }).catch((error) => {
             console.log("houve um erro ao tentar cadatrar funcionario")
             console.log(error);
+            deuRuim = true;
+
         });
+
+        return deuRuim
     }
 
     const funcoes = [cadastrarEmpresa1, cadastrarEmpresa2, cadastrarEmpresa3, cadastrarEmpresa4]
@@ -381,8 +399,10 @@ const Cadastro = () => {
 
     const avancar = (e) => {
         if (validacoes[currentStep]()) {
-            funcoes[currentStep]();
-            changeStep(currentStep + 1, e)
+            var deuRuim = funcoes[currentStep]();
+            if (!deuRuim) {
+                changeStep(currentStep + 1, e)
+            }
         }
     }
 

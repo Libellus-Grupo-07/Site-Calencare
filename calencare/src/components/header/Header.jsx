@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../logo/Logo";
 import styles from "./Header.module.css"
 import { useLocation, useNavigate } from "react-router-dom";
@@ -6,11 +6,15 @@ import { FaAngleRight } from "react-icons/fa6";
 import { IconlyProvider, Home, Calendar, Work, Chart, TwoUsers, AddUser, Graph } from "react-iconly";
 import iconProfile from "./../../utils/assets/perfil_padrao.svg"
 import { LuMenu } from "react-icons/lu";
+import api from "../../api";
 
 const Header = ({ nomeUser }) => {
     const navigate = useNavigate();
     const location = useLocation();
     console.log(location.pathname)
+    const idUser = sessionStorage.getItem("idUser");
+
+
 
     return (
         <>
@@ -144,7 +148,7 @@ const Header = ({ nomeUser }) => {
                 </ul>
                 <div
                     className={styles["user-profile"]}
-                    onClick={() => navigate(`/perfil`)} id={
+                    onClick={() => navigate(`/perfil/${idUser}`)} id={
                         styles[
                         location.pathname === "/perfil" ? "roxo" : "cinza"
                         ]
@@ -156,7 +160,7 @@ const Header = ({ nomeUser }) => {
                     <span
                         className={styles["name-user"]}
                     >
-                        {nomeUser || "Nome do Usuário"}
+                        { nomeUser || "Nome do Usuário" }
                     </span>
                     <div className={styles["icon-arrow"]}>
                         <FaAngleRight />
