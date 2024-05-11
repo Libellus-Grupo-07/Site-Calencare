@@ -8,7 +8,7 @@ import { Delete, IconlyProvider, Logout } from "react-iconly";
 import { useNavigate, useParams } from "react-router-dom";
 import imgPerfil from "./../../utils/assets/perfil_padrao.svg";
 import Row from './../../components/row/Row';
-import { transformarData } from "../../utils/global";
+import { logado, logoutUsuario, transformarData } from "../../utils/global";
 import { toast } from "react-toastify";
 import Swal from 'sweetalert2'
 
@@ -31,18 +31,19 @@ const Perfil = () => {
     }
 
     const sair = (url) => {
-        sessionStorage.removeItem("idUser");
+        logoutUsuario();
         sessionStorage.removeItem("sessaoPerfil");
+        sessionStorage.removeItem("token");
         navigate(url);
     }
 
     const excluir = () => {
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
-                confirmButton: styles["btn-roxo"],
-                cancelButton: styles["btn-branco"],
-                title: styles["title"],
-                text: styles["text"],
+                confirmButton: "btn-roxo",
+                cancelButton: "btn-branco",
+                title: "title-modal",
+                text: "text-modal",
 
             },
             buttonsStyling: false
@@ -82,6 +83,10 @@ const Perfil = () => {
     }
 
     useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
         api.get(`/funcionarios/${idUser}`).then((response) => {
             const { data } = response;
             console.log(response);

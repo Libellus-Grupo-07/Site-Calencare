@@ -17,25 +17,28 @@ const CadastroEtapa1 = ({
             <div className={styles["tela-cadastro"]}>
                 <div className={styles["container-cadastro"]}>
                     <Input
+                        id="razaoSocial"
                         valor={RazaoSocial}
                         alterarValor={setRazaoSocial}
                         titulo={"Razão Social"}
-                        validarEntrada={(e) => inputSomenteTexto(e)}
                     />
                     <Input
+                        id="cnpj"
                         valor={CNPJ}
                         alterarValor={setCNPJ}
                         titulo={"CNPJ"}
-                        validarEntrada={(e) => inputSomenteNumero(e)}
+                        mascara={"00.000.000/0000-00"}
                     />
                     <Input
+                        id="telefoneEmpresa"
                         valor={TelefoneDaEmpresa}
                         alterarValor={setTelefoneDaEmpresa}
                         titulo={"Telefone da Empresa"}
-                        validarEntrada={(e) => inputSomenteNumero(e)}
+                        mascara={"(00) 0000-0000"}
 
                     />
                     <Input
+                        id="emailEmpresa"
                         valor={EmailDaEmpresa}
                         alterarValor={setEmailDaEmpresa}
                         titulo={"Email da Empresa"}

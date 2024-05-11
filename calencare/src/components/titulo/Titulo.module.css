@@ -2,6 +2,7 @@ h1 {
   font-family: "Poppins";
   font-weight: 800;
   letter-spacing: -0.08rem;
+  font-size: 24px;
   color: var(--texto-preto);
 }
 
@@ -11,6 +12,7 @@ h1 {
 
 .md {
   font-size: 23px;
+  font-weight: 700;
 }
 
 .sm {

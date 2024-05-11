@@ -17,7 +17,7 @@
   display: flex;
   width: 100%;
   min-height: 100vh;
-  }
+}
 
 .container-imagem-cadastro {
   width: 50vw;
@@ -59,13 +59,19 @@
   margin: 0 auto;
 }
 
+.texto {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
 .engloba-formulario {
   width: 80%;
   display: flex;
   justify-content: space-between;
   margin: 0 auto;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: 24px;
 }
 
 .text-entrar {
@@ -81,4 +87,5 @@
 
 p {
   font-size: 14px;
+  line-height: 20px;
 }

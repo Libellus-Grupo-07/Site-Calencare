@@ -38,6 +38,7 @@ const Login = () => {
                 console.log(response)
                 const { data } = response
                 sessionStorage.setItem("idUser", data.userId)
+                sessionStorage.setItem("token", data.token)
                 navigate("/inicio");
                 toast.success("Login realizado com sucesso");
             }).catch(function (error) {
@@ -67,12 +68,14 @@ const Login = () => {
                     <div className={styles["form"]}>
                         <div className={styles["container-login"]}>
                             <Input
+                                id="email"
                                 titulo={"Email"}
                                 type="email"
                                 valor={email}
                                 alterarValor={setEmail}
                             />
                             <Input
+                                id="email"
                                 titulo={"Senha"}
                                 type={"password"}
                                 valor={senha}

@@ -12,7 +12,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  row-gap: 16px;
+  row-gap: 24px;
 }
 
 .background,
@@ -39,7 +39,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  row-gap: 8px;
+  row-gap: 16px;
 }
 
 .form {

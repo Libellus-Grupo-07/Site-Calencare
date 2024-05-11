@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import Logo from "../logo/Logo";
 import styles from "./Header.module.css"
 import { useLocation, useNavigate } from "react-router-dom";
@@ -6,15 +5,12 @@ import { FaAngleRight } from "react-icons/fa6";
 import { IconlyProvider, Home, Calendar, Work, Chart, TwoUsers, AddUser, Graph } from "react-iconly";
 import iconProfile from "./../../utils/assets/perfil_padrao.svg"
 import { LuMenu } from "react-icons/lu";
-import api from "../../api";
 
 const Header = ({ nomeUser }) => {
     const navigate = useNavigate();
     const location = useLocation();
     console.log(location.pathname)
     const idUser = sessionStorage.getItem("idUser");
-
-
 
     return (
         <>
@@ -65,6 +61,7 @@ const Header = ({ nomeUser }) => {
                             location.pathname === "/servicos" ? "roxo" : "cinza"
                             ]
                         }
+                        onClick={() => navigate("/servicos")}
                     >
                         <IconlyProvider
                             className={styles["abc"]}
@@ -117,6 +114,7 @@ const Header = ({ nomeUser }) => {
                             location.pathname === "/clientes" ? "roxo" : "cinza"
                             ]
                         }
+                        onClick={() => navigate("/clientes")}
                     >
                         <IconlyProvider
                             className={styles["abc"]}

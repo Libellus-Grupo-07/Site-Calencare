@@ -37,41 +37,49 @@ const CadastroEtapa2 = ({
         <div className={styles["tela-cadastro"]}>
             <div className={styles["container-cadastro"]}>
                 <Input
+                    id="cep"
                     valor={Cep}
                     alterarValor={setCep}
                     titulo={"CEP"}
                     funcao={() => buscarCep()}
+                    mascara={"00000-000"}
                 />
                 <Input
+                    id="logradouro"
                     valor={Logradouro}
                     alterarValor={setLogradouro}
                     titulo={"Logradouro"}
                 />
                 <div className={styles["container-adrress"]}>
                     <Input
+                        id="numero"
                         valor={Numero}
                         alterarValor={setNumero}
                         titulo={"Número"}
                     />
                     <Input
+                        id="complemento"
                         valor={Complemento}
                         alterarValor={setComplemento}
                         titulo={"Complemento"}
                     />
                 </div>
                 <Input
+                    id="bairro"
                     valor={Bairro}
                     alterarValor={setBairro}
                     titulo={"Bairro"}
                 />
                 <div className={styles["container-adrress"]}>
                     <Input
+                        id="cidade"
                         valor={Cidade}
                         alterarValor={setCidade}
                         titulo={"Cidade"}
                     />
                     <div className={styles["uf"]}>
                         <Input
+                            id="UF"
                             valor={UF}
                             alterarValor={setUF}
                             titulo={"UF"}

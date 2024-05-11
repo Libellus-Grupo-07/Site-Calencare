@@ -253,6 +253,7 @@ const Cadastro = () => {
             const { id, dtCriacao } = data;
             setId(id);
             setDtCriacao(dtCriacao)
+            // sessionStorage.setItem("empresa", data.id);
 
         }).catch((error) => {
             console.log(error)
@@ -271,6 +272,7 @@ const Cadastro = () => {
 
     const cadastrarEmpresa2 = () => {
         var deuRuim = false;
+        // var idEmpresa = sessionStorage.getItem("empresa");
         api.post(`/enderecos/${id}/${cep}/${numero}`).then((response) => {
             console.log(response);
         }).catch((error) => {
@@ -332,6 +334,7 @@ const Cadastro = () => {
             }
         ];
         var deuRuim = false;
+        // var idEmpresa = sessionStorage.getItem("empresa") || id;
 
         for (let i = 0; i < dias.length; i++) {
             let body = {
@@ -401,7 +404,7 @@ const Cadastro = () => {
         if (validacoes[currentStep]()) {
             var deuRuim = funcoes[currentStep]();
             if (!deuRuim) {
-                changeStep(currentStep + 1, e)
+                changeStep(Number(currentStep) + 1, e)
             }
         }
     }
@@ -410,15 +413,14 @@ const Cadastro = () => {
         <>
             <div className={styles["tela-cadastro"]}>
                 <div className={styles["container-imagem-cadastro"]}>
-                    {/* <div><Navbar/></div> */}
                     <div className={styles["logo-cadastro"]}><Logo /></div>
                     <img className={styles["imagem-cadastro"]} src={Imagem} alt="imagem cadastro" />
                 </div>
                 <div className={styles["formulario-cadastro"]}>
                     <div className={styles["engloba-formulario"]}>
-                        <div className="texto">
+                        <div className={styles["texto"]}>
                             <h1> Cadastro </h1>
-                            <p>Informe {currentStep == 2 ? "os dias" : currentStep == 1 ? "a localidade" : "os dados"} da <b>{currentStep < 2 ? "empresa" : currentStep == 2 ? "funcionamento" : "usuário"}</b> para começar a realizar os agendamentos.</p>
+                            <p className={styles["text"]}>Informe {currentStep == 2 ? "os dias" : currentStep == 1 ? "a localidade" : "os dados"} da <b>{currentStep < 2 ? "empresa" : currentStep == 2 ? "funcionamento" : "usuário"}</b> para começar a realizar os agendamentos.</p>
                         </div>
                         <div className={styles["inputs-container"]}>
                             <div className={styles["form"]}>

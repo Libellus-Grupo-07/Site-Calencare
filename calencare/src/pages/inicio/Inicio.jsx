@@ -9,7 +9,8 @@ import { CiMoneyBill } from "react-icons/ci";
 import { Icon } from '@iconify-icon/react';
 import CardKpi from "../../components/card-kpi/CardKpi";
 import CardAgendamento from './../../components/card-agendamento/CardAgendamento';
-import { transformarDataBd, transformarDouble } from "../../utils/global";
+import { logado, transformarDataBd, transformarDouble } from "../../utils/global";
+import Swal from "sweetalert2";
 
 const Inicio = () => {
     const navigate = useNavigate();
@@ -23,7 +24,53 @@ const Inicio = () => {
     const [proximosAgendamentos, setProximosAgendamentos] = useState([]);
     const [agendamentosEmAndamento, setAgendamentosEmAndamento] = useState([]);
 
+    const cancelar = (idAgendamento) => {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn-roxo",
+                cancelButton: "btn-branco",
+                title: "title-modal",
+                text: "text-modal",
+            },
+            buttonsStyling: false
+        });
+        swalWithBootstrapButtons.fire({
+            title: "Cancelamento de Agendamento",
+            text: `Você realmente deseja cancelar o agendamento?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim",
+            cancelButtonText: "Não",
+            showCloseButton: true,
+            reverseButtons: true,
+            width: "35vw",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // api.delete(`/funcionarios/${idUser}`).then((response) => {
+                //     swalWithBootstrapButtons.fire({
+                //         title: "Exclusão de Conta",
+                //         text: "Agendamento cancelado com sucesso.",
+                //         icon: "success"
+                //     });
+                // }).catch((error) => {
+                //     swalWithBootstrapButtons.fire({
+                //         title: "Exclusão de Conta",
+                //         text: "Não foi possível cancelar o agendamento.",
+                //         icon: "error"
+                //     });
+                //     console.error("Houve um erro ao tentar excluir a conta")
+                //     console.log(error)
+                // })
+            }
+        });
+    }
+
     useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
+
         const data = transformarDataBd(new Date());
 
         api.get(`/funcionarios/${idUser}`).then((response) => {
@@ -66,12 +113,24 @@ const Inicio = () => {
 
         api.get(`/agendamentos/em-andamento`).then((response) => {
             const { data } = response;
+            console.log("em andamento")
             console.log(data);
             setAgendamentosEmAndamento(data);
         }).catch((error) => {
             console.log("Houve um erro ao buscar agendamentos em andamentos")
             console.log(error);
         });
+
+
+        api.get(`/aservico-mais-procurado`).then((response) => {
+            const { data } = response;
+            console.log(data);
+            setServicoMaisProcuradoDia(data);
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar agendamentos em andamentos")
+            console.log(error);
+        });
+
 
     }, [idUser]);
 
@@ -141,7 +200,7 @@ const Inicio = () => {
                                                 proximosAgendamentos.map((agendamento, index) => (
                                                     <div key={index}>
                                                         <CardAgendamento
-                                                                cor={"branco"}
+                                                            cor={"branco"}
                                                             nomeFuncionario={agendamento.nomeFuncionario}
                                                             dataHora={agendamento.dtHora}
                                                             nomeCliente={agendamento.nomeCliente}
@@ -149,7 +208,7 @@ const Inicio = () => {
                                                             precoServico={agendamento.preco}
                                                         />
                                                     </div>
-                                                    
+
                                                 ))
                                             }
                                         </div>
@@ -159,11 +218,27 @@ const Inicio = () => {
                                 <div className={styles["titulo"]} >
                                     <Titulo tamanho={"sm"} titulo={"Agendamentos em andamento"} cor={"branco"} />
                                 </div>
-                                {agendamentosEmAndamento.length === 0 ? <span className={styles["text-sem-agendamentos"]}>
-                                    Sem agendamentos em andamento
-                                </span> :
+                                {agendamentosEmAndamento.length === 0 ?
+                                    <span className={styles["text-sem-agendamentos"]}>
+                                        Sem agendamentos em andamento
+                                    </span> :
                                     <div className={styles["group-agendamentos-em-andamento"]}>
+                                        {
+                                            agendamentosEmAndamento.map((agendamento, index) => (
+                                                <div className={styles["container-card"]} key={index}>
+                                                    <CardAgendamento
+                                                        tamanho={"md"}
+                                                        cor={"cinza"}
+                                                        nomeFuncionario={agendamento.nomeFuncionario}
+                                                        dataHora={agendamento.dtHora}
+                                                        nomeServico={agendamento.nomeServico}
+                                                        precoServico={agendamento.preco}
+                                                        funcaoCancelar={() => cancelar(agendamento.id)}
+                                                    />
+                                                </div>
 
+                                            ))
+                                        }
                                     </div>
                                 }
 

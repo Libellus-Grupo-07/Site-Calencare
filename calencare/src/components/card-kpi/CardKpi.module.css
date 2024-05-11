@@ -26,11 +26,11 @@
 .card-kpi .text-kpi {
   display: flex;
   flex-direction: column;
-  row-gap: 0;
+  row-gap: 8px;
 }
 
 .card-kpi .text-kpi .label-kpi {
-    width: 188px;
+  min-width: 100%;
   font-size: 13px;
   font-weight: 700;
   color: var(--texto-cinza);

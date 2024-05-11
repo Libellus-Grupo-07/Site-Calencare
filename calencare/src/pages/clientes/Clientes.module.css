@@ -1,0 +1,33 @@
+.section-clientes {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  column-gap: 20vw;
+}
+
+.section-clientes .container-clientes {
+  width: 100%;
+  padding: 24px 0;
+}
+
+.section-clientes .container-clientes .content-clientes {
+  width: 70vw;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+  justify-content: flex-start;
+}
+
+.section-clientes .container-clientes .content-clientes .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-clientes .container-clientes .content-clientes .header .group-button{
+  display: flex;
+  column-gap: 8px;
+  justify-content: center;
+}

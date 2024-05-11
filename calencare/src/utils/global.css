@@ -16,24 +16,25 @@
   --branco-secundario: #f8f7f9;
   --branco-opacidade: rgb(254, 254, 254, 0.75);
   --preto: #010101;
+  --cinza: #202020;
   --lilas-fundo: rgba(239, 232, 245, 1);
-  --cinza-claro: #C1C1C1;
+  --cinza-claro: #c1c1c1;
 }
 
 * {
-  font-family: "Poppins";
   margin: 0;
   padding: 0;
   scroll-behavior: auto;
   scroll-behavior: smooth;
+  font-family: "Poppins", Arial, Helvetica, sans-serif; 
 }
 
-*::-webkit-scrollbar{
+*::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
-*::-webkit-scrollbar-thumb{
+*::-webkit-scrollbar-thumb {
   background: var(--roxo-principal);
   border-radius: 1rem;
 }
@@ -44,7 +45,61 @@ body {
   /* background-size: cover; */
 }
 
-.title-roxo{
-    color: var(--roxo-principal);
+.title-roxo {
+  color: var(--roxo-principal);
+}
+
+button {
+  border-radius: 5rem;
+}
+
+.title-modal {
+  font-size: 24px;
+  color: var(--texto-preto);
+  letter-spacing: -0.05rem;
+  font-weight: 700;
+}
+
+.text-modal {
+  text-align: left;
+  color: var(--texto-cinza);
+  font-family: "Work Sans";
+  font-size: 18px;
+}
+
+.btn-roxo {
+  background-color: var(--roxo-principal);
+  color: white;
+  border-color: var(--roxo-principal);
+  border: none;
+}
+
+.btn-roxo,
+.btn-branco {
+  cursor: pointer;
+  border-radius: 5rem;
+  margin-left: 8px;
+  font-size: 16px;
+  padding: 10px 28px;
+  transition: 0.3s all linear;
+}
+
+.btn-roxo:hover {
+  background-color: transparent;
+  color: var(--roxo-principal);
+  border: 1.5px solid var(--roxo-principal);
+}
+
+.btn-branco {
+  cursor: pointer;
+  background-color: transparent;
+  border: 1.5px solid;
+  color: var(--texto-cinza);
+}
+
+.btn-branco:hover {
+  border: 1.5px solid var(--texto-preto);
+  background-color: var(--texto-preto);
+  color: var(--branco);
 }
 

@@ -1,6 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+export function logoutUsuario() {
+  sessionStorage.removeItem("token");
+}
+
+export function logado(token) {
+  if (token === null || token === "" || token === undefined) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 export function isVazio(campo, nome) {
   if (campo === "") {
     toast.error(`O campo ${nome} deve ser preenchido!`);
@@ -70,12 +82,29 @@ export const inputSemCaracteresEspeciais = (e) => {
 export function aberturaMaiorFechamento(hora1, hora2) {
   console.log("Abc de natal");
   console.log(hora1);
-  //   let horaAbertura = new Date()
+  let horaAbertura = new Date(
+    0,
+    0,
+    0,
+    hora1.toString().slice(0, 2),
+    hora1.toString().slice(3, 5)
+  );
+  let horaFechamento = new Date(
+    0,
+    0,
+    0,
+    hora1.toString().slice(0, 2),
+    hora1.toString().slice(3, 5)
+  );
 
-  //   if (horaAbertura.getTime() >= horaFechadura.getTime()) {
-  //     toast.error("A hora de fechamento deve ser maior que a hora de abertura!");
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
+  if (horaAbertura.getHours() >= horaFechamento.getHours()) {
+    if (horaAbertura.getMinutes() > horaFechamento.getMinutes()) {
+      toast.error(
+        "A hora de fechamento deve ser maior que a hora de abertura!"
+      );
+      return true;
+    }
+  } else {
+    return false;
+  }
 }

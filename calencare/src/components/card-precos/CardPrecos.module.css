@@ -139,7 +139,9 @@
   height: 56px;
   display: flex;
   justify-content: center;
+  align-items: center;
   font-weight: 600;
+  font-size: 18px;
   letter-spacing: -0.05rem;
   transition: 0.3s all linear;
   border: 1px solid var(--roxo-principal);
