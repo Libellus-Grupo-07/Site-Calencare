@@ -1,4 +1,3 @@
-import Form from 'react-bootstrap/Form';
 import styles from './ModalTemplate.module.css'
 import { IoClose } from "react-icons/io5";
 import Input from './../input/Input';
