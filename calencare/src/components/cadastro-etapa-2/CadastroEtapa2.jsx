@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Input from "../input/Input";
 import styles from "./CadastroEtapa2.module.css"
-import { toast } from "react-toastify"; // Importa toast para exibir mensagens de sucesso ou erro
 import api from "../../api";
 
 const CadastroEtapa2 = ({
@@ -13,7 +12,6 @@ const CadastroEtapa2 = ({
     Numero, setNumero,
     Complemento, setComplemento
 }) => {
-    const [disabled, setDisabled] = useState();
 
     const buscarCep = () => {
         if (Cep.length >= 8) {

@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import styles from "./Perfil.module.css"
 import Header from "../../components/header/Header";
 import api from "../../api";
-import Titulo from './../../components/titulo/Titulo';
 import Button from "../../components/button/Button";
 import { Delete, IconlyProvider, Logout } from "react-iconly";
 import { useNavigate, useParams } from "react-router-dom";
 import imgPerfil from "./../../utils/assets/perfil_padrao.svg";
 import Row from './../../components/row/Row';
 import { logado, logoutUsuario, transformarData } from "../../utils/global";
-import { toast } from "react-toastify";
 import Swal from 'sweetalert2'
 
 const Perfil = () => {
@@ -152,7 +150,7 @@ const Perfil = () => {
                                     onClick={() => mudarSecao("informacoes-empresa")}
                                     className={
                                         styles[
-                                        secaoPerfil == "informacoes-empresa" ?
+                                        secaoPerfil === "informacoes-empresa" ?
                                             "roxo" : "sem-fundo"
                                         ]
 
@@ -164,7 +162,7 @@ const Perfil = () => {
                                     onClick={() => mudarSecao("informacoes-pessoais")}
                                     className={
                                         styles[
-                                        secaoPerfil == "informacoes-pessoais" ?
+                                        secaoPerfil === "informacoes-pessoais" ?
                                             "roxo" : "sem-fundo"
                                         ]
                                     }

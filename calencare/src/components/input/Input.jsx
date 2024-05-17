@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Input.module.css";
-import InputMask from 'react-input-mask';
+// import InputMask from 'react-input-mask';
 import { IMaskInput } from 'react-imask';
 
 const Input = ({ tamanho, id, valor, titulo, type, alterarValor, validarEntrada, funcao, readonly, mascara }) => {
@@ -18,11 +18,17 @@ const Input = ({ tamanho, id, valor, titulo, type, alterarValor, validarEntrada,
                 </label>
                 {mascara ?
                     <IMaskInput
+                        id={id}
                         value={valor}
                         placeholder={titulo}
                         onChange={(e) => mudarValor(e)}
                         onKeyUp={funcao}
                         mask={mascara}
+                        style={{
+                            height: tamanho ? "32px" : "",
+                            fontSize: tamanho ? "14px" : "",
+                            padding: tamanho ? "6px 28px" : "",
+                        }}
                     /> :
                     <input
                         id={id}

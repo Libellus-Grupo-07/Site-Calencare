@@ -34,6 +34,7 @@ footer .container .content .title {
   color: var(--texto-branco);
   font-weight: 600;
   letter-spacing: -0.05rem;
+  line-height: 42px;
 }
 
 footer .container .image .img-footer {

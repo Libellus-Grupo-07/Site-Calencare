@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export function logoutUsuario() {
@@ -41,7 +40,7 @@ export function transformarDataHora(dataString) {
   const ano = data.getFullYear().toString().substring(2, 4);
   const hora = data.getHours().toString().padStart(2, "0");
   const minutos = data.getMinutes().toString().padStart(2, "0");
-  const segundos = data.getSeconds().toString().padStart(2, "0");
+  // const segundos = data.getSeconds().toString().padStart(2, "0");
   return `${dia}/${mes}/${ano} ${hora}:${minutos}`;
 }
 
@@ -72,7 +71,7 @@ export const inputSomenteTexto = (e) => {
 };
 
 export const inputSomenteNumero = (e) => {
-  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+  e.target.value = e.target.value.replace(/"^\d+(,\d{1,2})?$"/g, "");
 };
 
 export const inputSemCaracteresEspeciais = (e) => {

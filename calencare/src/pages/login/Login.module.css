@@ -33,6 +33,10 @@
   right: 0%;
 }
 
+#senha{
+  z-index: 9999;
+}
+
 .text {
   width: 80%;
   display: flex;

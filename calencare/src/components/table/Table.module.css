@@ -36,6 +36,7 @@
 }
 
 .container-table .table .body-table tr {
+  width: 100%;
   border-bottom: 1px solid;
   border-bottom-color: rgba(159, 53, 240, 0.5);
 }
@@ -44,13 +45,18 @@
   border-bottom: 0px solid;
 }
 
-.container-table .table .body-table tr td {
+.container-table .table .body-table tr .td-div {
   margin: 0;
+  height: 10%;
+  /* width: 100%; */
   padding: 24px;
   font-weight: 600;
   font-size: 13px;
   text-align: center;
   letter-spacing: -0.03rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .container-table .table .body-table tr td:first-child {

@@ -4,16 +4,12 @@ import Header from "../../components/header/Header";
 import api from "../../api";
 import Titulo from './../../components/titulo/Titulo';
 import Button from "../../components/button/Button";
-import { Delete, IconlyProvider, Logout } from "react-iconly";
 import { useNavigate, useParams } from "react-router-dom";
-import imgPerfil from "./../../utils/assets/perfil_padrao.svg";
-import Row from './../../components/row/Row';
-import { inputSomenteNumero, inputSomenteTexto, logado, logoutUsuario, transformarData } from "../../utils/global";
+import { inputSomenteNumero, inputSomenteTexto, logado } from "../../utils/global";
 import Input from "../../components/input/Input";
 import { FaCheck } from "react-icons/fa6";
 import { TiCancel } from "react-icons/ti";
 import { toast } from "react-toastify";
-import { logoutUsuarioUsuario } from './../../utils/global';
 
 const EditarPerfil = () => {
     const navigate = useNavigate();

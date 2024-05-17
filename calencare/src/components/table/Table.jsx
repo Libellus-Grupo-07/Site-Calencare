@@ -1,5 +1,4 @@
 import React from "react";
-import Titulo from "../titulo/Titulo";
 import styles from "./Table.module.css";
 
 const Table = ({ titulos, linhas, icones }) => {
@@ -21,20 +20,22 @@ const Table = ({ titulos, linhas, icones }) => {
                     <tbody className={styles["body-table"]}>
                         {
                             linhas.map((linha, index) => (
-                                <tr className={styles[index % 2 === 0 ? "branco" : "roxo"]}  key={index}>
-                                    {linha.map((dado, index2) => (
-                                        index2 < dado.length ?
-                                            <td key={index2}>
+                                <tr className={styles[index % 2 === 0 ? "branco" : "roxo"]} key={index}>
+                                    {linha.map((dado, index) => (
+                                        <td key={index}>
+                                            <div className={styles["td-div"]}>
                                                 {dado}
-                                            </td>
-                                            : icones ?
-                                            icones.map((icone, index3) => (
-                                                <td key={index3}>
-                                                    {icone}
-                                                </td>
-                                            ))
-                                            : ""
-                                    ))}
+                                            </div>
+                                        </td>
+                                    ))
+                                    }
+                                     { icones ? icones.map((icone, index) => (
+                                        <td key={index}>
+                                            <div className={styles["td-div"]}>
+                                                {icone}
+                                            </div>
+                                        </td>
+                                    )): ""}
                                 </tr>
                             ))
                         }

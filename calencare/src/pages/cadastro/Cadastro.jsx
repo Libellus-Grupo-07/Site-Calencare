@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import Button from "../../components/button/Button";
 import styles from "./Cadastro.module.css"
@@ -13,7 +13,6 @@ import { isVazio, aberturaMaiorFechamento, transformarHora } from "../../utils/g
 import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
-import dayjs from "dayjs";
 import { useForm } from "../../hooks/useForm";
 import { useNavigate } from "react-router-dom";
 
@@ -66,8 +65,6 @@ const Cadastro = () => {
     const [diaDomingoAberto, setDiaDomingoAberto] = useState(true);
     const [horario1Domingo, setHorario1Domingo] = useState(hora)
     const [horario2Domingo, setHorario2Domingo] = useState(hora)
-
-    const [empresa, setEmpresa] = useState({});
 
     const formComponents = [<CadastroEtapa1
         RazaoSocial={razaoSocial}
@@ -420,7 +417,7 @@ const Cadastro = () => {
                     <div className={styles["engloba-formulario"]}>
                         <div className={styles["texto"]}>
                             <h1> Cadastro </h1>
-                            <p className={styles["text"]}>Informe {currentStep == 2 ? "os dias" : currentStep == 1 ? "a localidade" : "os dados"} da <b>{currentStep < 2 ? "empresa" : currentStep == 2 ? "funcionamento" : "usuário"}</b> para começar a realizar os agendamentos.</p>
+                            <p className={styles["text"]}>Informe {currentStep === 2 ? "os dias" : currentStep === 1 ? "a localidade" : "os dados"} da <b>{currentStep < 2 ? "empresa" : currentStep === 2 ? "funcionamento" : "usuário"}</b> para começar a realizar os agendamentos.</p>
                         </div>
                         <div className={styles["inputs-container"]}>
                             <div className={styles["form"]}>

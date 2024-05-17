@@ -148,7 +148,7 @@ const Header = ({ nomeUser }) => {
                     className={styles["user-profile"]}
                     onClick={() => navigate(`/perfil/${idUser}`)} id={
                         styles[
-                        location.pathname === "/perfil" ? "roxo" : "cinza"
+                        location.pathname === `/perfil/${idUser}` ? "roxo" : "cinza"
                         ]
                     }
                 >

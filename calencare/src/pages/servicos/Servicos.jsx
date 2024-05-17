@@ -48,13 +48,13 @@ const Servicos = () => {
                                 <Button
                                     cor="roxo"
                                     titulo={"Adicionar"}
-                                    icone={<FaPlus/>
-                                    }
+                                    icone={<FaPlus />}
+                                    funcaoButton={() => navigate("/servicos/adicionar")}
                                 />
                             </div>
                         </div>
                         <div className={styles["table-servicos"]}>
-                            <Table titulos={titulos} linhas={dados}/>
+                            <Table titulos={titulos} linhas={dados} icones={""}/>
                         </div>
                     </div>
                 </div>

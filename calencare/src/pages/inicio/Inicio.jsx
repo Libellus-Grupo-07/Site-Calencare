@@ -4,8 +4,7 @@ import Titulo from "../../components/titulo/Titulo";
 import Header from "../../components/header/Header";
 import api from "../../api";
 import styles from "./Inicio.module.css";
-import { IconlyProvider, Notification, Calendar, Buy, Work } from "react-iconly";
-import { CiMoneyBill } from "react-icons/ci";
+import { IconlyProvider, Notification, Calendar, Work } from "react-iconly";
 import { Icon } from '@iconify-icon/react';
 import CardKpi from "../../components/card-kpi/CardKpi";
 import CardAgendamento from './../../components/card-agendamento/CardAgendamento';
@@ -170,7 +169,7 @@ const Inicio = () => {
                                         icon="fluent:money-16-regular" width="40" height="40" />
                                 }
                                 legenda={"Potencial Lucro Para Hoje"}
-                                valor={potencialLucroDia.length == 0 ? "R$ 0,00" : "R$" + transformarDouble(potencialLucroDia)}
+                                valor={potencialLucroDia.length === 0 ? "R$ 0,00" : "R$" + transformarDouble(potencialLucroDia)}
                             />
                             <CardKpi
                                 icon={
@@ -191,7 +190,7 @@ const Inicio = () => {
                                     <Titulo tamanho={"md"} titulo={"Próximos Agendamentos"} />
                                 </div>
                                 {
-                                    proximosAgendamentos.length == 0 ?
+                                    proximosAgendamentos.length === 0 ?
                                         <span className={styles["text-sem-agendamentos"]}>
                                             Sem agendamentos marcados
                                         </span> :

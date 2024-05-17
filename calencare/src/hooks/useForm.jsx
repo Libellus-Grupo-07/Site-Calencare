@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export function useForm(steps) {
     const [currentStep, setCurrentStep] = useState(sessionStorage.getItem("currentStep") || 0)

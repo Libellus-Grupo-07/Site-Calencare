@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Input from "../../components/input/Input";
 import styles from "./CadastroEtapa1.module.css"
-import { inputSomenteTexto, inputSemCaracteresEspeciais, inputSomenteNumero } from "../../utils/global";
 
 const CadastroEtapa1 = ({
     RazaoSocial, setRazaoSocial,

@@ -17,8 +17,7 @@
 .roxo {
   background-color: var(--roxo-principal);
   color: white;
-  border-color: var(--roxo-principal);
-  border: none;
+  border: 1.5px solid var(--roxo-principal);
 }
 
 .roxo:hover {

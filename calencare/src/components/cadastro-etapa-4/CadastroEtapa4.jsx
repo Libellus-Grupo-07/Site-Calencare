@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Input from "../../components/input/Input";
 import styles from "./CadastroEtapa4.module.css"
-import { toast } from "react-toastify";
-import { inputSomenteNumero } from "../../utils/global";
 
 const CadastroEtapa4 = ({
     Nome, setNome,
