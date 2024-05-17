@@ -13,6 +13,8 @@ import Perfil from "./pages/perfil/Perfil";
 import EditarPerfil from "./pages/editar-perfil/EditarPerfil";
 import Servicos from "./pages/servicos/Servicos";
 import Clientes from "./pages/clientes/Clientes";
+import Equipe from "./pages/minha-equipe/MinhaEquipe";
+import CadastroFuncionario from "./pages/cadastro-funcionarios/CadastroFuncionario";
 
 function Rotas() {
   return (
@@ -28,6 +30,8 @@ function Rotas() {
           <Route path="clientes" element={<Clientes />} />
           <Route path="perfil/:idUser" element={<Perfil />} />
           <Route path="editar-perfil/:idUser" element={<EditarPerfil />} />
+          <Route path="equipe" element={<Equipe/>}/>
+          <Route path="cadastro-profissional" element={<CadastroFuncionario/>}/>
         </Routes>
       </BrowserRouter>
     </>
