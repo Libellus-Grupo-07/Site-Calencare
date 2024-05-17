@@ -1,0 +1,24 @@
+option{
+    height: fit-content;
+}
+
+/* option::before{
+    background-color: var(--roxo-principal);
+} */
+
+.component-select{
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    width: 100%;
+}
+
+.titulo-select{
+    font-family: "Poppins";
+    margin-left: 30px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+
+
