@@ -5,6 +5,7 @@ import { FaAngleRight } from "react-icons/fa6";
 import { IconlyProvider, Home, Calendar, Work, Chart, TwoUsers, AddUser, Graph } from "react-iconly";
 import iconProfile from "./../../utils/assets/perfil_padrao.svg"
 import { LuMenu } from "react-icons/lu";
+import Equipe from "../../pages/minha-equipe/MinhaEquipe";
 
 const Header = ({ nomeUser }) => {
     const navigate = useNavigate();
@@ -94,9 +95,10 @@ const Header = ({ nomeUser }) => {
                     <li
                         className={
                             styles[
-                            location.pathname === "/minha-equipe" ? "roxo" : "cinza"
+                            location.pathname === "/equipe" ? "roxo" : "cinza"
                             ]
                         }
+                        onClick={() => navigate("/equipe")}
                     >
                         <IconlyProvider
                             className={styles["abc"]}
