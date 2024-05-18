@@ -9,10 +9,12 @@ import imgPerfil from "./../../utils/assets/perfil_padrao.svg";
 import Row from './../../components/row/Row';
 import { logado, logoutUsuario, transformarData } from "../../utils/global";
 import Swal from 'sweetalert2'
+import CadastroEtapa3 from "../../components/cadastro-etapa-3/CadastroEtapa3";
 
 const Perfil = () => {
 
     const navigate = useNavigate();
+    const hora = new Date();
 
     const { idUser } = useParams();
     const [nome, setNome] = useState("");
@@ -25,6 +27,8 @@ const Perfil = () => {
     const [cnpj, setCNPJ] = useState("")
     const [telefonePrincipal, setTelefonePrincipal] = useState("")
     const [emailPrincipal, setEmailPrincipal] = useState("")
+
+    const [dias, setDias] = useState([]);
 
     const [secaoPerfil, setSecaoPerfil] = useState(sessionStorage.getItem("sessaoPerfil") || "informacoes-pessoais");
 
@@ -101,14 +105,30 @@ const Perfil = () => {
             setEmail(email);
             setTelefone(telefone);
             setDtCriacao(dtCriacao);
-            
+
             setRazaoSocial(razaoSocial);
             setCNPJ(cnpj);
             setEmailPrincipal(emailPrincipal);
             setTelefonePrincipal(telefonePrincipal);
 
-            api.get(`/funcionarios/${idUser}`).then((response) => { 
+            api.get(`/empresas/${id}`).then((response) => {
+                const { data } = response
+                const { horariosFuncionamentos } = data;
+                const vetorDias = [];
 
+                horariosFuncionamentos.forEach((h) => {
+                    vetorDias.push({
+                        "id": h.id,
+                        "diaSemana": h.diaSemana,
+                        "fim": h.fim,
+                        "inicio": h.inicio,
+                        "status": h.status
+                    })
+                });
+
+                setDias(vetorDias);
+
+                console.log(vetorDias)
             }).catch((error) => {
                 console.log("Houve um erro ao buscar o funcionário");
                 console.log(error);
@@ -193,26 +213,34 @@ const Perfil = () => {
                                 </button>
                             </div>{
                                 secaoPerfil === "informacoes-empresa" ?
-                                    <div className={styles[""]}>
-                                        <Row
-                                            titulo="Razão Social"
-                                            valor={razaoSocial}
-                                            funcao={() => navigate(`/editar-perfil/${idUser}`)}
-                                        />
-                                        <Row
-                                            titulo="CNPJ"
-                                            valor={cnpj}
-                                            funcao={() => navigate(`/editar-perfil/${idUser}`)}
-                                        />
-                                        <Row
-                                            titulo="Email Principal"
-                                            valor={emailPrincipal}
-                                            funcao={() => navigate(`/editar-perfil/${idUser}`)}
-                                        />
-                                        <Row
-                                            titulo="Telefone Principal"
-                                            valor={telefonePrincipal}
-                                        />
+                                    <div className={styles["info-empresa"]}>
+                                        <div className={styles["grid-info"]}>
+
+                                            <Row
+                                                titulo="Razão Social"
+                                                valor={razaoSocial}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="CNPJ"
+                                                valor={cnpj}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="Email Principal"
+                                                valor={emailPrincipal}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="Telefone Principal"
+                                                valor={telefonePrincipal}
+                                            />
+
+                                        </div>
+                                        <div className={styles["card-horarios"]}>
+                                            <CadastroEtapa3
+                                            />
+                                        </div>
                                     </div> :
                                     <div className={styles[""]}>
                                         <div>
@@ -236,7 +264,7 @@ const Perfil = () => {
                                                 valor={transformarData(dtCriacao)}
                                             />
                                         </div>
-                                </div>
+                                    </div>
                             }
                         </div>
                     </div>
