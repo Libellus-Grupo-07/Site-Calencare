@@ -27,6 +27,7 @@ function Rotas() {
           <Route path="clientes" element={<Clientes />} />
           <Route path="perfil/:idUser" element={<Perfil />} />
           <Route path="editar-perfil/:idUser" element={<EditarPerfil />} />
+          <Route path="editar-empresa/:idEmpresa" element={<EditarPerfil />} />
         </Routes>
       </BrowserRouter>
     </>

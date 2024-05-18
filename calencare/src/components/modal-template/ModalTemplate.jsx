@@ -1,4 +1,3 @@
-import Form from 'react-bootstrap/Form';
 import styles from './ModalTemplate.module.css'
 import { IoClose } from "react-icons/io5";
 import Input from './../input/Input';
@@ -9,7 +8,7 @@ import Titulo from '../titulo/Titulo';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 
-const ModalTemplate = ({ aberto, setAberto }) => {
+const ModalTemplate = ({ aberto, setAberto, titulo, corpo, tituloBotaoConfirmar, funcaoBotaoConfirmar }) => {
 
     const handleClose = () => setAberto(false);
     const handleShow = () => setAberto(true);
@@ -27,46 +26,30 @@ const ModalTemplate = ({ aberto, setAberto }) => {
             >
                 <div className={styles["container-modal"]}>
                     <div className={styles["header-modal"]}>
-                        <Titulo titulo={"Adicionar Cliente"} tamanho={"md"} />
+                        <Titulo titulo={ titulo || "Título Modal" } tamanho={"md"} />
                         <IoClose
                             className={styles["icon"]}
                             onClick={handleClose}
                         />
                     </div>
                     <div className={styles['form']}>
-                        <Input
-                            id={"nomeCliente"}
-                            titulo={"Nome"}
-                        />
-
-                        <Input
-                            titulo={"Sobrenome"}
-                        />
-                        <Input
-                            titulo={"Email (Opcional)"}
-                        />
-                        <Input
-                            titulo={"Telefone"}
-                            mascara={"(00) 00000-0000"}
-                        />
+                       { corpo }
                     </div>
                     <div className={styles['group-button']}>
                         <Button
+                            funcaoButton={handleClose}
                             titulo={"Cancelar"}
                             cor={"branco"}
                             icone={
-                                <div style={{
-                                    fontSize: "18px",
-                                    display: "flex",
-                                    alignItens: "center",
-                                    justifyContent: "center"
-                                }}>
-                                    <TiCancel />
-                                </div>
+                                <TiCancel />
                             } />
                         <Button
-                            titulo={"Adicionar"}
-                            icone={<FaCheck />}
+                            funcaoButton={funcaoBotaoConfirmar || handleClose}
+                            titulo={tituloBotaoConfirmar || "Confirmar"}
+                            icone={
+
+                                <FaCheck />
+                            }
                             cor={"roxo"}
                         />
                     </div>

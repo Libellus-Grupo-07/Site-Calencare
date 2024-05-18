@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./CadastroEtapa3.module.css"
-import DiaDaSemanaComponente from "../input-funcionamento/DiaDaSemanaComponente"
+import DiaDaSemanaComponente from "../dia-da-semana/DiaDaSemanaComponente"
 
 const CadastroEtapa3 = ({
   diaSegundaAberto, setDiaSegundaAberto,

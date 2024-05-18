@@ -68,14 +68,15 @@ const Login = () => {
                     <div className={styles["form"]}>
                         <div className={styles["container-login"]}>
                             <Input
-                                id="email"
+                                id={"email"}
                                 titulo={"Email"}
                                 type="email"
                                 valor={email}
                                 alterarValor={setEmail}
+                                className={styles["email"]}
                             />
                             <Input
-                                id={styles["senha"]}
+                                id={"senha"}
                                 titulo={"Senha"}
                                 type={"password"}
                                 valor={senha}

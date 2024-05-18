@@ -41,6 +41,7 @@
 
 body {
   background: var(--branco-secundario);
+  overflow-x: hidden;
   /* background-image: url(./assets/bolinhas_fundo.svg); */
   /* background-size: cover; */
 }

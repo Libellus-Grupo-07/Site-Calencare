@@ -9,18 +9,65 @@ import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Table from "../../components/table/Table";
 import ModalTemplate from "../../components/modal-template/ModalTemplate";
+import Input from "../../components/input/Input";
 
 const Clientes = () => {
     const navigate = useNavigate();
     const idUser = sessionStorage.getItem("idUser");
     const titulos = ["Nome", "Email", "Telefone", "Cliente Desde", "Último Agendamento", ""]
-    const dados = [["Coloração", "Coloração de fios", "Categoria", "R$ 45,00", "20% em %"], ["Coloração", "Coloração de fios", "Categoria", "R$ 45,00", "20% em %"]];
+    const dados = [];
+    const [nomeCliente, setNomeCliente] = useState(""); 
+    const [sobrenomeCliente, setSobrenomeCliente] = useState(""); 
+    const [emailCliente, setEmailCliente] = useState(""); 
+    const [telefoneCliente, setTelefoneCliente] = useState(""); 
+    const [dataNascimentoCliente, setDataNascimentoCliente] = useState(""); 
+
+    const tituloModal = "Adicionar Cliente";
+    const tituloBotao = "Adicionar";
+    const corpoModal = (
+        <>
+            <Input
+                id={"nomeCliente"}
+                titulo={"Nome"}
+                valor={nomeCliente}
+                alterarValor={setNomeCliente}
+            />
+
+            <Input
+                id={"sobrenomeCliente"}
+                titulo={"Sobrenome"}
+                valor={sobrenomeCliente}
+                alterarValor={setSobrenomeCliente}
+            />
+            <Input
+                id={"emailCliente"}
+                titulo={"Email (Opcional)"}
+                placeholder={"Email"}
+                valor={emailCliente}
+                alterarValor={setEmailCliente}
+            />
+            <Input
+                id={"telefoneCliente"}
+                titulo={"Telefone"}
+                valor={telefoneCliente}
+                alterarValor={setTelefoneCliente}
+                mascara={"(00) 00000-0000"}
+            />
+            <Input
+                id={"dataNascimentoCliente"}
+                titulo={"Data de Nascimento"}
+                valor={dataNascimentoCliente}
+                alterarValor={setDataNascimentoCliente}
+                type={"date"}
+            />
+        </>
+    )
 
     const [nome, setNome] = useState("");
     const [modalAberto, setModalAberto] = useState(false);
 
     const abrirModal = () => {
-        setModalAberto(!modalAberto);   
+        setModalAberto(!modalAberto);
     }
 
     useEffect(() => {
@@ -39,6 +86,10 @@ const Clientes = () => {
         });
     }, [idUser]);
 
+
+    const cadastrarCliente = () => {
+
+    }
 
     return (
         <>
@@ -59,7 +110,7 @@ const Clientes = () => {
                                         stroke="bold"
                                         size="small"
                                     >
-                                        <AddUser/>
+                                        <AddUser />
                                     </IconlyProvider>
                                     }
                                 />
@@ -71,7 +122,7 @@ const Clientes = () => {
                                     <Edit />
                                     {/* <Delete /> */}
                                 </IconlyProvider>]
-                            }/>
+                            } />
                         </div>
                     </div>
                 </div>
@@ -79,12 +130,15 @@ const Clientes = () => {
                     style={{
                         position: "absolute"
                     }}
-                > 
+                >
                     <ModalTemplate
-                        
                         aberto={modalAberto}
-                        setAberto={setModalAberto} />
-               </div>
+                        setAberto={setModalAberto}
+                        corpo={corpoModal}
+                        titulo={tituloModal}
+                        tituloBotaoConfirmar={tituloBotao}
+                    />
+                </div>
             </section>
         </>
     );

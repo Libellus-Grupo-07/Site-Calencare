@@ -3,7 +3,7 @@ import styles from "./Input.module.css";
 // import InputMask from 'react-input-mask';
 import { IMaskInput } from 'react-imask';
 
-const Input = ({ tamanho, id, valor, titulo, type, alterarValor, validarEntrada, funcao, readonly, mascara }) => {
+const Input = ({ tamanho, id, valor, placeholder, titulo, type, alterarValor, validarEntrada, funcao, readonly, mascara }) => {
     const mudarValor = (e) => {
         alterarValor(e.target.value);
     }
@@ -20,7 +20,7 @@ const Input = ({ tamanho, id, valor, titulo, type, alterarValor, validarEntrada,
                     <IMaskInput
                         id={id}
                         value={valor}
-                        placeholder={titulo}
+                        placeholder={placeholder || titulo}
                         onChange={(e) => mudarValor(e)}
                         onKeyUp={funcao}
                         mask={mascara}
@@ -29,12 +29,13 @@ const Input = ({ tamanho, id, valor, titulo, type, alterarValor, validarEntrada,
                             fontSize: tamanho ? "14px" : "",
                             padding: tamanho ? "6px 28px" : "",
                         }}
+                        type={type}
                     /> :
                     <input
                         id={id}
                         type={type}
                         value={valor}
-                        placeholder={titulo}
+                        placeholder={placeholder || titulo}
                         onChange={(e) => mudarValor(e)}
                         onInput={validarEntrada ? (e) => validarEntrada(e) : null}
                         onKeyUp={funcao}
