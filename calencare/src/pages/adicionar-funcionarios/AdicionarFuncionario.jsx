@@ -31,7 +31,7 @@ const AdicionarFuncionario = () => {
     const [options, setOptions] = useState([]);
     const [tipoPerfil, setTipoPerfil] = useState("");
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
-    // const items = [
+     const items = []
     //     "Coloração",
     //     "Hidratação",
     //     "Pé e Mão ",

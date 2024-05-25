@@ -20,6 +20,15 @@ export function isVazio(campo, nome) {
   return false;
 }
 
+export function isValidEmail(email, nomeCampo) {
+  if (email.indexOf("@") !== -1) {
+    return true;
+  }
+
+  toast.error(`${nomeCampo} inválido.`);
+  return false;
+}
+
 export function transformarDouble(dataString) {
   const valor = dataString.toString();
   return parseFloat(valor).toFixed(2).replace(".", ",");

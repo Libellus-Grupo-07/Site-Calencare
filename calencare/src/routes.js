@@ -26,8 +26,8 @@ function Rotas() {
           <Route path="login" element={<Login />} />
           <Route path="inicio" element={<Inicio />} />
           <Route path="servicos" element={<Servicos />} />
-          <Route path="adicionar-servicos" element={<AdicionarServico />} />
-          <Route path="servicos/:idServico" element={<AdicionarServico />} />
+          <Route path="servicos/adicionar" element={<AdicionarServico />} />
+          <Route path="servicos/editar/:idServico" element={<AdicionarServico />} />
           <Route path="clientes" element={<Clientes />} />
           <Route path="perfil/:idUser" element={<Perfil />} />
           <Route path="editar-perfil/:idUser" element={<EditarPerfil />} />

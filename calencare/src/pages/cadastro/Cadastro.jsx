@@ -9,7 +9,7 @@ import CadastroEtapa1 from "../../components/cadastro-etapa-1/CadastroEtapa1";
 import CadastroEtapa2 from "../../components/cadastro-etapa-2/CadastroEtapa2";
 import CadastroEtapa3 from "../../components/cadastro-etapa-3/CadastroEtapa3";
 import CadastroEtapa4 from "../../components/cadastro-etapa-4/CadastroEtapa4";
-import { isVazio, aberturaMaiorFechamento, transformarHora } from "../../utils/global";
+import { isVazio, aberturaMaiorFechamento, transformarHora, isValidEmail } from "../../utils/global";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
@@ -18,8 +18,6 @@ import { useNavigate } from "react-router-dom";
 
 const Cadastro = () => {
     const hora = new Date();
-    const [id, setId] = useState(0);
-    const [dtCriacao, setDtCriacao] = useState(new Date());
     const [razaoSocial, setRazaoSocial] = useState("")
     const [cnpj, setCNPJ] = useState("")
     const [telefonePrincipal, setTelefonePrincipal] = useState("")
@@ -170,11 +168,14 @@ const Cadastro = () => {
     const navigate = useNavigate()
 
     const validarCadastro1 = () => {
+        // validarCnpj();
         if (
             !isVazio(razaoSocial, "Razão Social") &&
             !isVazio(cnpj, "CNPJ") &&
             !isVazio(telefonePrincipal, "Telefone da Empresa") &&
-            !isVazio(emailPrincipal, "Email da Empresa")) {
+            !isVazio(emailPrincipal, "Email da Empresa") &&
+            isValidEmail(emailPrincipal, "Email da Empresa")
+        ) {
             return true
         }
 
@@ -230,116 +231,107 @@ const Cadastro = () => {
         if (!isVazio(nome, "Nome")
             && !isVazio(telefone, "Telefone")
             && !isVazio(email, "Email")
-            && !isVazio(senha, "Senha")) {
+            && !isVazio(senha, "Senha") &&
+            isValidEmail(email, "Email da Empresa")
+
+        ) {
             return true;
         }
 
         return false;
     }
 
-    const cadastrarEmpresa1 = () => {
+    const cadastrar = () => {
+
         let body = {
             razaoSocial,
             cnpj,
             telefonePrincipal,
             emailPrincipal
         }
-        var deuRuim = false;
 
         api.post("/empresas", body).then((response) => {
             const { data } = response;
-            const { id, dtCriacao } = data;
-            setId(id);
-            setDtCriacao(dtCriacao)
-            // sessionStorage.setItem("empresa", data.id);
+            const { id } = data;
+            api.post(`/enderecos/${id}/${cep}/${numero}`).then().catch((error) => {
+                toast.error("Houve um erro ao tentar cadastrar o endereço")
+            });
 
-        }).catch((error) => {
-            console.log(error)
-            const { response } = error;
-            const { status } = response;
+            const dias = [
+                {
+                    diaSemana: "Segunda-Feira",
+                    inicio: horario1Segunda,
+                    fim: horario2Segunda,
+                    status: diaSegundaAberto ? 1 : 0
+                },
+                {
+                    diaSemana: "Terça-Feira",
+                    inicio: horario1Terca,
+                    fim: horario2Terca,
+                    status: diaTercaAberto ? 1 : 0
+                    ,
+                },
+                {
+                    diaSemana: "Quarta-Feira",
+                    inicio: horario1Quarta,
+                    fim: horario2Quarta,
+                    status: diaQuartaAberto ? 1 : 0
+                },
+                {
+                    diaSemana: "Quinta-Feira",
+                    inicio: horario1Quinta,
+                    fim: horario2Quinta,
+                    status: diaQuintaAberto ? 1 : 0
+                },
+                {
 
-            if (status === 409) {
-                toast.error("O CNPJ informado, já foi cadastrado!")
+                    diaSemana: "Sexta-Feira",
+                    inicio: horario1Sexta,
+                    fim: horario2Sexta,
+                    status: diaSextaAberto ? 1 : 0
+                    ,
+                },
+                {
+                    diaSemana: "Sábado",
+                    inicio: horario1Sabado,
+                    fim: horario2Sabado,
+                    status: diaSabadoAberto ? 1 : 0
+                },
+                {
+                    diaSemana: "Domingo",
+                    inicio: horario1Domingo,
+                    fim: horario2Domingo,
+                    status: diaDomingoAberto ? 1 : 0
+                }
+            ];
+
+            for (let i = 0; i < dias.length; i++) {
+                let bodyDias = {
+                    "diaSemana": dias[i].diaSemana,
+                    "inicio": dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].inicio),
+                    "fim": dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].fim),
+                    "status": dias[i].status,
+                    "empresa": {
+                        id,
+                        razaoSocial,
+                        cnpj,
+                        telefonePrincipal,
+                        emailPrincipal
+                    }
+                };
+
+                api.post("/horarios-funcionamento", bodyDias).then().catch((error) => {
+                    console.log("houve um erro ao tentar cadastrar o horario de funcionamento");
+                    toast.error("Houve um erro ao tentar cadastrar o horario de funcionamento dia:" + bodyDias.diaSemana);
+                    console.log(error);
+                })
             }
 
-            deuRuim = true;
-        });
-
-        return deuRuim;
-    }
-
-    const cadastrarEmpresa2 = () => {
-        var deuRuim = false;
-        // var idEmpresa = sessionStorage.getItem("empresa");
-        api.post(`/enderecos/${id}/${cep}/${numero}`).then((response) => {
-            console.log(response);
-        }).catch((error) => {
-            toast.error("Houve um erro ao tentar cadastrar o endereço")
-            console.log(error)
-            deuRuim = true;
-
-        });
-
-        return deuRuim
-    }
-
-    const cadastrarEmpresa3 = () => {
-        const dias = [
-            {
-                diaSemana: "Segunda-Feira",
-                inicio: horario1Segunda,
-                fim: horario2Segunda,
-                status: diaSegundaAberto ? 1 : 0
-            },
-            {
-                diaSemana: "Terça-Feira",
-                inicio: horario1Terca,
-                fim: horario2Terca,
-                status: diaTercaAberto ? 1 : 0
-                ,
-            },
-            {
-                diaSemana: "Quarta-Feira",
-                inicio: horario1Quarta,
-                fim: horario2Quarta,
-                status: diaQuartaAberto ? 1 : 0
-            },
-            {
-                diaSemana: "Quinta-Feira",
-                inicio: horario1Quinta,
-                fim: horario2Quinta,
-                status: diaQuintaAberto ? 1 : 0
-            },
-            {
-
-                diaSemana: "Sexta-Feira",
-                inicio: horario1Sexta,
-                fim: horario2Sexta,
-                status: diaSextaAberto ? 1 : 0
-                ,
-            },
-            {
-                diaSemana: "Sábado",
-                inicio: horario1Sabado,
-                fim: horario2Sabado,
-                status: diaSabadoAberto ? 1 : 0
-            },
-            {
-                diaSemana: "Domingo",
-                inicio: horario1Domingo,
-                fim: horario2Domingo,
-                status: diaDomingoAberto ? 1 : 0
-            }
-        ];
-        var deuRuim = false;
-        // var idEmpresa = sessionStorage.getItem("empresa") || id;
-
-        for (let i = 0; i < dias.length; i++) {
-            let body = {
-                "diaSemana": dias[i].diaSemana,
-                "inicio": dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].inicio),
-                "fim": dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].fim),
-                "status": dias[i].status,
+            let bodyFuncionario = {
+                nome,
+                telefone,
+                email,
+                senha,
                 "empresa": {
                     id,
                     razaoSocial,
@@ -347,63 +339,40 @@ const Cadastro = () => {
                     telefonePrincipal,
                     emailPrincipal
                 }
-            };
-
-            api.post("/horarios-funcionamento", body).then((response) => {
-                console.log("deu certo o cadastro dos horários de funcionamento")
-                console.log(response);
-            }).catch((error) => {
-                console.log("houve um erro ao tentar cadastrar o horario de funcionamento");
-                toast.error("houve um erro ao tentar cadastrar o horario de funcionamento dia:" + body.diaSemana);
-                console.log(error);
-                deuRuim = true;
-            })
-        }
-
-        return deuRuim;
-    }
-
-    const cadastrarEmpresa4 = () => {
-        var deuRuim = false;
-        let body = {
-            nome,
-            telefone,
-            email,
-            senha,
-            "empresa": {
-                id,
-                razaoSocial,
-                cnpj,
-                telefonePrincipal,
-                emailPrincipal
             }
-        }
 
-        api.post("/funcionarios", body).then((response) => {
-            console.log("cadastro de funcionario com sucesso")
-            console.log(response);
-            toast.success("Cadastro realizado com sucesso!");
-            navigate("/login");
+            api.post("/funcionarios", bodyFuncionario).then((response) => {
+                toast.success("Cadastro realizado com sucesso!");
+                navigate("/login");
+                sessionStorage.removeItem("currentStep");
+            }).catch(() => {
+                toast.error("Houve um erro ao tentar cadatrar funcionario")
+            });
+
         }).catch((error) => {
-            console.log("houve um erro ao tentar cadatrar funcionario")
             console.log(error);
-            deuRuim = true;
+            const { code } = error;
+
+            if (code === "ERR_NETWORK") {
+                toast.error("Houve um erro ao tentar realizar cadastro. Tente novamente mais tarde!");
+            } else {
+                const { response } = error;
+                const { status } = response;
+
+                if (status === 409) {
+                    toast.error("O CNPJ informado, já foi cadastrado!")
+                }
+            }
 
         });
 
-        return deuRuim
     }
-
-    const funcoes = [cadastrarEmpresa1, cadastrarEmpresa2, cadastrarEmpresa3, cadastrarEmpresa4]
 
     const validacoes = [validarCadastro1, validarCadastro2, validarCadastro3, validarCadastro4];
 
     const avancar = (e) => {
         if (validacoes[currentStep]()) {
-            var deuRuim = funcoes[currentStep]();
-            if (!deuRuim) {
-                changeStep(Number(currentStep) + 1, e)
-            }
+            changeStep(Number(currentStep) + 1, e)
         }
     }
 
@@ -433,7 +402,7 @@ const Cadastro = () => {
                                         cor={"roxo"}
                                     /> :
                                     <Button
-                                        funcaoButton={(e) => avancar(e)}
+                                        funcaoButton={() => cadastrar()}
                                         titulo="Cadastrar"
                                         cor={"roxo"}
                                     />}

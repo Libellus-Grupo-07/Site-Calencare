@@ -7,11 +7,11 @@ import iconProfile from "./../../utils/assets/perfil_padrao.svg"
 import { LuMenu } from "react-icons/lu";
 import Equipe from "../../pages/minha-equipe/MinhaEquipe";
 
-const Header = ({ nomeUser }) => {
+const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location.pathname)
     const idUser = sessionStorage.getItem("idUser");
+    const nomeUser = sessionStorage.getItem("nomeUser");
 
     return (
         <>
@@ -78,7 +78,7 @@ const Header = ({ nomeUser }) => {
                     <li
                         className={
                             styles[
-                            location.pathname === "/dashboard" ? "roxo" : "cinza"
+                                location.pathname === "/dashboard" ? "roxo" : "cinza"
                             ]
                         }
                     >
