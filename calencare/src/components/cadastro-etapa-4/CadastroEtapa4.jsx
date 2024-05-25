@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Input from "../../components/input/Input";
 import styles from "./CadastroEtapa4.module.css"
-import { toast } from "react-toastify";
 
 const CadastroEtapa4 = ({
     Nome, setNome,
@@ -15,20 +14,26 @@ const CadastroEtapa4 = ({
         <div className={styles["tela-cadastro"]}>
             <div className={styles["container-cadastro"]}>
                 <Input
+                    id="nomeUsuario"
                     valor={Nome}
                     alterarValor={setNome}
                     titulo={"Nome"}/>
                 <Input
+                    id="telefoneUsuario"
                     valor={Telefone}
                     alterarValor={setTelefone}
                     titulo={"Telefone"}
+                    mascara={"(00) 00000-0000"}
+                    // validarEntrada={inputSomenteNumero}
                 />
                 <Input
+                    id="emailUsuario"
                     valor={Email}
                     alterarValor={setEmail}
                     titulo={"Email"}
                 />
                 <Input
+                    id="senha"
                     valor={Senha}
                     alterarValor={setSenha}
                     titulo={"Senha"}

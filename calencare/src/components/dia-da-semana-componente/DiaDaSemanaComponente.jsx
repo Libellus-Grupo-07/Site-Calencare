@@ -23,7 +23,15 @@ const DiaDaSemanaComponente = (
 
   const handleButtonClick = () => {
     setAberto(!aberto);
+    diaFechado()
   };
+
+  const diaFechado = () => {
+    if(!aberto){
+      setHorario1("00:00:00")
+      setHorario2("00:00:00")
+    }
+  }
 
   const mudarValor = (e, alterarValor) => {
     alterarValor(e.target.value);
@@ -112,7 +120,7 @@ const DiaDaSemanaComponente = (
 
         </div>
         :
-        <span className={styles["btn-fechado"]} >
+        <span className={styles["btn-fechado"]} onLoad={() => diaFechado()}>
           Fechado
         </span>
       }

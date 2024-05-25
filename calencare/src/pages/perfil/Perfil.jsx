@@ -2,28 +2,35 @@ import React, { useEffect, useState } from "react";
 import styles from "./Perfil.module.css"
 import Header from "../../components/header/Header";
 import api from "../../api";
-import Titulo from './../../components/titulo/Titulo';
 import Button from "../../components/button/Button";
 import { Delete, IconlyProvider, Logout } from "react-iconly";
 import { useNavigate, useParams } from "react-router-dom";
 import imgPerfil from "./../../utils/assets/perfil_padrao.svg";
 import Row from './../../components/row/Row';
-import { transformarData } from "../../utils/global";
-import { toast } from "react-toastify";
+import { logado, logoutUsuario, transformarData } from "../../utils/global";
 import Swal from 'sweetalert2'
+import CadastroEtapa3 from "../../components/cadastro-etapa-3/CadastroEtapa3";
 
 const Perfil = () => {
 
     const navigate = useNavigate();
+    const hora = new Date();
 
     const { idUser } = useParams();
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
     const [dtCriacao, setDtCriacao] = useState("");
-    let secaoAtual = sessionStorage.getItem("sessaoPerfil");
-    // const [secaoPerfil, setSecaoPerfil] = useState(secaoAtual || "informacoes-empresa");
-    const [secaoPerfil, setSecaoPerfil] = useState(secaoAtual || "informacoes-pessoais");
+
+    const [idEmpresa, setIdEmpresa] = useState(0);
+    const [razaoSocial, setRazaoSocial] = useState("")
+    const [cnpj, setCNPJ] = useState("")
+    const [telefonePrincipal, setTelefonePrincipal] = useState("")
+    const [emailPrincipal, setEmailPrincipal] = useState("")
+
+    const [dias, setDias] = useState([]);
+
+    const [secaoPerfil, setSecaoPerfil] = useState(sessionStorage.getItem("sessaoPerfil") || "informacoes-pessoais");
 
     const mudarSecao = (secao) => {
         setSecaoPerfil(secao);
@@ -31,18 +38,19 @@ const Perfil = () => {
     }
 
     const sair = (url) => {
-        sessionStorage.removeItem("idUser");
+        logoutUsuario();
         sessionStorage.removeItem("sessaoPerfil");
+        sessionStorage.removeItem("token");
         navigate(url);
     }
 
     const excluir = () => {
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
-                confirmButton: styles["btn-roxo"],
-                cancelButton: styles["btn-branco"],
-                title: styles["title"],
-                text: styles["text"],
+                confirmButton: "btn-roxo",
+                cancelButton: "btn-branco",
+                title: "title-modal",
+                text: "text-modal",
 
             },
             buttonsStyling: false
@@ -82,19 +90,56 @@ const Perfil = () => {
     }
 
     useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
+
         api.get(`/funcionarios/${idUser}`).then((response) => {
             const { data } = response;
-            console.log(response);
-            const { nome, email, telefone, dtCriacao } = data;
+            const { nome, email, telefone, dtCriacao, empresa } = data;
+            const { id, razaoSocial, cnpj, emailPrincipal, telefonePrincipal } = empresa;
+
+            setIdEmpresa(id);
             setNome(nome);
             setEmail(email);
             setTelefone(telefone);
             setDtCriacao(dtCriacao);
+
+            setRazaoSocial(razaoSocial);
+            setCNPJ(cnpj);
+            setEmailPrincipal(emailPrincipal);
+            setTelefonePrincipal(telefonePrincipal);
+
+            api.get(`/empresas/${id}`).then((response) => {
+                const { data } = response
+                const { horariosFuncionamentos } = data;
+                const vetorDias = [];
+
+                horariosFuncionamentos.forEach((h) => {
+                    vetorDias.push({
+                        "id": h.id,
+                        "diaSemana": h.diaSemana,
+                        "fim": h.fim,
+                        "inicio": h.inicio,
+                        "status": h.status
+                    })
+                });
+
+                setDias(vetorDias);
+
+                console.log(vetorDias)
+            }).catch((error) => {
+                console.log("Houve um erro ao buscar o funcionário");
+                console.log(error);
+            })
+
+
         }).catch((error) => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
-        });
-    }, [idUser]);
+        })
+    });
 
     return (
         <>
@@ -143,51 +188,84 @@ const Perfil = () => {
                                 />
                             </div>
                             <div className={styles["group-button"]}>
-                                {/* <button
+                                <button
                                     onClick={() => mudarSecao("informacoes-empresa")}
                                     className={
                                         styles[
-                                        secaoPerfil == "informacoes-empresa" ?
+                                        secaoPerfil === "informacoes-empresa" ?
                                             "roxo" : "sem-fundo"
                                         ]
 
                                     }
                                 >
                                     Informações da Empresa
-                                </button> */}
+                                </button>
                                 <button
                                     onClick={() => mudarSecao("informacoes-pessoais")}
                                     className={
                                         styles[
-                                        secaoPerfil == "informacoes-pessoais" ?
+                                        secaoPerfil === "informacoes-pessoais" ?
                                             "roxo" : "sem-fundo"
                                         ]
                                     }
                                 >
                                     Informações Pessoais
                                 </button>
-                            </div>
-                            <div className={styles[""]}>
-                                <Row
-                                    titulo="Nome"
-                                    valor={nome}
-                                    funcao={() => navigate(`/editar-perfil/${idUser}`)}
-                                />
-                                <Row
-                                    titulo="Telefone"
-                                    valor={telefone}
-                                    funcao={() => navigate(`/editar-perfil/${idUser}`)}
-                                />
-                                <Row
-                                    titulo="Email"
-                                    valor={email}
-                                    funcao={() => navigate(`/editar-perfil/${idUser}`)}
-                                />
-                                <Row
-                                    titulo="Data de Cadastro"
-                                    valor={transformarData(dtCriacao)}
-                                />
-                            </div>
+                            </div>{
+                                secaoPerfil === "informacoes-empresa" ?
+                                    <div className={styles["info-empresa"]}>
+                                        <div className={styles["grid-info"]}>
+
+                                            <Row
+                                                titulo="Razão Social"
+                                                valor={razaoSocial}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="CNPJ"
+                                                valor={cnpj}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="Email Principal"
+                                                valor={emailPrincipal}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="Telefone Principal"
+                                                valor={telefonePrincipal}
+                                            />
+
+                                        </div>
+                                        <div className={styles["card-horarios"]}>
+                                            <CadastroEtapa3
+                                            />
+                                        </div>
+                                    </div> :
+                                    <div className={styles[""]}>
+                                        <div>
+                                            <Row
+                                                titulo="Nome"
+                                                valor={nome}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="Telefone"
+                                                valor={telefone}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="Email"
+                                                valor={email}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="Data de Cadastro"
+                                                valor={transformarData(dtCriacao)}
+                                            />
+                                        </div>
+                                    </div>
+                            }
                         </div>
                     </div>
                 </div>

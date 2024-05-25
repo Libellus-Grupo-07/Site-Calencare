@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export function useForm(steps) {
-    const [currentStep, setCurrentStep] = useState(0)
+    const [currentStep, setCurrentStep] = useState(sessionStorage.getItem("currentStep") || 0)
     const navigate = useNavigate();
 
     function changeStep(i, e) {
@@ -14,8 +14,12 @@ export function useForm(steps) {
             navigate(-1)
         }
 
-        if (i < 0 || i >= steps.length) return
+        if (i < 0 || i >= steps.length) {
+            sessionStorage.setItem("currentStep", parseInt(0));
+            return
+        }
 
+        sessionStorage.setItem("currentStep", i);
         setCurrentStep(i)
     }
 

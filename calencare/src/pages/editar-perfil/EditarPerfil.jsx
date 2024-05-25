@@ -4,11 +4,8 @@ import Header from "../../components/header/Header";
 import api from "../../api";
 import Titulo from './../../components/titulo/Titulo';
 import Button from "../../components/button/Button";
-import { Delete, IconlyProvider, Logout } from "react-iconly";
 import { useNavigate, useParams } from "react-router-dom";
-import imgPerfil from "./../../utils/assets/perfil_padrao.svg";
-import Row from './../../components/row/Row';
-import { inputSomenteNumero, inputSomenteTexto, transformarData } from "../../utils/global";
+import { inputSomenteNumero, inputSomenteTexto, logado } from "../../utils/global";
 import Input from "../../components/input/Input";
 import { FaCheck } from "react-icons/fa6";
 import { TiCancel } from "react-icons/ti";
@@ -48,13 +45,11 @@ const EditarPerfil = () => {
         });
     }
 
-    const sair = (url) => {
-        sessionStorage.removeItem("idUser");
-        sessionStorage.removeItem("sessaoPerfil");
-        navigate(url);
-    }
-
     useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
         api.get(`/funcionarios/${idUser}`).then((response) => {
             const { data } = response;
             console.log(response);
@@ -87,24 +82,29 @@ const EditarPerfil = () => {
                         </div>
                         <div className={styles["informations-perfil"]}>
                             <Input
+                                tamanho={"lg"}
                                 valor={nome}
                                 alterarValor={setNome}
                                 titulo={"Nome"}
                                 validarEntrada={(e) => inputSomenteTexto(e)}
                             />
                             <Input
+                                tamanho={"lg"}
                                 valor={telefone}
                                 alterarValor={setTelefone}
                                 titulo={"Telefone"}
+                                mascara={"(00) 00000-0000"}
                                 validarEntrada={(e) => inputSomenteNumero(e)}
                             />
                             <Input
+                                tamanho={"lg"}
                                 valor={email}
                                 alterarValor={setEmail}
                                 titulo={"Email"}
 
                             />
                             <Input
+                                tamanho={"lg"}
                                 valor={"Administrador"}
                                 readonly={true}
                                 titulo={"Perfil"}

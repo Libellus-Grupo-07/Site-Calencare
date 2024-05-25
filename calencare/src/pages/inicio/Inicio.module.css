@@ -32,18 +32,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  row-gap: 16px;
 }
 
-.section-inicio .container-inicio .content-inicio .container-agendamentos{
+.section-inicio .container-inicio .content-inicio .container-agendamentos {
   width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
 
-.section-inicio .container-inicio .content-inicio .container-agendamentos .proximos-agendamentos{
+.section-inicio
+  .container-inicio
+  .content-inicio
+  .container-agendamentos
+  .proximos-agendamentos {
   width: 60%;
   height: 318px;
+  min-height: 318px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -51,12 +59,18 @@
   row-gap: 16px;
 }
 
-
-.section-inicio .container-inicio .content-inicio .container-agendamentos .proximos-agendamentos .titulo, .section-inicio .container-inicio .content-inicio .container-agendamentos .agendamentos-em-andamento .titulo{
-  width: 100%;
-}
-
-.section-inicio .container-inicio .content-inicio .container-agendamentos .proximos-agendamentos .group-proximos-agendamentos{
+.section-inicio
+  .container-inicio
+  .content-inicio
+  .container-agendamentos
+  .proximos-agendamentos
+  .titulo,
+.section-inicio
+  .container-inicio
+  .content-inicio
+  .container-agendamentos
+  .proximos-agendamentos
+  .group-proximos-agendamentos {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,23 +78,31 @@
   row-gap: 24px;
 }
 
-.section-inicio .container-inicio .content-inicio .container-agendamentos .proximos-agendamentos .text-sem-agendamentos{
+.section-inicio
+  .container-inicio
+  .content-inicio
+  .container-agendamentos
+  .proximos-agendamentos
+  .text-sem-agendamentos {
   font-size: 16px;
   letter-spacing: -0.05rem;
   font-weight: 500;
   color: var(--texto-cinza);
   width: 100%;
-  height: 100% ;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.section-inicio .container-inicio .content-inicio .container-agendamentos .agendamentos-em-andamento{
+.section-inicio
+  .container-inicio
+  .content-inicio
+  .container-agendamentos
+  .agendamentos-em-andamento {
   background-color: var(--preto);
-  width: 35%;
+  width: 40%;
   padding: 24px;
-  height: 320px;
   min-height: 320px;
   border: none;
   border-radius: 1rem;
@@ -89,11 +111,27 @@
   align-items: flex-start;
   justify-content: flex-start;
   row-gap: 16px;
+  border: 1px solid white;
+  max-width: 440px;
 }
 
-.section-inicio .container-inicio .content-inicio .container-agendamentos .agendamentos-em-andamento .text-sem-agendamentos{
+.section-inicio
+  .container-inicio
+  .content-inicio
+  .container-agendamentos
+  .agendamentos-em-andamento
+  .container-card {
   width: 100%;
-  height: 100% ;
+}
+
+.section-inicio
+  .container-inicio
+  .content-inicio
+  .container-agendamentos
+  .agendamentos-em-andamento
+  .text-sem-agendamentos {
+  width: 100%;
+  height: 100%;
   color: var(--cinza-claro);
   font-size: 14px;
   font-weight: 400;
@@ -103,5 +141,15 @@
   justify-content: center;
 }
 
-
-
+.section-inicio
+  .container-inicio
+  .content-inicio
+  .container-agendamentos
+  .agendamentos-em-andamento
+  .group-agendamentos-em-andamento {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
