@@ -17,72 +17,71 @@ const AdicionarServico = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const titulo = location.pathname === "/servicos/adicionar" ? "Adicionar Serviço" : "Editar Serviço";
+    const isEditar = location.pathname === "/servicos/adicionar";
     const { idServico } = useParams();
-    const idUser = sessionStorage.getItem("idUser");
+    const nomeUser = sessionStorage.getItem("nomeUser");
     const [nome, setNome] = useState("");
-    const [nomeUser, setNomeUser] = useState("");
     const [descricao, setDescricao] = useState("");
     const [preco, setPreco] = useState("");
     const [comissao, setComissao] = useState(0);
     const [duracao, setDuracao] = useState(0);
-    const [options, setOptions] = useState([
-        {
-            label: "Selecione",
-            value: null
-        },{
-            label: "Cabelo",
-            value: "Cabelo"
-        },
-        {
-            label: "Maquiagem",
-            value: "Maquiagem"
-        },
-        {
-            label: "Podologia",
-            value: "Podologia"
-        },
-        {
-            label: "Manicure",
-            value: "Manicure"
-        }]);
-    const [categoria, setCategoria] = useState(options[0]);
+    const [servicos, setServicos] = useState([]);
+    const [options, setOptions] = useState([]);
+    const [categoria, setCategoria] = useState();
 
-
-    // const editar = () => {
-    //     let body = {
-    //         "id": idServico,
-    //         "nome": nome,
-    //         email,
-    //         telefone,
-    //         dtCriacao,
-    //         empresa
-    //     }
-    //     api.put(`/funcionarios/${idUser}`, body).then((response) => {
-    //         console.log(response);
-    //         toast.success("Informações atualizadas com sucesso!")
-    //         voltar();
-    //     }).catch((error) => {
-    //         console.log("Houve um erro ao atualizar o funcionário");
-    //         console.log(error);
-    //     });
-    // }
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
             navigate("/login");
             return;
         }
-        api.get(`/funcionarios/${idUser}`).then((response) => {
+
+        api.get("/categoria-servico").then((response) => {
             const { data } = response;
-            console.log(response);
-            const { nome } = data;
-            setNomeUser(nome)
+            mapear(data);
+
         }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
+            console.error("Houve um erro ao buscar Categorias de Serviço => " + error);
         });
-    }, [idUser]);
+
+        api.get("servicos").then((response) => {
+            const { data } = response;
+            setServicos(data);
+        }).catch((error) => {
+            console.error("Houve um erro ao buscar os serviços.");
+            console.error(error);
+        });
+    }, []);
+
+
+
+    const salvar = () => {
+        var url = isEditar ? `/servicos/preco/${idServico}` : "/servicos/preco/";
+        var body = {};
+        
+        api.post(url, body).then(() => {
+            toast.success("Serviço adicionado com sucesso!");
+            navigate("/servicos");
+        }).catch((error) => {
+            toast.error("Houve um erro ao tentar adicionar serviço!");
+            console.error(error);
+        });
+    }
+
+
+    const mapear = ( data ) => {
+        var optionsMap = [];
+
+        for (let i = 0; i < data.length; i++) {
+            optionsMap.push({
+                label: data[i].nome,
+                value: data[i].nome,
+            })
+        }
+        
+        setOptions(optionsMap)
+        setCategoria(optionsMap[0]);
+    }
 
     return (
         <>
@@ -95,10 +94,10 @@ const AdicionarServico = () => {
                         <div className={styles["header"]}>
                             <Titulo
                                 tamanho={"md"}
-                                titulo={titulo}
+                                titulo={isEditar ? "Adicionar Serviço" : "Editar Serviço"}
                             />
                         </div>
-                        <div className={styles["informations-adicionar-servico"]}>
+                        <form className={styles["informations-adicionar-servico"]}>
                             <Input
                                 id="nomeServico"
                                 tamanho={"lg"}
@@ -147,7 +146,7 @@ const AdicionarServico = () => {
                                 valor={duracao}
                                 alterarValor={setDuracao}
                             />
-                        </div>
+                        </form>
                         <div className={styles["group-button"]}>
                             <Button
                                 funcaoButton={() => navigate(-1)}
@@ -164,9 +163,10 @@ const AdicionarServico = () => {
                                     </div>
                                 } />
                             <Button
-                                titulo={"Adicionar"}
+                                titulo={isEditar ? "Adicionar" : "Editar" }
                                 icone={<FaCheck />}
                                 cor={"roxo"}
+                                funcaoButton={() => salvar()}
                             />
                         </div>
                     </div>
