@@ -21,30 +21,35 @@ const AdicionarFuncionario = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const isEditar = location.pathname === "/funcionarios";
-    const {idProfissional} = useParams();
+    const { idProfissional } = useParams();
     const [nomeUser, setNomeUser] = useState("");
-    const idUser = sessionStorage.getItem("idUser");
     const [nome, setNome] = useState("");
-    const [sobrenome, setSobrenome] = useState("");
+    const [telefone, setTelefone] = useState("");
+    const [bitStatus, setBitStatus] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-    const [options, setOptions] = useState([]);
+    const [options, setOptions] = useState([
+            {
+                label: "Selecione",
+                value: null
+            }, {
+                label: "Administrador",
+                value: "Adminstrador"
+            },
+            {
+                label: "Funcionário",
+                value: "Funcionário"
+            }]);
+    
     const [tipoPerfil, setTipoPerfil] = useState("");
+    
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
-    // const items = [
-    //     "Coloração",
-    //     "Hidratação",
-    //     "Pé e Mão ",
-    //     "Corte",
-    //     "Maquiagem ",
-    //     "Unha de Gel",
-    //     "Depilação",
-    //     "Massagem"
-    // ];
+    const items = [];
 
     const validarFuncionario = () => {
         if (!isVazio(nome, "Nome")
-            && !isVazio(sobrenome, "Sobrenome")
+            && !isVazio(telefone, "Telefone")
+            && !isVazio(bitStatus, "Status")
             && !isVazio(email, "Email")
             && !isVazio(senha, "Senha")
             && !isVazio(options, "Tipo de Perfil")
@@ -57,10 +62,11 @@ const AdicionarFuncionario = () => {
     }
 
     const handleSave = () => {
-        var url = isEditar ? `/funcionarios/${idProfissional}` : "/funcionarios" 
+        var url = isEditar ? `/funcionarios/${idProfissional}` : "/funcionarios"
         const objetoAdicionado = {
             nome,
-            sobrenome,
+            telefone,
+            bitStatus,
             email,
             senha,
             options,
@@ -95,12 +101,29 @@ const AdicionarFuncionario = () => {
             console.log(response);
             const { nome, telefone, email, bitStatus } = data;
             setNomeUser(nome);
+            setTelefone(telefone);
+            setBitStatus(bitStatus);
+            setEmail(email);
+
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar o funcionário");
+            console.log(error);
+        });
+
+        api.get(`/funcionarios/${idProfissional}`).then((response) => {
+            const { data } = response;
+            console.log(response);
+            const { } = data;
+            setNomeUser(nome);
+            
         }).catch((error) => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
         });
 
     }, [idProfissional]);
+
+    
 
     return (
         <>
@@ -114,38 +137,38 @@ const AdicionarFuncionario = () => {
                             <Titulo tamanho={"md"} titulo={isEditar ? "Editar Profissional" : "Adicionar Profissional"} />
                         </div>
                         <div className={styles["informations-adicionar-funcionario"]}>
-                            <div className={styles["group-input"]}>
-                                <Input
-                                    id="nome"
-                                    tamanho={"lg"}
-                                    valor={nome}
-                                    alterarValor={setNome}
-                                    titulo={"Nome"}
-                                    validarEntrada={(e) => inputSomenteTexto(e)}
-                                />
-                                <Input
-                                    id="sobrenome"
-                                    tamanho={"lg"}
-                                    valor={sobrenome}
-                                    alterarValor={setSobrenome}
-                                    titulo={"Sobrenome"}
-                                    validarEntrada={(e) => inputSomenteTexto(e)}
-                                />
-                            </div>
 
                             <Input
-                                id="email"
-                                valor={email}
-                                alterarValor={setEmail}
-                                titulo={"Email"}
+                                id="nome"
+                                tamanho={"lg"}
+                                valor={nome}
+                                alterarValor={setNome}
+                                titulo={"Nome"}
+                                validarEntrada={(e) => inputSomenteTexto(e)}
                             />
                             <Input
-                                id="senha"
-                                valor={senha}
-                                alterarValor={setSenha}
-                                titulo={"Senha"}
+                                id="telefone"
+                                tamanho={"lg"}
+                                valor={telefone}
+                                alterarValor={setTelefone}
+                                titulo={"Telefone"}
+                                mascara={"(00) 00000-0000"}
                             />
+                  
+                        <Input
+                            id="email"
+                            valor={email}
+                            alterarValor={setEmail}
+                            titulo={"Email"}
+                        />
+                        <Input
+                            id="senha"
+                            valor={senha}
+                            alterarValor={setSenha}
+                            titulo={"Senha"}
+                        />
 
+                        <div className={styles["group-input"]}>
                             <SelectInput
                                 id={"tipoPerfil"}
                                 tamanho={"lg"}
@@ -155,40 +178,52 @@ const AdicionarFuncionario = () => {
                                 titulo={"Tipo de Perfil"}
                             />
 
-                            <Ul className={styles["servicos-grid"]}
-                                titulo={"Serviços que realiza"}
-                                items={items}
-                                servicosSelecionados={servicosSelecionados}
-                                toggleServico={toggleServico}
-                            />
+                            <div className={styles[isEditar ? "selectInput-status" : "none-selectInput-status"]}>
+                                <SelectInput
+                                    id={"status"}
+                                    tamanho={"lg"}
+                                    options={options}
+                                    valor={bitStatus}
+                                    alterarValor={setBitStatus}
+                                    titulo={"Status"}
+                                />
+                            </div>
                         </div>
-                        <div className={styles["group-button"]}>
-                            <Button
 
-                                funcaoButton={() => navigate(-1)}
-                                titulo={"Cancelar"}
-                                cor={"branco"}
-                                icone={
-                                    <div style={{
-                                        fontSize: "18px",
-                                        display: "flex",
-                                        alignItens: "center",
-                                        justifyContent: "center"
-                                    }}>
-                                        <TiCancel />
-                                    </div>
-                                } />
-                            <Button
-                                //(e) => avancar(e)
-                                funcaoButton={handleSave}
-                                titulo={isEditar ? "Editar " : "Adicionar "}
-                                icone={<FaCheck />}
-                                cor={"roxo"}
-                            />
-                        </div>
+                        <Ul className={styles["servicos-grid"]}
+                            titulo={"Serviços que realiza"}
+                            items={items}
+                            servicosSelecionados={servicosSelecionados}
+                            toggleServico={toggleServico}
+                        />
+                    </div>
+                    <div className={styles["group-button"]}>
+                        <Button
+
+                            funcaoButton={() => navigate(-1)}
+                            titulo={"Cancelar"}
+                            cor={"branco"}
+                            icone={
+                                <div style={{
+                                    fontSize: "18px",
+                                    display: "flex",
+                                    alignItens: "center",
+                                    justifyContent: "center"
+                                }}>
+                                    <TiCancel />
+                                </div>
+                            } />
+                        <Button
+                            //(e) => avancar(e)
+                            funcaoButton={handleSave}
+                            titulo={isEditar ? "Editar " : "Adicionar "}
+                            icone={<FaCheck />}
+                            cor={"roxo"}
+                        />
+                    </div>
                     </div>
                 </div>
-            </section>
+        </section >
 
         </>
     );

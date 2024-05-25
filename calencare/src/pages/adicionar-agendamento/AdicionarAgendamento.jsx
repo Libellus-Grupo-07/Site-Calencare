@@ -36,16 +36,7 @@ const AdicionarAgendamento = () => {
         }]);
     const [tipoPerfil, setTipoPerfil] = useState(options[0]);
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
-    const items = [
-        "Coloração - R$ 45,00",
-        "Hidratação - R$ 45,00",
-        "Pé e Mão - R$ 57,00",
-        "Corte - R$ 45,00",
-        "Maquiagem - R$ 35,00",
-        "Unha de Gel - R$ 100,00",
-        "Depilação - R$ 45,00",
-        "Massagem - R$ 200,00"
-    ];
+    const items = [];
 
     const toggleServico = (item) => {
         if (servicosSelecionados.includes(item)) {

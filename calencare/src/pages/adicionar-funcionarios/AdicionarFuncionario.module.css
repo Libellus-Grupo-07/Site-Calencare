@@ -92,3 +92,11 @@
   border: none;
   color: var(--texto-cinza);
 }
+
+.selectInput-status{
+  display: inline;
+}
+
+.none-selectInput-status{
+  display: none;
+}
