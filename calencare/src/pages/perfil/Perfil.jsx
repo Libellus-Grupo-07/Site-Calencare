@@ -9,7 +9,7 @@ import imgPerfil from "./../../utils/assets/perfil_padrao.svg";
 import Row from './../../components/row/Row';
 import { logado, logoutUsuario, transformarData } from "../../utils/global";
 import Swal from 'sweetalert2'
-import CadastroEtapa3 from "../../components/cadastro-etapa-3/CadastroEtapa3";
+import DiaDaSemanaComponente from './../../components/dia-da-semana/DiaDaSemanaComponente';
 
 const Perfil = () => {
 
@@ -27,8 +27,36 @@ const Perfil = () => {
     const [cnpj, setCNPJ] = useState("")
     const [telefonePrincipal, setTelefonePrincipal] = useState("")
     const [emailPrincipal, setEmailPrincipal] = useState("")
+    const [diaSegundaAberto, setDiaSegundaAberto] = useState(true);
+    const [horario1Segunda, setHorario1Segunda] = useState(hora)
+    const [horario2Segunda, setHorario2Segunda] = useState(hora)
+
+    const [diaTercaAberto, setDiaTercaAberto] = useState(true);
+    const [horario1Terca, setHorario1Terca] = useState(hora)
+    const [horario2Terca, setHorario2Terca] = useState(hora)
+
+    const [diaQuartaAberto, setDiaQuartaAberto] = useState(true);
+    const [horario1Quarta, setHorario1Quarta] = useState(hora)
+    const [horario2Quarta, setHorario2Quarta] = useState(hora)
+
+    const [diaQuintaAberto, setDiaQuintaAberto] = useState(true);
+    const [horario1Quinta, setHorario1Quinta] = useState(hora)
+    const [horario2Quinta, setHorario2Quinta] = useState(hora)
+
+    const [diaSextaAberto, setDiaSextaAberto] = useState(true);
+    const [horario1Sexta, setHorario1Sexta] = useState(hora)
+    const [horario2Sexta, setHorario2Sexta] = useState(hora)
+
+    const [diaSabadoAberto, setDiaSabadoAberto] = useState(true);
+    const [horario1Sabado, setHorario1Sabado] = useState(hora)
+    const [horario2Sabado, setHorario2Sabado] = useState(hora)
+
+    const [diaDomingoAberto, setDiaDomingoAberto] = useState(true);
+    const [horario1Domingo, setHorario1Domingo] = useState(hora)
+    const [horario2Domingo, setHorario2Domingo] = useState(hora)
 
     const [dias, setDias] = useState([]);
+    const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
 
     const [secaoPerfil, setSecaoPerfil] = useState(sessionStorage.getItem("sessaoPerfil") || "informacoes-pessoais");
 
@@ -238,8 +266,19 @@ const Perfil = () => {
 
                                         </div>
                                         <div className={styles["card-horarios"]}>
-                                            <CadastroEtapa3
-                                            />
+                                            {
+                                                dias.map((d, index) => (
+                                                    <div key={index}>
+                                                        <DiaDaSemanaComponente
+                                                            aberto={ d.aberto === 1 }
+                                                            diaSemana={d.diaSemana}
+                                                            horario1={d.inicio}
+                                                            horario2={d.fim}
+                                                        />
+                                                    </div>
+                                            
+                                                ))
+                                            }
                                         </div>
                                     </div> :
                                     <div className={styles[""]}>

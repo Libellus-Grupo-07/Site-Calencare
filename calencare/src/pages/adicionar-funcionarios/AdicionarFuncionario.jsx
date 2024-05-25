@@ -44,8 +44,9 @@ const AdicionarFuncionario = () => {
     const [tipoPerfil, setTipoPerfil] = useState("");
     
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
-    const items = [];
 
+    const items = [];
+  
     const validarFuncionario = () => {
         if (!isVazio(nome, "Nome")
             && !isVazio(telefone, "Telefone")

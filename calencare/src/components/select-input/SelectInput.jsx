@@ -1,8 +1,10 @@
 import React from "react";
 import styles from "./SelectInput.module.css";
 import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 
-const SelectInput = ({ titulo, id, options, alterarValor, valor }) => {
+
+const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar }) => {
     const mudarValor = (e) => {
         alterarValor(e.value)
     }
@@ -15,12 +17,14 @@ const SelectInput = ({ titulo, id, options, alterarValor, valor }) => {
                         className={styles["titulo-select"]}
                     >{titulo}</span>
                 </label>
-                <Select
+                <CreatableSelect
                     id={id}
+                    placeholder={placeholder || "Selecione"}
                     defaultValue={valor}
                     onChange={(e) => mudarValor(e)}
                     isSearchable={true}
                     options={options}
+                    onCreateOption={funcaoAdicionar}
                     styles={{
                         control: (state) => ({
                             padding: "0px 24px",

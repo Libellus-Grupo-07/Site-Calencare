@@ -78,6 +78,7 @@ const Inicio = () => {
             setNome(nome);
             setEmail(email);
             setTelefone(telefone);
+            sessionStorage.setItem("nomeUser", nome);
         }).catch((error) => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
@@ -121,7 +122,7 @@ const Inicio = () => {
         });
 
 
-        api.get(`/aservico-mais-procurado`).then((response) => {
+        api.get(`/agendamentos/servico-mais-procurado`).then((response) => {
             const { data } = response;
             console.log(data);
             setServicoMaisProcuradoDia(data);

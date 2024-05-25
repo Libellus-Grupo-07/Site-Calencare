@@ -3,7 +3,7 @@ import styles from "./Input.module.css";
 // import InputMask from 'react-input-mask';
 import { IMaskInput } from 'react-imask';
 
-const Input = ({ tamanho, id, valor, placeholder, titulo, type, alterarValor, validarEntrada, funcao, readonly, mascara }) => {
+const Input = ({ tamanho, id, valor, placeholder, titulo, type, alterarValor, validarEntrada, funcao, readonly, mascara, regex, maxlength, minlength }) => {
     const mudarValor = (e) => {
         alterarValor(e.target.value);
     }
@@ -30,6 +30,8 @@ const Input = ({ tamanho, id, valor, placeholder, titulo, type, alterarValor, va
                             padding: tamanho ? "6px 28px" : "",
                         }}
                         type={type}
+                        maxLength={maxlength}
+                        minLength={minlength}
                     /> :
                     <input
                         id={id}
@@ -46,6 +48,9 @@ const Input = ({ tamanho, id, valor, placeholder, titulo, type, alterarValor, va
                             fontSize: tamanho ? "14px" : "",
                             padding: tamanho ? "8px 28px" : "",
                         }}
+                        pattern={regex}
+                        maxLength={maxlength}
+                        minLength={minlength}
                     />
                 }
             </div>
