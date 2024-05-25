@@ -16,7 +16,6 @@ import SelectInput from "../../components/select-input/SelectInput";
 const AdicionarServico = () => {
     const navigate = useNavigate();
     const location = useLocation();
-
     const titulo = location.pathname === "/servicos/adicionar" ? "Adicionar Serviço" : "Editar Serviço";
     const { idServico } = useParams();
     const idUser = sessionStorage.getItem("idUser");

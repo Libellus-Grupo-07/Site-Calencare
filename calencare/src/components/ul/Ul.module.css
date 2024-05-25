@@ -1,29 +1,42 @@
-ul{
-    padding: 0px 25px;
-    height: 40px;
-    border-radius: 100px;
-    font-size: 14.5px;
+.servicos-container {
+    margin-bottom: 20px; /* Espaçamento entre a input e os outros elementos */
+}
+
+.servicos-input {
     border: 1.5px solid var(--texto-cinza);
-    letter-spacing: -0.03rem;
-    color: var(--texto-preto);
-    font-weight: 500;
+    border-radius: 30px;
+    padding: 10px;
+    margin-top: 10px;
 }
 
-.componet-input{
+.servicos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.servico-item {
     display: flex;
-    flex-direction: column;
-    row-gap: 8px;
-    width: 100%;
+    align-items: center;
 }
 
-.titulo-input{
+.servico-item span {
+    margin-left: 5px;
+}
+
+.titulo-input {
     font-family: "Poppins";
-    margin-left: 30px;
     font-weight: bold;
     font-size: 16px;
+    margin-bottom: 10px;
+       margin-left: 30px;
 }
 
+.servico-item.selected {
+    color: #000000; /* Cor do ícone quando selecionado */
+}
 
-
-
-
+.selected-text {
+    color: #000000; /* Cor do texto quando selecionado */
+}
