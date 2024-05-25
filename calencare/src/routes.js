@@ -11,7 +11,9 @@ import Servicos from "./pages/servicos/Servicos";
 import Clientes from "./pages/clientes/Clientes";
 import AdicionarServico from './pages/adicionar-servico/AdicionarServico';
 import Equipe from "./pages/minha-equipe/MinhaEquipe";
-import CadastroFuncionario from "./pages/cadastro-funcionarios/CadastroFuncionario";
+import AdicionarFuncionario from "./pages/adicionar-funcionarios/AdicionarFuncionario";
+import AdicionarAgendamento from "./pages/adicionar-agendamento/AdicionarAgendamento";
+import Agenda from "./pages/agenda/Agenda";
 
 function Rotas() {
   return (
@@ -31,7 +33,11 @@ function Rotas() {
           <Route path="editar-perfil/:idUser" element={<EditarPerfil />} />
           <Route path="editar-empresa/:idEmpresa" element={<EditarPerfil />} />
           <Route path="equipe" element={<Equipe/>}/>
-          <Route path="cadastro-profissional" element={<CadastroFuncionario/>}/>
+          <Route path="profissional/adicionar" element={<AdicionarFuncionario/>}/>
+          <Route path="profissional/:idProfissional" element={<AdicionarFuncionario />} />
+          <Route path="agenda" element={<Agenda/>} />
+          <Route path="agenda/adicionar" element={<AdicionarAgendamento/>}/>
+
         </Routes>
       </BrowserRouter>
     </>

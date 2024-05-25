@@ -45,6 +45,7 @@ const Header = () => {
                             location.pathname === "/agenda" ? "roxo" : "cinza"
                             ]
                         }
+                        onClick={() => navigate("/agenda")}
                     >
                         <IconlyProvider
                             className={styles["abc"]}

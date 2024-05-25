@@ -162,6 +162,7 @@ const Cadastro = () => {
         setSenha={setSenha}
     />]
 
+
     const { currentStep, currentComponent, changeStep, isLastStep } = useForm(formComponents)
 
     const navigate = useNavigate()

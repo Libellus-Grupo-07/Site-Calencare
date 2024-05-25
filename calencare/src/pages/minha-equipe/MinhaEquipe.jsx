@@ -8,13 +8,11 @@ import { AddUser, Edit, IconlyProvider } from "react-iconly";
 import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Table from "../../components/table/Table";
-import CadastroFuncionario from "../cadastro-funcionarios/CadastroFuncionario";
-
 
 const Equipe = () => {
     const navigate = useNavigate();
     const idUser = sessionStorage.getItem("idUser");
-    const titulos = ["", "Nome", "Email", "Perfil", "Status", "Serviços"]
+    const titulos = ["", "Nome", "Email", "Perfil", "Status", "Serviços",""]
     const dados = [["", "Felipe Santana", "felipe@gmail.com", "Funcionário", "Ativo", "Corte"],
     ["", "Helen Araújo", "helen@gmail.com", "Funcionário", "Ativo", "Hidratação"]];
     // const tituloServico = ["Serviços"]
@@ -48,10 +46,10 @@ const Equipe = () => {
                 <div className={styles["container-equipe"]}>
                     <div className={styles["content-equipe"]}>
                         <div className={styles["header"]}>
-                            <Titulo tamanho={"md"} titulo={`equipe`} />
+                            <Titulo tamanho={"md"} titulo={"Equipe"}/>
                             <div className={styles["group-button"]}>
                                 <Button
-                                    funcaoButton={() => navigate("/cadastro-profissional")}
+                                    funcaoButton={() => navigate("/profissional/adicionar")}
                                     cor="roxo"
                                     titulo={"Adicionar"}
                                     icone={<IconlyProvider

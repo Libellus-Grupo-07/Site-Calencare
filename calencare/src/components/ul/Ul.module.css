@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ul{
     padding: 0px 25px;
     height: 40px;
@@ -8,22 +9,47 @@
     color: var(--texto-preto);
     font-weight: 500;
 } */
-
-.componet-input{
-    display: flex;
-    flex-direction: column;
-    row-gap: 8px;
-    width: 100%;
+=======
+.servicos-container {
+    margin-bottom: 20px; /* Espaçamento entre a input e os outros elementos */
 }
 
-.titulo-input{
+.servicos-input {
+    border: 1.5px solid var(--texto-cinza);
+    border-radius: 30px;
+    padding: 10px;
+    margin-top: 10px;
+}
+>>>>>>> 09a8892e29a5fe9b10071ad4b02f5ea4d93b69d6
+
+.servicos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.servico-item {
+    display: flex;
+    align-items: center;
+}
+
+.servico-item span {
+    margin-left: 5px;
+}
+
+.titulo-input {
     font-family: "Poppins";
-    margin-left: 30px;
     font-weight: bold;
     font-size: 16px;
+    margin-bottom: 10px;
+       margin-left: 30px;
 }
 
+.servico-item.selected {
+    color: #000000; /* Cor do ícone quando selecionado */
+}
 
-
-
-
+.selected-text {
+    color: #000000; /* Cor do texto quando selecionado */
+}
