@@ -20,14 +20,14 @@ const Agenda = () => {
             return;
         }
 
-        api.get(`/agendas/${idUser}`).then((response) => {
-            const { data } = response;
-            const { nome } = data;
-            setNome(nome);
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar uma agenda");
-            console.log(error);
-        });
+        // api.get(`/agendas/${idUser}`).then((response) => {
+        //     const { data } = response;
+        //     const { nome } = data;
+        //     setNome(nome);
+        // }).catch((error) => {
+        //     console.log("Houve um erro ao buscar uma agenda");
+        //     console.log(error);
+        // });
     }, [idUser]);
 
     return (

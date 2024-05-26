@@ -5,13 +5,15 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Input from "../../components/input/Input";
-import { inputSomenteTexto, logado,isVazio } from "../../utils/global";
+import { inputSomenteTexto, logado, isVazio, isValidEmail } from "../../utils/global";
 import styles from "./AdicionarAgendamento.module.css";
 import Ul from "../../components/ul/Ul";
 import { TickSquare } from "react-iconly";
 import SelectInput from "../../components/select-input/SelectInput";
 import { FaCheck } from "react-icons/fa6";
 import { TiCancel } from "react-icons/ti";
+import ModalTemplate from "../../components/modal-template/ModalTemplate";
+import { toast } from "react-toastify";
 
 
 const AdicionarAgendamento = () => {
@@ -20,7 +22,15 @@ const AdicionarAgendamento = () => {
     const titulo = location.pathname === "/agenda/adicionar" ? "Adicionar Agendamento" : "Editar Agendamento";
     const [nomeUser, setNomeUser] = useState("");
     const idUser = sessionStorage.getItem("idUser");
-    const [cliente, setCliente] = useState("");
+    const [cliente, setCliente] = useState();
+    const [clientes, setClientes] = useState([]);
+    const [nomeCliente, setNomeCliente] = useState("");
+    const [sobrenomeCliente, setSobrenomeCliente] = useState("");
+    const [emailCliente, setEmailCliente] = useState("");
+    const [telefoneCliente, setTelefoneCliente] = useState("");
+    const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
+    const [modalAberto, setModalAberto] = useState(false);
+    const [nome, setNome] = useState("");
     const [data, setData] = useState("");
     const [options, setOptions] = useState([
         {
@@ -46,24 +56,152 @@ const AdicionarAgendamento = () => {
         }
     };
 
+    const tituloModal = "Adicionar Cliente";
+    const tituloBotao = "Adicionar";
+    const corpoModal = (
+        <>
+            <Input
+                id={"nomeCliente"}
+                titulo={"Nome"}
+                valor={nomeCliente}
+                alterarValor={setNomeCliente}
+                maxlength={40}
+                minlength={3}
+                validarEntrada={inputSomenteTexto}
+            />
+
+            <Input
+                id={"sobrenomeCliente"}
+                titulo={"Sobrenome"}
+                valor={sobrenomeCliente}
+                alterarValor={setSobrenomeCliente}
+                maxlength={40}
+                minlength={3}
+                validarEntrada={inputSomenteTexto}
+            />
+            <Input
+                id={"emailCliente"}
+                titulo={"Email (Opcional)"}
+                placeholder={"Email"}
+                valor={emailCliente}
+                alterarValor={setEmailCliente}
+                maxlength={60}
+                minlength={3}
+            />
+            <Input
+                id={"telefoneCliente"}
+                titulo={"Telefone"}
+                valor={telefoneCliente}
+                alterarValor={setTelefoneCliente}
+                mascara={"(00) 00000-0000"}
+            />
+            <Input
+                id={"dataNascimentoCliente"}
+                titulo={"Data de Nascimento"}
+                valor={dataNascimentoCliente}
+                alterarValor={setDataNascimentoCliente}
+                type={"date"}
+            />
+        </>
+    )
+
+    const abrirModal = (value) => {
+        setModalAberto(!modalAberto);
+        setNomeCliente(value)
+    }
+
+    const validarCadastroCliente = () => {
+        if (!isVazio(nomeCliente, "Nome do Cliente") &&
+            !isVazio(sobrenomeCliente, "Sobrenome do Cliente") &&
+            (isVazio(emailCliente, "Email do Cliente") || (
+            !isVazio(emailCliente, "Email do Cliente") && isValidEmail(emailCliente, "Email do Cliente")
+            )) &&
+            !isVazio(telefoneCliente, "Telefone do Cliente") &&
+            !isVazio(dataNascimentoCliente, "Data de Nascimento do Cliente")
+        ) {
+            return true;
+        }
+
+        return false
+    }
+
+    const adicionarCliente = () => {
+        if (validarCadastroCliente()) {
+            let body = {
+                "nome": nomeCliente,
+                // "sobrenome": sobrenomeCliente,
+                "telefone": telefoneCliente,
+                "email": emailCliente,
+                // "dtNascimento": dataNascimentoCliente
+            }
+
+            api.post("/clientes", body).then(() => {
+                setNomeCliente("");
+                setSobrenomeCliente("");
+                setEmailCliente("");
+                setTelefoneCliente("");
+                setDataNascimentoCliente("");
+                toast.success("Cliente adicionado com sucesso!");
+                abrirModal();
+                buscarClientes()
+            }).catch((error) => {
+                toast.error("Houve um erro ao tentar adicionar cliente");
+                console.error("Houve um erro ao tentar adicionar cliente!");
+                console.error(error)
+            })
+        }
+    }
+
+    const buscarClientes = (index) => {
+        api.get(`/clientes/${sessionStorage.getItem("idEmpresa")}`).then((response) => {
+            const { data } = response;
+            console.log(data);
+            mapear(data, index);
+
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar clientes");
+            console.log(error);
+        });
+    }
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
             navigate("/login");
             return;
         }
-        api.get(`/agendas/${idUser}`).then((response) => {
-            const { data } = response;
-            console.log(response);
-            const { nome } = data;
-            setNomeUser(nome);
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
-        });
+      
+        // api.get(`/agendas/${idUser}`).then((response) => {
+        //     const { data } = response;
+        //     console.log(response);
+        //     const { nome } = data;
+        //     setNomeUser(nome);
+        // }).catch((error) => {
+        //     console.log("Houve um erro ao buscar o funcionário");
+        //     console.log(error);
+        // });
+        
+        buscarClientes(0)
+
+
     }, [idUser]);
 
+    const mapear = (data, index) => {
+        var dataMapp = [];
+        let i = 0;
 
+        for (i = 0; i < data.length; i++){
+            dataMapp.push({
+                id: data[i].id,
+                label: data[i].nome,
+                value: data[i].nome
+            })
+        }
+
+        i = index === 0 ? index - 1 : i;
+        console.log(i);
+        setClientes(dataMapp);
+        setCliente(dataMapp[i]);
+    }
 
 
     return (
@@ -79,11 +217,14 @@ const AdicionarAgendamento = () => {
                         </div>
                         <div className={styles["informations-adicionar-agenda"]}>
 
-                            <Input
+                            <SelectInput
                                 id="cliente"
-                                valor={cliente}
+                                // valor={cliente}
                                 alterarValor={setCliente}
                                 titulo={"Cliente"}
+                                options={clientes}
+                                funcaoAdicionar={abrirModal}
+
                             />
 
                             <Ul className={styles["servicos-grid"]}
@@ -99,6 +240,7 @@ const AdicionarAgendamento = () => {
                                 valor={tipoPerfil}
                                 alterarValor={setTipoPerfil}
                                 titulo={"Profissional"}
+
                             />
 
                             <Input
@@ -108,8 +250,6 @@ const AdicionarAgendamento = () => {
                                 alterarValor={setData}
                                 titulo={"Data"}
                             />
-
-
 
                         </div>
                         <div className={styles["group-button"]}>
@@ -134,6 +274,20 @@ const AdicionarAgendamento = () => {
                             />
                         </div>
                     </div>
+                </div>
+                <div
+                    style={{
+                        position: "absolute"
+                    }}
+                >
+                    <ModalTemplate
+                        aberto={modalAberto}
+                        setAberto={setModalAberto}
+                        corpo={corpoModal}
+                        titulo={tituloModal}
+                        tituloBotaoConfirmar={tituloBotao}
+                        funcaoBotaoConfirmar={adicionarCliente}
+                    />
                 </div>
             </section>
 
