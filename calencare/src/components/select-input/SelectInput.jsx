@@ -1,10 +1,9 @@
 import React from "react";
 import styles from "./SelectInput.module.css";
-import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 
 
-const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar }) => {
+const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar, sobrepor }) => {
     const mudarValor = (e) => {
         alterarValor(e.value)
     }
@@ -38,7 +37,7 @@ const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, fu
                             color: "var(--texto-preto)",
                             fontWeight: 500,
                             borderColor: state.isFocused ? "var(--preto)" : "var(--texto-cinza)",
-                            borderWidth: state.isFocused ? "2px" : "1.5px"
+                            borderWidth: state.isFocused ? "2px" : "1.5px",
                         }),
                     }}
                 />
