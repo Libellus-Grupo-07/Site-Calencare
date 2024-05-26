@@ -1,3 +1,7 @@
+.teste{
+  z-index: 99999999;
+  background-color: cadetblue;
+}
 
 @media screen and (min-width: 1024px) {
   .modal {
@@ -61,6 +65,7 @@
     align-items: center;
     justify-content: center;
     width: 24vw;
+    z-index: 99999999999;
   }
 
   .modal .container-modal {
