@@ -1,7 +1,8 @@
 import React from "react";
 import styles from "./Table.module.css";
+import { Delete, Edit, IconlyProvider } from "react-iconly";
 
-const Table = ({ titulos, linhas, icones }) => {
+const Table = ({ titulos, linhas, showEditIcon, showDeleteIcon, funcaoEditar, funcaoDeletar }) => {
     return (
         <>
             <div className={styles["container-table"]}>
@@ -29,13 +30,31 @@ const Table = ({ titulos, linhas, icones }) => {
                                         </td>
                                     ))
                                     }
-                                     { icones ? icones.map((icone, index) => (
+                                    {showEditIcon || showDeleteIcon ?
                                         <td key={index}>
-                                            <div className={styles["td-div"]}>
-                                                {icone}
+                                            <div className={styles["group-icon"]}>
+                                                {showEditIcon ?
+                                                    <div className={styles["td-div-icon"]} onClick={funcaoEditar(index)}>
+                                                        <IconlyProvider>
+                                                            <Edit />
+                                                        </IconlyProvider>
+                                                    </div>
+                                                    : ""
+                                                }
+
+                                                {showDeleteIcon ?
+                                                    <div className={styles["td-div-icon"]} onClick={funcaoDeletar(index)}>
+                                                        <IconlyProvider>
+                                                            <Delete />
+                                                        </IconlyProvider>
+                                                    </div>
+                                                    : ""
+                                                }
+
+
                                             </div>
                                         </td>
-                                    )): ""}
+                                        : ""}
                                 </tr>
                             ))
                         }

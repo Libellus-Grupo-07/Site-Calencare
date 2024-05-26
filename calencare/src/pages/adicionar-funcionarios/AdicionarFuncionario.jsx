@@ -111,20 +111,18 @@ const AdicionarFuncionario = () => {
             console.log(error);
         });
 
-        api.get(`/funcionarios/${idProfissional}`).then((response) => {
-            const { data } = response;
-            console.log(response);
-            const { } = data;
-            setNomeUser(nome);
-            
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
-        });
+        // api.get(`/servicos/`).then((response) => {
+        //     const { data } = response;
+        //     console.log(response);
+        //     const { } = data;
+
+        // }).catch((error) => {
+        //     console.log("Houve um erro ao buscar o serviço");
+        //     console.log(error);
+        // });
 
     }, [idProfissional]);
 
-    
 
     return (
         <>
