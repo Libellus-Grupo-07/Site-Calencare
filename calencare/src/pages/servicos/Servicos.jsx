@@ -12,10 +12,10 @@ import Table from "../../components/table/Table";
 const Servicos = () => {
     const navigate = useNavigate();
     const idUser = sessionStorage.getItem("idUser");
-    const titulos = ["Nome", "Descrição", "Categoria", "Preço", "Comissão em %", "Duração (minutos)"]
-    const dados = [["Coloração", "Coloração de fios", "Categoria", "R$ 45,00", "20% em %", "60 minutos"], ["Coloração", "Coloração de fios", "Categoria", "R$ 45,00", "20% em %", "60 minutos"]];
+    const titulos = ["Nome", "Descrição", "Categoria", "Preço", "Comissão em %", "Duração (minutos)", ""]
+    const [dados, setDados] = useState([]);
 
-    const [nome, setNome] = useState("");
+    // const [nome, setNome] = useState("");
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -23,22 +23,51 @@ const Servicos = () => {
             return;
         }
 
-        api.get(`/funcionarios/${idUser}`).then((response) => {
+        api.get("/servicos/preco").then((response) => {
             const { data } = response;
-            const { nome } = data;
-            setNome(nome);
+            mapear(data);
         }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
-        });
-    }, [idUser]);
+            console.error("Houve um erro ao buscar serviços");
+            console.error(error)
+        })
 
+        // api.get(`/funcionarios/${idUser}`).then((response) => {
+        //     const { data } = response;
+        //     const { nome } = data;
+        //     setNome(nome);
+        // }).catch((error) => {
+        //     console.log("Houve um erro ao buscar o funcionário");
+        //     console.log(error);
+        // });
+    }, []);
+
+    const mapear = ( data ) => {
+        var dataMapp = [];
+        // ["Coloração", "Coloração de fios", "Categoria", "R$ 45,00", "20% em %", "60 minutos"], ["Coloração", "Coloração de fios", "Categoria", "R$ 45,00", "20% em %", "60 minutos"
+        
+        for (let i = 0; i < data.length; i++){
+            var dataAtual = [];
+            dataAtual.push(data[i].descricao);
+            dataAtual.push(data[i].descricao);
+            dataAtual.push(data[i].descricao);
+            dataAtual.push(`R$ ${data[i].preco.toFixed(2).replace(".", ",")}`);
+            dataAtual.push((data[i].comissao * 10).toFixed(2).replace(".", ",") + "%");
+            dataAtual.push(data[i].duracao + " minutos");
+
+            dataMapp.push(dataAtual);
+        }
+
+        setDados(dataMapp);
+    }
+
+    const editar = () => {}
+    const deletar = () => {}
 
     return (
         <>
             <section className={styles["section-servicos"]}>
                 <div>
-                    <Header nomeUser={nome} />
+                    <Header />
                 </div>
                 <div className={styles["container-servicos"]}>
                     <div className={styles["content-servicos"]}>
@@ -54,7 +83,20 @@ const Servicos = () => {
                             </div>
                         </div>
                         <div className={styles["table-servicos"]}>
-                            <Table titulos={titulos} linhas={dados} icones={""}/>
+                            {dados.length === 0 ?
+                                <div>
+                                    Nenhum serviço adicionado
+                                </div>
+                                :
+                                <Table
+                                    titulos={titulos}
+                                    linhas={dados}
+                                    showEditIcon={true}
+                                    showDeleteIcon={true}
+                                    funcaoEditar={editar}
+                                    funcaoDeletar={deletar}
+                                />
+                            }
                         </div>
                     </div>
                 </div>

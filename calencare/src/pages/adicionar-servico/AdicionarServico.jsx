@@ -18,10 +18,10 @@ const AdicionarServico = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const isEditar = location.pathname === "/servicos/adicionar";
+    const isEditar = location.pathname === "/servicos/editar/:idServico";
     const { idServico } = useParams();
     const nomeUser = sessionStorage.getItem("nomeUser");
-    const [nome, setNome] = useState("");
+    const [servico, setServico] = useState()
     const [descricao, setDescricao] = useState("");
     const [nomeCategoria, setNomeCategoria] = useState("");
     const [descricaoCategoria, setDescricaoCategoria] = useState("");
@@ -32,6 +32,26 @@ const AdicionarServico = () => {
     const [options, setOptions] = useState([]);
     const [categoria, setCategoria] = useState();
 
+    const buscarCategoriasServico = (action) => {
+        api.get("/categoria-servico").then((response) => {
+            const { data } = response;
+            console.log("Resposta => " + data.length);
+            mapear("categoria-servico", data, action === "I" ? data.length : 0);
+
+        }).catch((error) => {
+            console.error("Houve um erro ao buscar Categorias de Serviço => " + error);
+        });
+    }
+
+    const buscarServicos = (action) => {
+        api.get("/servicos").then((response) => {
+            const { data } = response;
+            mapear("servico", data, action === "I" ? data.length : 0);
+        }).catch((error) => {
+            console.error("Houve um erro ao buscar os serviços.");
+            console.error(error);
+        });
+    }
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -39,50 +59,35 @@ const AdicionarServico = () => {
             return;
         }
 
-        api.get("/categoria-servico").then((response) => {
-            const { data } = response;
-            mapear(data);
+        buscarCategoriasServico("C");
 
-        }).catch((error) => {
-            console.error("Houve um erro ao buscar Categorias de Serviço => " + error);
-        });
-
-        api.get("servicos").then((response) => {
-            const { data } = response;
-            setServicos(data);
-        }).catch((error) => {
-            console.error("Houve um erro ao buscar os serviços.");
-            console.error(error);
-        });
+        buscarServicos("C");
     }, []);
 
 
-    const salvar = () => {
-        var url = isEditar ? `/servicos/preco/${idServico}` : "/servicos/preco/";
-        var body = {};
-
-        api.post(url, body).then(() => {
-            toast.success("Serviço adicionado com sucesso!");
-            navigate("/servicos");
-        }).catch((error) => {
-            toast.error("Houve um erro ao tentar adicionar serviço!");
-            console.error(error);
-        });
-    }
-
-
-    const mapear = (data) => {
+    const mapear = (campo, data, index) => {
         var optionsMap = [];
+        let i = 0;
 
-        for (let i = 0; i < data.length; i++) {
+        console.log(data);
+        for (i = 0; i < data.length; i++) {
             optionsMap.push({
+                id: data[i].id,
                 label: data[i].nome,
                 value: data[i].nome,
             })
         }
 
-        setOptions(optionsMap)
-        setCategoria(optionsMap[0]);
+        i = index === 0 ? index - 1 : i;
+        console.log(i);
+
+        if (campo === "categoria-servico") {
+            setOptions(optionsMap)
+            setCategoria(optionsMap[i]);
+        } else {
+            setServicos(optionsMap)
+            setServico(optionsMap[i]);
+        }
     }
 
     const tituloModal = "Adicionar Categoria de Serviço";
@@ -107,11 +112,12 @@ const AdicionarServico = () => {
 
     const [modalAberto, setModalAberto] = useState(false);
 
-    const abrirModal = () => {
+    const abrirModal = (value) => {
         setModalAberto(!modalAberto);
+        setNomeCategoria(value)
     }
 
-    const isAdicionarValid = () => {
+    const isAdicionarCategoriaValid = () => {
         if (!isVazio(nomeCategoria, "Nome da Categoria")
             && !isVazio(descricaoCategoria, "Descrição da Categoria")
         ) {
@@ -121,22 +127,72 @@ const AdicionarServico = () => {
         return false;
     }
 
+    const isAdicionarServicoValid = (value) => {
+        if (!isVazio(value, "Nome do Serviço")
+        ) {
+            alert(value);
+            return true;
+        }
+
+        return false;
+    }
+
     const adicionarCategoria = () => {
-        if (isAdicionarValid) {
+        if (isAdicionarCategoriaValid()) {
             var body = {
                 "nome": nomeCategoria,
                 "descricao": descricaoCategoria
             }
 
             api.post("/categoria-servico", body).then(() => {
-                toast.success("Categoria de Serviço adicionada com sucesso!");
                 abrirModal();
+                buscarCategoriasServico("I");
+                toast.success("Categoria de Serviço adicionada com sucesso!");
+                setNomeCategoria("");
+                setDescricaoCategoria("");
             }).catch((error) => {
                 console.error(error)
                 toast.error("Ocorreu um erro ao salvar Categoria de Serviço!");
             })
         }
     }
+
+    const adicionarServico = (value) => {
+        if (isAdicionarServicoValid(value)) {
+            var body = {
+                "nome": value
+            }
+
+            api.post("/servicos", body).then(() => {
+                buscarServicos("I");
+            }).catch((error) => {
+                console.error("Houve um erro ao adicionar serviço!");
+                console.error(error);
+            });
+        }
+    }
+
+    const salvar = () => {
+        var url = isEditar ? `/servicos/preco/${idServico}` : "/servicos/preco";
+        var body = {
+            "descricao": descricao,
+            "preco": preco.replace("R$ ", "").replace(",", "."),
+            "duracao": duracao,
+            "comissao": comissao.replace(",", "."),
+            "bitStatus": 1,
+            "fkEmpresa": sessionStorage.getItem("idEmpresa"),
+            "fkServico": servico.id
+        };
+
+        api.post(url, body).then(() => {
+            toast.success("Serviço adicionado com sucesso!");
+            navigate("/servicos");
+        }).catch((error) => {
+            toast.error("Houve um erro ao tentar adicionar serviço!");
+            console.error(error);
+        });
+    }
+
 
     return (
         <>
@@ -149,17 +205,20 @@ const AdicionarServico = () => {
                         <div className={styles["header"]}>
                             <Titulo
                                 tamanho={"md"}
-                                titulo={isEditar ? "Adicionar Serviço" : "Editar Serviço"}
+                                titulo={!isEditar ? "Adicionar Serviço" : "Editar Serviço"}
                             />
                         </div>
                         <form className={styles["informations-adicionar-servico"]}>
-                            <Input
+                            <SelectInput
                                 id="nomeServico"
                                 tamanho={"lg"}
-                                valor={nome}
-                                alterarValor={setNome}
+                                // valor={nome}
+                                placeholder={"Nome"}
+                                alterarValor={setServico}
                                 titulo={"Nome"}
                                 validarEntrada={(e) => inputSomenteTexto(e)}
+                                funcaoAdicionar={adicionarServico}
+                                options={servicos}
                                 maxlength={40}
                                 minlength={5}
                             />
@@ -177,7 +236,7 @@ const AdicionarServico = () => {
                                 id={"categoriaServico"}
                                 tamanho={"lg"}
                                 options={options}
-                                valor={categoria}
+                                // valor={categoria}
                                 alterarValor={setCategoria}
                                 funcaoAdicionar={abrirModal}
                                 titulo={"Categoria"}
@@ -231,7 +290,7 @@ const AdicionarServico = () => {
                                     </div>
                                 } />
                             <Button
-                                titulo={isEditar ? "Adicionar" : "Editar"}
+                                titulo={!isEditar ? "Adicionar" : "Editar"}
                                 icone={<FaCheck />}
                                 cor={"roxo"}
                                 funcaoButton={() => salvar()}

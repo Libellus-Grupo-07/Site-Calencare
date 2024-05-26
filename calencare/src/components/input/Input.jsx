@@ -38,6 +38,7 @@ const Input = ({
                         value={valor}
                         placeholder={placeholder || titulo}
                         onChange={(e) => mudarValor(e)}
+                        onKeyUp={funcao}
                         onInput={validarEntrada ? (e) => validarEntrada(e) : null}
                         mask={mascara}
                         style={{

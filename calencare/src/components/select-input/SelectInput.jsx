@@ -18,11 +18,14 @@ const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, fu
                 </label>
                 <CreatableSelect
                     id={id}
+                    formatCreateLabel={(value) => `Criar "${value}"`}
                     placeholder={placeholder || "Selecione"}
                     defaultValue={valor}
                     onChange={(e) => mudarValor(e)}
                     isSearchable={true}
+                    value={valor}
                     options={options}
+                    noOptionsMessage={() => "Nenhum resultado encontrado"}
                     onCreateOption={funcaoAdicionar}
                     styles={{
                         control: (state) => ({
