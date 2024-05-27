@@ -17,11 +17,11 @@ import { TiCancel } from "react-icons/ti";
 const AdicionarAgendamento = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const titulo = location.pathname === "/agenda/adicionar" ? "Adicionar Agendamento" : "Editar Agendamento";
+    const isEditar = location.pathname === "/agendas";
+    const { idAgenda } = useParams();
     const [nomeUser, setNomeUser] = useState("");
-    const idUser = sessionStorage.getItem("idUser");
     const [cliente, setCliente] = useState("");
-    const [data, setData] = useState("");
+    const [dataAgenda, setDataAgenda] = useState("");
     const [options, setOptions] = useState([
         {
             label: "Selecione",
@@ -34,9 +34,22 @@ const AdicionarAgendamento = () => {
             label: "Funcionário",
             value: "Funcionário"
         }]);
-    const [tipoPerfil, setTipoPerfil] = useState(options[0]);
+    const [tipoPerfil, setTipoPerfil] = useState("");
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
     const items = [];
+
+    const validarAgenda = () => {
+        if (!isVazio(cliente, "Cliente")
+            && !isVazio(dataAgenda, "Data")
+            && !isVazio(options, "Tipo de Perfil")
+            && !isVazio(tipoPerfil, "Tipo de Perfil")
+            && !isVazio(servicosSelecionados, "Serviços que realiza")
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 
     const toggleServico = (item) => {
         if (servicosSelecionados.includes(item)) {
@@ -47,24 +60,42 @@ const AdicionarAgendamento = () => {
     };
 
 
+    const handleSave = () => {
+        var url = isEditar ? `/agendas/${idAgenda}` : "/agendas"
+        const objetoAdicionado = {
+            cliente,
+            dataAgenda,
+            options,
+            tipoPerfil,
+            servicosSelecionados
+        };
+        if (validarAgenda()) {
+            api.post(url, objetoAdicionado).then(() => {
+                toast.success("Agenda adicionada com sucesso!");
+                sessionStorage.setItem("editado", JSON.stringify(objetoAdicionado));
+                navigate("/agendas");
+            }).catch(() => {
+                toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
+            })
+        }
+    };
+
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
             navigate("/login");
             return;
         }
-        api.get(`/agendas/${idUser}`).then((response) => {
+        api.get(`/agendas/${idAgenda}`).then((response) => {
             const { data } = response;
             console.log(response);
-            const { nome } = data;
-            setNomeUser(nome);
+            const {cliente, dataAgenda } = data;
+            setCliente(cliente);
+            setDataAgenda(dataAgenda);
         }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
+            console.log("Houve um erro ao buscar o agendamento");
             console.log(error);
         });
-    }, [idUser]);
-
-
-
+    }, [idAgenda]);
 
     return (
         <>
@@ -75,7 +106,7 @@ const AdicionarAgendamento = () => {
                 <div className={styles["container-adicionar-agenda"]}>
                     <div className={styles["content-adicionar-agenda"]}>
                         <div className={styles["header"]}>
-                            <Titulo tamanho={"md"} titulo={titulo} />
+                            <Titulo tamanho={"md"} titulo={isEditar ? "Editar Agendamento" : "Adicionar Agendamento"} />
                         </div>
                         <div className={styles["informations-adicionar-agenda"]}>
 
@@ -108,10 +139,8 @@ const AdicionarAgendamento = () => {
                                 alterarValor={setData}
                                 titulo={"Data"}
                             />
-
-
-
                         </div>
+
                         <div className={styles["group-button"]}>
                             <Button
                                 funcaoButton={() => navigate(-1)}
@@ -128,7 +157,7 @@ const AdicionarAgendamento = () => {
                                     </div>
                                 } />
                             <Button
-                                titulo={"Adicionar"}
+                                titulo={isEditar ? "Editar" : "Adicionar"}
                                 icone={<FaCheck />}
                                 cor={"roxo"}
                             />
