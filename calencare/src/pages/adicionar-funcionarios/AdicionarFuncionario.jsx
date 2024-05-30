@@ -42,9 +42,7 @@ const AdicionarFuncionario = () => {
             }]);
     
     const [tipoPerfil, setTipoPerfil] = useState("");
-    
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
-
     const items = [];
   
     const validarFuncionario = () => {
@@ -54,6 +52,7 @@ const AdicionarFuncionario = () => {
             && !isVazio(email, "Email")
             && !isVazio(senha, "Senha")
             && !isVazio(options, "Tipo de Perfil")
+            && !isVazio(tipoPerfil, "Tipo de Perfil")
             && !isVazio(servicosSelecionados, "Serviços que realiza")
         ) {
             return true;
@@ -71,6 +70,7 @@ const AdicionarFuncionario = () => {
             email,
             senha,
             options,
+            tipoPerfil,
             servicosSelecionados
         };
         if (validarFuncionario()) {
@@ -215,7 +215,7 @@ const AdicionarFuncionario = () => {
                         <Button
                             //(e) => avancar(e)
                             funcaoButton={handleSave}
-                            titulo={isEditar ? "Editar " : "Adicionar "}
+                            titulo={isEditar ? "Editar" : "Adicionar"}
                             icone={<FaCheck />}
                             cor={"roxo"}
                         />
