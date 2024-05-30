@@ -27,7 +27,6 @@ const Home = () => {
   const irParaBeneficios = () => sectionBeneficios.current.scrollIntoView()
   const irParaPrecos = () => sectionPrecos.current.scrollIntoView()
 
-
   return (
     <>
       <div className={styles["page-home"]}>
@@ -40,7 +39,11 @@ const Home = () => {
         <section className={styles["section-inicio"]} ref={sectionInicio}>
           <div className={styles["container-inicio"]}>
             <div className={styles["text"]}>
-              <h1 className={styles["title"]}> Organizando seu negócio, sempre <br /> que <span className={styles["title-roxo"]}> você </span> quiser </h1>
+              <h1 className={styles["title"]}>
+                Organizando seu <br />
+                negócio, sempre <br />
+                que <span className={styles["title-roxo"]}> você </span> quiser
+              </h1>
               <div className={styles["button"]}>
                 <Button titulo="Começar" cor="roxo" funcaoButton={() => navigate("/cadastro")}/>
               </div>
@@ -80,7 +83,7 @@ const Home = () => {
               />
             </div>
           </div>
-          <div className={styles["tecnologias"]}>
+          {/* <div className={styles["tecnologias"]}>
             <Titulo tamanho="lg" titulo="Tecnologias Utilizadas" />
             <div className={styles["container-cards"]}>
               <div className={styles["card-tecnologias"]}>
@@ -117,7 +120,7 @@ const Home = () => {
               </div>
 
             </div>
-          </div>
+          </div> */}
         </section>
         <section className={styles["section-precos"]} ref={sectionPrecos}>
           <Titulo tamanho="lg" titulo="Preços" />

@@ -9,7 +9,7 @@ section {
 }
 
 .section-inicio{
-  padding-top: 112px;
+  padding-top: 104px;
   background-color: var(--lilas-fundo);
   display: flex;
   align-items: center;
@@ -42,11 +42,12 @@ section {
 }
 
 .section-inicio .container-inicio .text .button {
-  width: auto;
+  max-width: 144px;
 }
 
 .section-inicio .container-inicio .image .img-inicio {
-  height: 440px;
+  min-height: 440px;
+  max-width: 35vw;
 }
 
 .section-produto{
@@ -103,7 +104,7 @@ section {
 
 .section-beneficios .container-cards .card-tecnologias .icon {
   font-size: 64px;
-  height: 72px;
+  min-height: 72px;
 }
 
 .section-beneficios .container-cards .card-tecnologias .card-title {

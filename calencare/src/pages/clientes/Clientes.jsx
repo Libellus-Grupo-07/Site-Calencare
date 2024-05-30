@@ -16,11 +16,11 @@ const Clientes = () => {
     const idUser = sessionStorage.getItem("idUser");
     const titulos = ["Nome", "Email", "Telefone", "Cliente Desde", "Último Agendamento", ""]
     const dados = [];
-    const [nomeCliente, setNomeCliente] = useState(""); 
-    const [sobrenomeCliente, setSobrenomeCliente] = useState(""); 
-    const [emailCliente, setEmailCliente] = useState(""); 
-    const [telefoneCliente, setTelefoneCliente] = useState(""); 
-    const [dataNascimentoCliente, setDataNascimentoCliente] = useState(""); 
+    const [nomeCliente, setNomeCliente] = useState("");
+    const [sobrenomeCliente, setSobrenomeCliente] = useState("");
+    const [emailCliente, setEmailCliente] = useState("");
+    const [telefoneCliente, setTelefoneCliente] = useState("");
+    const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
 
     const tituloModal = "Adicionar Cliente";
     const tituloBotao = "Adicionar";
@@ -84,6 +84,8 @@ const Clientes = () => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
         });
+
+
     }, [idUser]);
 
 
@@ -102,7 +104,7 @@ const Clientes = () => {
                         <div className={styles["header"]}>
                             <Titulo tamanho={"md"} titulo={`Clientes`} />
                             <div className={styles["group-button"]}>
-                                <Button
+                                {/* <Button
                                     funcaoButton={() => abrirModal()}
                                     cor="roxo"
                                     titulo={"Adicionar"}
@@ -113,16 +115,23 @@ const Clientes = () => {
                                         <AddUser />
                                     </IconlyProvider>
                                     }
-                                />
+                                /> */}
                             </div>
                         </div>
                         <div className={styles["table-clientes"]}>
-                            <Table titulos={titulos} linhas={dados} icones={[
-                                <IconlyProvider>
-                                    <Edit />
-                                    {/* <Delete /> */}
-                                </IconlyProvider>]
-                            } />
+                            {
+                                dados.length === 0 ?
+                                    <div>
+                                        Nenhum cliente cadastrado
+                                    </div>
+                                    :
+                                    <Table titulos={titulos} linhas={dados} icones={[
+                                        <IconlyProvider>
+                                            <Edit />
+                                            {/* <Delete /> */}
+                                        </IconlyProvider>]
+                                    } />
+                            }
                         </div>
                     </div>
                 </div>

@@ -73,11 +73,11 @@
   cursor: pointer;
 }
 
-.container-table .table .body-table tr td:first-child {
+.container-table .table .body-table tr:last-child td:first-child {
   border-bottom-left-radius: 1rem;
 }
 
-.container-table .table .body-table tr td:last-child {
+.container-table .table .body-table tr:last-child td:last-child {
   border-bottom-right-radius: 1rem;
 }
 

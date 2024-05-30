@@ -33,7 +33,7 @@ const DiaDaSemanaComponente = (
       }}>
         <Typography
           style={{
-            width: "8vw",
+            width: "7.5vw",
             fontSize: "17px",
             fontFamily: "Poppins",
             fontWeight: "bold",

@@ -1,6 +1,6 @@
 option {
   height: fit-content;
-  z-index: 999999;
+  /* z-index: 999999; */
 }
 
 /* option::before{
@@ -12,7 +12,7 @@ option {
   flex-direction: column;
   row-gap: 8px;
   width: 100%;
-  z-index: 999999;
+  /* z-index: 999999; */
 }
 
 .titulo-select {
@@ -20,5 +20,5 @@ option {
   margin-left: 30px;
   font-weight: bold;
   font-size: 16px;
-  z-index: 999999;
+  /* z-index: 999999; */
 }
