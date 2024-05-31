@@ -240,23 +240,6 @@ const AdicionarAgendamento = () => {
         }
     };
 
-    useEffect(() => {
-        if (!logado(sessionStorage.getItem("token"))) {
-            navigate("/login");
-            return;
-        }
-        api.get(`/agendas/${idAgenda}`).then((response) => {
-            const { data } = response;
-            console.log(response);
-            const {cliente, dataAgenda } = data;
-            setCliente(cliente);
-            setDataAgenda(dataAgenda);
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar o agendamento");
-            console.log(error);
-        });
-    }, [idAgenda]);
-
     return (
         <>
             <section className={styles["section-adicionar-agenda"]}>

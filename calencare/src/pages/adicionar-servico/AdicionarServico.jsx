@@ -5,7 +5,7 @@ import api from "../../api";
 import Titulo from '../../components/titulo/Titulo';
 import Button from "../../components/button/Button";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { inputSomenteNumero, inputSomenteTexto, inputValorMontario, inputValorPorcentagem, isVazio, logado } from "../../utils/global";
+import { inputSomenteNumero, inputSomenteTexto, inputValorMontario, inputValorPorcentagem, isSelected, isVazio, logado } from "../../utils/global";
 import Input from "../../components/input/Input";
 import Textarea from "../../components/textarea/Textarea";
 import { FaCheck } from "react-icons/fa6";
@@ -21,6 +21,8 @@ const AdicionarServico = () => {
     const isEditar = location.pathname === "/servicos/editar/:idServico";
     const { idServico } = useParams();
     const nomeUser = sessionStorage.getItem("nomeUser");
+    const idUser = sessionStorage.getItem("idUser");
+    const [idEmpresa, setIdEmpresa] = useState(0);
     const [servico, setServico] = useState()
     const [descricao, setDescricao] = useState("");
     const [nomeCategoria, setNomeCategoria] = useState("");
@@ -58,6 +60,15 @@ const AdicionarServico = () => {
             navigate("/login");
             return;
         }
+
+        api.get(`/empresas/funcionarios?idFuncionario=${idUser}`).then((response) => {
+            const { data } = response;
+            const { id } = data;
+            setIdEmpresa(id);
+        }).catch((error) => {
+            console.error("Houve um erro ao buscar a empresa")
+            console.error(error)
+        })
 
         buscarCategoriasServico("C");
 
@@ -128,9 +139,9 @@ const AdicionarServico = () => {
     }
 
     const isAdicionarServicoValid = (value) => {
-        if (!isVazio(value, "Nome do Serviço")
+        if (!isSelected(categoria, "Categoria do Serviço") &&
+            !isVazio(value, "Nome do Serviço")
         ) {
-            alert(value);
             return true;
         }
 
@@ -158,13 +169,16 @@ const AdicionarServico = () => {
     }
 
     const adicionarServico = (value) => {
+        console.log("funcao adicionar servico")
         if (isAdicionarServicoValid(value)) {
             var body = {
-                "nome": value
+                "nome": value,
+                "categoriaId": categoria.id
             }
 
-            api.post("/servicos", body).then(() => {
+            api.post(`/servicos/${servicos[servicos.length -1].id}`, body).then(() => {
                 buscarServicos("I");
+                toast.success("Nome adicionado com sucesso!")
             }).catch((error) => {
                 console.error("Houve um erro ao adicionar serviço!");
                 console.error(error);
@@ -173,7 +187,7 @@ const AdicionarServico = () => {
     }
 
     const salvar = () => {
-        var url = isEditar ? `/servicos/preco/${idServico}` : "/servicos/preco";
+        var url = isEditar ? `/servico-preco/${idServico}` : `/servicos-preco/${idEmpresa}/${categoria.id}`;
         var body = {
             "descricao": descricao,
             "preco": preco.replace("R$ ", "").replace(",", "."),
@@ -210,6 +224,15 @@ const AdicionarServico = () => {
                         </div>
                         <form className={styles["informations-adicionar-servico"]}>
                             <SelectInput
+                                id={"categoriaServico"}
+                                tamanho={"lg"}
+                                options={options}
+                                // valor={categoria}
+                                alterarValor={setCategoria}
+                                funcaoAdicionar={abrirModal}
+                                titulo={"Categoria"}
+                            />
+                            <SelectInput
                                 id="nomeServico"
                                 tamanho={"lg"}
                                 // valor={nome}
@@ -231,15 +254,6 @@ const AdicionarServico = () => {
                                 validarEntrada={(e) => inputSomenteTexto(e)}
                                 maxlength={60}
                                 minlength={5}
-                            />
-                            <SelectInput
-                                id={"categoriaServico"}
-                                tamanho={"lg"}
-                                options={options}
-                                // valor={categoria}
-                                alterarValor={setCategoria}
-                                funcaoAdicionar={abrirModal}
-                                titulo={"Categoria"}
                             />
                             <div className={styles["group-input"]}>
                                 <Input
