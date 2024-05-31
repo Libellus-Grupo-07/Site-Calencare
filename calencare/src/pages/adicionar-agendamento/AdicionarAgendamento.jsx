@@ -33,9 +33,9 @@ const AdicionarAgendamento = () => {
     const [modalAberto, setModalAberto] = useState(false);
     const [nome, setNome] = useState("");
     const [data, setData] = useState("");
-    const [cliente, setCliente] = useState("");
+    // const [cliente, setCliente] = useState("");
     const [dataAgenda, setDataAgenda] = useState("");
-/*    const [options, setOptions] = useState([
+    const [options, setOptions] = useState([
         {
             label: "Selecione",
             value: null
@@ -47,7 +47,6 @@ const AdicionarAgendamento = () => {
             label: "Funcionário",
             value: "Funcionário"
         }]);
-        */
   
     const [tipoPerfil, setTipoPerfil] = useState("");
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
@@ -88,7 +87,6 @@ const AdicionarAgendamento = () => {
                 validarEntrada={inputSomenteTexto}
             />
 
-//<<<<<<< feat-adicionar-cliente
             <Input
                 id={"sobrenomeCliente"}
                 titulo={"Sobrenome"}
@@ -132,7 +130,7 @@ const AdicionarAgendamento = () => {
     const validarCadastroCliente = () => {
         if (!isVazio(nomeCliente, "Nome do Cliente") &&
             !isVazio(sobrenomeCliente, "Sobrenome do Cliente") &&
-            (isVazio(emailCliente, "Email do Cliente") || (
+            (emailCliente == "" || (
             !isVazio(emailCliente, "Email do Cliente") && isValidEmail(emailCliente, "Email do Cliente")
             )) &&
             !isVazio(telefoneCliente, "Telefone do Cliente") &&
@@ -222,7 +220,6 @@ const AdicionarAgendamento = () => {
         setCliente(dataMapp[i]);
     }
 
-//=======
     const handleSave = () => {
         var url = isEditar ? `/agendas/${idAgenda}` : "/agendas"
         const objetoAdicionado = {
@@ -259,7 +256,6 @@ const AdicionarAgendamento = () => {
             console.log(error);
         });
     }, [idAgenda]);
-//>>>>>>> ajustes-tela-agenda
 
     return (
         <>
@@ -307,10 +303,7 @@ const AdicionarAgendamento = () => {
                                 alterarValor={setData}
                                 titulo={"Data"}
                             />
-//<<<<<<< feat-adicionar-cliente
 
-//=======
-//>>>>>>> ajustes-tela-agenda
                         </div>
 
                         <div className={styles["group-button"]}>
