@@ -20,6 +20,15 @@ export function isVazio(campo, nome) {
   return false;
 }
 
+export function isValidEmail(email, nomeCampo) {
+  if (email.indexOf("@") !== -1) {
+    return true;
+  }
+
+  toast.error(`${nomeCampo} inválido.`);
+  return false;
+}
+
 export function transformarDouble(dataString) {
   const valor = dataString.toString();
   return parseFloat(valor).toFixed(2).replace(".", ",");
@@ -71,8 +80,24 @@ export const inputSomenteTexto = (e) => {
 };
 
 export const inputSomenteNumero = (e) => {
-  e.target.value = e.target.value.replace(/"^\d+(,\d{1,2})?$"/g, "");
+  e.target.value = e.target.value.replace(/[^\d+(,\d{1,2})?$]/g, "");
 };
+
+export const inputValorMontario = (e) =>{
+  var valorAlterado = e.target.value;
+  valorAlterado = valorAlterado.replace(/\D/g, ""); // Remove todos os não dígitos
+  valorAlterado = valorAlterado.replace(/(\d+)(\d{2})$/, "$1,$2"); // Adiciona a parte de centavos
+  valorAlterado = valorAlterado.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."); // Adiciona pontos a cada três dígitos
+  valorAlterado = "R$ " + valorAlterado;
+  e.target.value = valorAlterado;
+}
+
+export const inputValorPorcentagem = (e) => {
+  var valorAlterado = e.target.value;
+  valorAlterado = valorAlterado.replace(/\D/g, ""); // Remove todos os não dígitos
+  valorAlterado = valorAlterado.replace(/(\d+)(\d{2})$/, "$1,$2"); // Adiciona a parte de centavos
+  e.target.value = valorAlterado;
+}
 
 export const inputSemCaracteresEspeciais = (e) => {
   e.target.value = e.target.value.replace(/[^A-Za-zÀ-ú0-9\s]/g, "");

@@ -5,84 +5,194 @@ import api from "../../api";
 import Titulo from '../../components/titulo/Titulo';
 import Button from "../../components/button/Button";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { inputSomenteNumero, inputSomenteTexto, logado } from "../../utils/global";
+import { inputSomenteNumero, inputSomenteTexto, inputValorMontario, inputValorPorcentagem, isVazio, logado } from "../../utils/global";
 import Input from "../../components/input/Input";
 import Textarea from "../../components/textarea/Textarea";
 import { FaCheck } from "react-icons/fa6";
 import { TiCancel } from "react-icons/ti";
 import { toast } from "react-toastify";
 import SelectInput from "../../components/select-input/SelectInput";
+import ModalTemplate from "../../components/modal-template/ModalTemplate";
 
 const AdicionarServico = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const titulo = location.pathname === "/servicos/adicionar" ? "Adicionar Serviço" : "Editar Serviço";
+    const isEditar = location.pathname === "/servicos/editar/:idServico";
     const { idServico } = useParams();
-    const idUser = sessionStorage.getItem("idUser");
-    const [nome, setNome] = useState("");
-    const [nomeUser, setNomeUser] = useState("");
+    const nomeUser = sessionStorage.getItem("nomeUser");
+    const [servico, setServico] = useState()
     const [descricao, setDescricao] = useState("");
+    const [nomeCategoria, setNomeCategoria] = useState("");
+    const [descricaoCategoria, setDescricaoCategoria] = useState("");
     const [preco, setPreco] = useState("");
-    const [comissao, setComissao] = useState(0);
+    const [comissao, setComissao] = useState("");
     const [duracao, setDuracao] = useState(0);
-    const [options, setOptions] = useState([
-        {
-            label: "Selecione",
-            value: null
-        },{
-            label: "Cabelo",
-            value: "Cabelo"
-        },
-        {
-            label: "Maquiagem",
-            value: "Maquiagem"
-        },
-        {
-            label: "Podologia",
-            value: "Podologia"
-        },
-        {
-            label: "Manicure",
-            value: "Manicure"
-        }]);
-    const [categoria, setCategoria] = useState(options[0]);
+    const [servicos, setServicos] = useState([]);
+    const [options, setOptions] = useState([]);
+    const [categoria, setCategoria] = useState();
 
+    const buscarCategoriasServico = (action) => {
+        api.get("/categoria-servico").then((response) => {
+            const { data } = response;
+            console.log("Resposta => " + data.length);
+            mapear("categoria-servico", data, action === "I" ? data.length : 0);
 
-    // const editar = () => {
-    //     let body = {
-    //         "id": idServico,
-    //         "nome": nome,
-    //         email,
-    //         telefone,
-    //         dtCriacao,
-    //         empresa
-    //     }
-    //     api.put(`/funcionarios/${idUser}`, body).then((response) => {
-    //         console.log(response);
-    //         toast.success("Informações atualizadas com sucesso!")
-    //         voltar();
-    //     }).catch((error) => {
-    //         console.log("Houve um erro ao atualizar o funcionário");
-    //         console.log(error);
-    //     });
-    // }
+        }).catch((error) => {
+            console.error("Houve um erro ao buscar Categorias de Serviço => " + error);
+        });
+    }
+
+    const buscarServicos = (action) => {
+        api.get("/servicos").then((response) => {
+            const { data } = response;
+            mapear("servico", data, action === "I" ? data.length : 0);
+        }).catch((error) => {
+            console.error("Houve um erro ao buscar os serviços.");
+            console.error(error);
+        });
+    }
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
             navigate("/login");
             return;
         }
-        api.get(`/funcionarios/${idUser}`).then((response) => {
-            const { data } = response;
-            console.log(response);
-            const { nome } = data;
-            setNomeUser(nome)
+
+        buscarCategoriasServico("C");
+
+        buscarServicos("C");
+    }, []);
+
+
+    const mapear = (campo, data, index) => {
+        var optionsMap = [];
+        let i = 0;
+
+        console.log(data);
+        for (i = 0; i < data.length; i++) {
+            optionsMap.push({
+                id: data[i].id,
+                label: data[i].nome,
+                value: data[i].nome,
+            })
+        }
+
+        i = index === 0 ? index - 1 : i;
+        console.log(i);
+
+        if (campo === "categoria-servico") {
+            setOptions(optionsMap)
+            setCategoria(optionsMap[i]);
+        } else {
+            setServicos(optionsMap)
+            setServico(optionsMap[i]);
+        }
+    }
+
+    const tituloModal = "Adicionar Categoria de Serviço";
+    const tituloBotao = "Adicionar";
+    const corpoModal = (
+        <>
+            <Input
+                id={"nomeCategoria"}
+                titulo={"Nome"}
+                valor={nomeCategoria}
+                alterarValor={setNomeCategoria}
+            />
+
+            <Textarea
+                id={"descricaoCategoria"}
+                titulo={"Descrição"}
+                valor={descricaoCategoria}
+                alterarValor={setDescricaoCategoria}
+            />
+        </>
+    )
+
+    const [modalAberto, setModalAberto] = useState(false);
+
+    const abrirModal = (value) => {
+        setModalAberto(!modalAberto);
+        setNomeCategoria(value)
+    }
+
+    const isAdicionarCategoriaValid = () => {
+        if (!isVazio(nomeCategoria, "Nome da Categoria")
+            && !isVazio(descricaoCategoria, "Descrição da Categoria")
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    const isAdicionarServicoValid = (value) => {
+        if (!isVazio(value, "Nome do Serviço")
+        ) {
+            alert(value);
+            return true;
+        }
+
+        return false;
+    }
+
+    const adicionarCategoria = () => {
+        if (isAdicionarCategoriaValid()) {
+            var body = {
+                "nome": nomeCategoria,
+                "descricao": descricaoCategoria
+            }
+
+            api.post("/categoria-servico", body).then(() => {
+                abrirModal();
+                buscarCategoriasServico("I");
+                toast.success("Categoria de Serviço adicionada com sucesso!");
+                setNomeCategoria("");
+                setDescricaoCategoria("");
+            }).catch((error) => {
+                console.error(error)
+                toast.error("Ocorreu um erro ao salvar Categoria de Serviço!");
+            })
+        }
+    }
+
+    const adicionarServico = (value) => {
+        if (isAdicionarServicoValid(value)) {
+            var body = {
+                "nome": value
+            }
+
+            api.post("/servicos", body).then(() => {
+                buscarServicos("I");
+            }).catch((error) => {
+                console.error("Houve um erro ao adicionar serviço!");
+                console.error(error);
+            });
+        }
+    }
+
+    const salvar = () => {
+        var url = isEditar ? `/servicos/preco/${idServico}` : "/servicos/preco";
+        var body = {
+            "descricao": descricao,
+            "preco": preco.replace("R$ ", "").replace(",", "."),
+            "duracao": duracao,
+            "comissao": comissao.replace(",", "."),
+            "bitStatus": 1,
+            "fkEmpresa": sessionStorage.getItem("idEmpresa"),
+            "fkServico": servico.id
+        };
+
+        api.post(url, body).then(() => {
+            toast.success("Serviço adicionado com sucesso!");
+            navigate("/servicos");
         }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
+            toast.error("Houve um erro ao tentar adicionar serviço!");
+            console.error(error);
         });
-    }, [idUser]);
+    }
+
 
     return (
         <>
@@ -95,17 +205,22 @@ const AdicionarServico = () => {
                         <div className={styles["header"]}>
                             <Titulo
                                 tamanho={"md"}
-                                titulo={titulo}
+                                titulo={!isEditar ? "Adicionar Serviço" : "Editar Serviço"}
                             />
                         </div>
-                        <div className={styles["informations-adicionar-servico"]}>
-                            <Input
+                        <form className={styles["informations-adicionar-servico"]}>
+                            <SelectInput
                                 id="nomeServico"
                                 tamanho={"lg"}
-                                valor={nome}
-                                alterarValor={setNome}
+                                // valor={nome}
+                                placeholder={"Nome"}
+                                alterarValor={setServico}
                                 titulo={"Nome"}
                                 validarEntrada={(e) => inputSomenteTexto(e)}
+                                funcaoAdicionar={adicionarServico}
+                                options={servicos}
+                                maxlength={40}
+                                minlength={5}
                             />
                             <Textarea
                                 id={"descricaoServico"}
@@ -114,13 +229,16 @@ const AdicionarServico = () => {
                                 alterarValor={setDescricao}
                                 titulo={"Descrição"}
                                 validarEntrada={(e) => inputSomenteTexto(e)}
+                                maxlength={60}
+                                minlength={5}
                             />
                             <SelectInput
                                 id={"categoriaServico"}
                                 tamanho={"lg"}
                                 options={options}
-                                valor={categoria}
+                                // valor={categoria}
                                 alterarValor={setCategoria}
+                                funcaoAdicionar={abrirModal}
                                 titulo={"Categoria"}
                             />
                             <div className={styles["group-input"]}>
@@ -130,7 +248,9 @@ const AdicionarServico = () => {
                                     titulo={"Preço"}
                                     valor={preco}
                                     alterarValor={setPreco}
-
+                                    validarEntrada={inputValorMontario}
+                                    maxlength={20}
+                                    minlength={2}
                                 />
                                 <Input
                                     id="comissaoServico"
@@ -138,6 +258,9 @@ const AdicionarServico = () => {
                                     titulo={"Comissão em %"}
                                     valor={comissao}
                                     alterarValor={setComissao}
+                                    validarEntrada={inputValorPorcentagem}
+                                    maxlength={6}
+                                    minlength={1}
                                 />
                             </div>
                             <Input
@@ -146,8 +269,11 @@ const AdicionarServico = () => {
                                 titulo={"Duração em minutos"}
                                 valor={duracao}
                                 alterarValor={setDuracao}
+                                validarEntrada={inputSomenteNumero}
+                                maxlength={10}
+                                minlength={1}
                             />
-                        </div>
+                        </form>
                         <div className={styles["group-button"]}>
                             <Button
                                 funcaoButton={() => navigate(-1)}
@@ -164,13 +290,23 @@ const AdicionarServico = () => {
                                     </div>
                                 } />
                             <Button
-                                titulo={"Adicionar"}
+                                titulo={!isEditar ? "Adicionar" : "Editar"}
                                 icone={<FaCheck />}
                                 cor={"roxo"}
+                                funcaoButton={() => salvar()}
                             />
                         </div>
                     </div>
                 </div>
+
+                <ModalTemplate
+                    aberto={modalAberto}
+                    setAberto={setModalAberto}
+                    corpo={corpoModal}
+                    titulo={tituloModal}
+                    tituloBotaoConfirmar={tituloBotao}
+                    funcaoBotaoConfirmar={adicionarCategoria}
+                />
             </section>
 
         </>

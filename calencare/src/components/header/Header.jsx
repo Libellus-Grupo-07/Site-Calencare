@@ -5,12 +5,13 @@ import { FaAngleRight } from "react-icons/fa6";
 import { IconlyProvider, Home, Calendar, Work, Chart, TwoUsers, AddUser, Graph } from "react-iconly";
 import iconProfile from "./../../utils/assets/perfil_padrao.svg"
 import { LuMenu } from "react-icons/lu";
+import Equipe from "../../pages/minha-equipe/MinhaEquipe";
 
-const Header = ({ nomeUser }) => {
+const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location.pathname)
     const idUser = sessionStorage.getItem("idUser");
+    const nomeUser = sessionStorage.getItem("nomeUser");
 
     return (
         <>
@@ -44,6 +45,7 @@ const Header = ({ nomeUser }) => {
                             location.pathname === "/agenda" ? "roxo" : "cinza"
                             ]
                         }
+                        onClick={() => navigate("/agenda")}
                     >
                         <IconlyProvider
                             className={styles["abc"]}
@@ -76,7 +78,7 @@ const Header = ({ nomeUser }) => {
                     <li
                         className={
                             styles[
-                            location.pathname === "/dashboard" ? "roxo" : "cinza"
+                                location.pathname === "/dashboard" ? "roxo" : "cinza"
                             ]
                         }
                     >
@@ -94,9 +96,10 @@ const Header = ({ nomeUser }) => {
                     <li
                         className={
                             styles[
-                            location.pathname === "/minha-equipe" ? "roxo" : "cinza"
+                            location.pathname === "/equipe" ? "roxo" : "cinza"
                             ]
                         }
+                        onClick={() => navigate("/equipe")}
                     >
                         <IconlyProvider
                             className={styles["abc"]}

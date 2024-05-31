@@ -46,17 +46,21 @@
 }
 
 .logo-cadastro {
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
   margin-top: 32px;
   padding-left: 48px;
 }
 
 .imagem-cadastro {
-  max-height: 500px;
+  position: relative;
+  max-height: 75vh;
+  max-width: 40vw;
   width: auto;
   height: auto;
   margin: 0 auto;
+  top: 5%;
+  bottom: 15%;
 }
 
 .texto {

@@ -1,4 +1,4 @@
-.section-agenda {
+.section-equipe {
     width: 100%;
     display: flex;
     align-items: flex-start;
@@ -6,12 +6,12 @@
     column-gap: 20vw;
   }
   
-  .section-agenda .container-agenda {
+  .section-equipe .container-equipe {
     width: 100%;
     padding: 24px 0;
   }
   
-  .section-agenda .container-agenda .content-agenda {
+  .section-equipe .container-equipe .content-equipe {
     width: 70vw;
     margin: 0 auto;
     display: flex;
@@ -20,13 +20,13 @@
     justify-content: flex-start;
   }
   
-  .section-agenda .container-agenda .content-agenda .header {
+  .section-equipe .container-equipe .content-equipe .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   
-  .section-agenda .container-agenda .content-agenda .header .group-button{
+  .section-equipe .container-equipe .content-equipe .header .group-button{
     display: flex;
     column-gap: 8px;
     justify-content: center;

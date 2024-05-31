@@ -3,8 +3,8 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .container-cadastro {
-  display: "flex";
-  justify-content: "flex-start";
+  display: flex;
+  justify-content: space-between;
   align-items: "center";
 }
 
@@ -16,6 +16,7 @@ input::-webkit-calendar-picker-indicator {
 .input-time {
   width: 100%;
   height: 100%;
+  /* max-width: 120px; */
   border: 2px solid;
   border-radius: 5rem;
   font-weight: 700;

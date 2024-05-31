@@ -9,10 +9,12 @@ import imgPerfil from "./../../utils/assets/perfil_padrao.svg";
 import Row from './../../components/row/Row';
 import { logado, logoutUsuario, transformarData } from "../../utils/global";
 import Swal from 'sweetalert2'
+import DiaDaSemanaComponente from './../../components/dia-da-semana/DiaDaSemanaComponente';
 
 const Perfil = () => {
 
     const navigate = useNavigate();
+    const hora = new Date();
 
     const { idUser } = useParams();
     const [nome, setNome] = useState("");
@@ -25,6 +27,36 @@ const Perfil = () => {
     const [cnpj, setCNPJ] = useState("")
     const [telefonePrincipal, setTelefonePrincipal] = useState("")
     const [emailPrincipal, setEmailPrincipal] = useState("")
+    const [diaSegundaAberto, setDiaSegundaAberto] = useState(true);
+    const [horario1Segunda, setHorario1Segunda] = useState(hora)
+    const [horario2Segunda, setHorario2Segunda] = useState(hora)
+
+    const [diaTercaAberto, setDiaTercaAberto] = useState(true);
+    const [horario1Terca, setHorario1Terca] = useState(hora)
+    const [horario2Terca, setHorario2Terca] = useState(hora)
+
+    const [diaQuartaAberto, setDiaQuartaAberto] = useState(true);
+    const [horario1Quarta, setHorario1Quarta] = useState(hora)
+    const [horario2Quarta, setHorario2Quarta] = useState(hora)
+
+    const [diaQuintaAberto, setDiaQuintaAberto] = useState(true);
+    const [horario1Quinta, setHorario1Quinta] = useState(hora)
+    const [horario2Quinta, setHorario2Quinta] = useState(hora)
+
+    const [diaSextaAberto, setDiaSextaAberto] = useState(true);
+    const [horario1Sexta, setHorario1Sexta] = useState(hora)
+    const [horario2Sexta, setHorario2Sexta] = useState(hora)
+
+    const [diaSabadoAberto, setDiaSabadoAberto] = useState(true);
+    const [horario1Sabado, setHorario1Sabado] = useState(hora)
+    const [horario2Sabado, setHorario2Sabado] = useState(hora)
+
+    const [diaDomingoAberto, setDiaDomingoAberto] = useState(true);
+    const [horario1Domingo, setHorario1Domingo] = useState(hora)
+    const [horario2Domingo, setHorario2Domingo] = useState(hora)
+
+    const [dias, setDias] = useState([]);
+    const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
 
     const [secaoPerfil, setSecaoPerfil] = useState(sessionStorage.getItem("sessaoPerfil") || "informacoes-pessoais");
 
@@ -101,14 +133,30 @@ const Perfil = () => {
             setEmail(email);
             setTelefone(telefone);
             setDtCriacao(dtCriacao);
-            
+
             setRazaoSocial(razaoSocial);
             setCNPJ(cnpj);
             setEmailPrincipal(emailPrincipal);
             setTelefonePrincipal(telefonePrincipal);
 
-            api.get(`/funcionarios/${idUser}`).then((response) => { 
+            api.get(`/empresas/${id}`).then((response) => {
+                const { data } = response
+                const { horariosFuncionamentos } = data;
+                const vetorDias = [];
 
+                horariosFuncionamentos.forEach((h) => {
+                    vetorDias.push({
+                        "id": h.id,
+                        "diaSemana": h.diaSemana,
+                        "fim": h.fim,
+                        "inicio": h.inicio,
+                        "status": h.status
+                    })
+                });
+
+                setDias(vetorDias);
+
+                console.log(vetorDias)
             }).catch((error) => {
                 console.log("Houve um erro ao buscar o funcionário");
                 console.log(error);
@@ -193,26 +241,45 @@ const Perfil = () => {
                                 </button>
                             </div>{
                                 secaoPerfil === "informacoes-empresa" ?
-                                    <div className={styles[""]}>
-                                        <Row
-                                            titulo="Razão Social"
-                                            valor={razaoSocial}
-                                            funcao={() => navigate(`/editar-perfil/${idUser}`)}
-                                        />
-                                        <Row
-                                            titulo="CNPJ"
-                                            valor={cnpj}
-                                            funcao={() => navigate(`/editar-perfil/${idUser}`)}
-                                        />
-                                        <Row
-                                            titulo="Email Principal"
-                                            valor={emailPrincipal}
-                                            funcao={() => navigate(`/editar-perfil/${idUser}`)}
-                                        />
-                                        <Row
-                                            titulo="Telefone Principal"
-                                            valor={telefonePrincipal}
-                                        />
+                                    <div className={styles["info-empresa"]}>
+                                        <div className={styles["grid-info"]}>
+
+                                            <Row
+                                                titulo="Razão Social"
+                                                valor={razaoSocial}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="CNPJ"
+                                                valor={cnpj}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="Email Principal"
+                                                valor={emailPrincipal}
+                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                            />
+                                            <Row
+                                                titulo="Telefone Principal"
+                                                valor={telefonePrincipal}
+                                            />
+
+                                        </div>
+                                        <div className={styles["card-horarios"]}>
+                                            {
+                                                dias.map((d, index) => (
+                                                    <div key={index}>
+                                                        <DiaDaSemanaComponente
+                                                            aberto={ d.aberto === 1 }
+                                                            diaSemana={d.diaSemana}
+                                                            horario1={d.inicio}
+                                                            horario2={d.fim}
+                                                        />
+                                                    </div>
+                                            
+                                                ))
+                                            }
+                                        </div>
                                     </div> :
                                     <div className={styles[""]}>
                                         <div>
@@ -236,7 +303,7 @@ const Perfil = () => {
                                                 valor={transformarData(dtCriacao)}
                                             />
                                         </div>
-                                </div>
+                                    </div>
                             }
                         </div>
                     </div>

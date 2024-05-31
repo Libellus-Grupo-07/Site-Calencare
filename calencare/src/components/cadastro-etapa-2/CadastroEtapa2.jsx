@@ -41,12 +41,16 @@ const CadastroEtapa2 = ({
                     titulo={"CEP"}
                     funcao={() => buscarCep()}
                     mascara={"00000-000"}
+                    minlength={9}
+                    maxlength={9}
                 />
                 <Input
                     id="logradouro"
                     valor={Logradouro}
                     alterarValor={setLogradouro}
                     titulo={"Logradouro"}
+                    minlength={5}
+                    maxlength={50}
                 />
                 <div className={styles["container-adrress"]}>
                     <Input

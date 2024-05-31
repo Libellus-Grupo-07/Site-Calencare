@@ -14,9 +14,9 @@ import Swal from "sweetalert2";
 const Inicio = () => {
     const navigate = useNavigate();
     const idUser = sessionStorage.getItem("idUser");
-    const [nome, setNome] = useState("");
-    const [email, setEmail] = useState("");
-    const [telefone, setTelefone] = useState("");
+    const [nome, setNome] = useState(sessionStorage.getItem("nomeUser"));
+    // const [email, setEmail] = useState("");
+    // const [telefone, setTelefone] = useState("");
     const [totalAgendamentosDia, setTotalAgendamentosDia] = useState("");
     const [potencialLucroDia, setPotencialLucroDia] = useState("");
     const [servicoMaisProcuradoDia, setServicoMaisProcuradoDia] = useState("");
@@ -72,16 +72,18 @@ const Inicio = () => {
 
         const data = transformarDataBd(new Date());
 
-        api.get(`/funcionarios/${idUser}`).then((response) => {
-            const { data } = response;
-            const { nome, email, telefone } = data;
-            setNome(nome);
-            setEmail(email);
-            setTelefone(telefone);
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
-        });
+        // api.get(`/funcionarios/${idUser}`).then((response) => {
+        //     const { data } = response;
+        //     // const { nome, email, telefone } = data;
+        //     const { nome } = data;
+        //     setNome(nome);
+        //     // setEmail(email);
+        //     // setTelefone(telefone);
+        //     sessionStorage.setItem("nomeUser", nome);
+        // }).catch((error) => {
+        //     console.log("Houve um erro ao buscar o funcionário");
+        //     console.log(error);
+        // });
 
         api.get(`/agendamentos/total?data=${data}`).then((response) => {
             const { data } = response;
@@ -121,7 +123,7 @@ const Inicio = () => {
         });
 
 
-        api.get(`/aservico-mais-procurado`).then((response) => {
+        api.get(`/agendamentos/servico-mais-procurado`).then((response) => {
             const { data } = response;
             console.log(data);
             setServicoMaisProcuradoDia(data);

@@ -37,8 +37,10 @@ const Login = () => {
             api.post("/funcionarios/login", body).then((response) => {
                 console.log(response)
                 const { data } = response
+                sessionStorage.setItem("nomeUser", data.nome)
                 sessionStorage.setItem("idUser", data.userId)
                 sessionStorage.setItem("token", data.token)
+                sessionStorage.setItem("idEmpresa", data.idEmpresa)
                 navigate("/inicio");
                 toast.success("Login realizado com sucesso");
             }).catch(function (error) {
