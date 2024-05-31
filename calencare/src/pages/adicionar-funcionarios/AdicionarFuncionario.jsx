@@ -48,7 +48,6 @@ const AdicionarFuncionario = () => {
     const validarFuncionario = () => {
         if (!isVazio(nome, "Nome")
             && !isVazio(telefone, "Telefone")
-            && !isVazio(bitStatus, "Status")
             && !isVazio(email, "Email")
             && !isVazio(senha, "Senha")
             && !isVazio(options, "Tipo de Perfil")
