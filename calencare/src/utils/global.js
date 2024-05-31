@@ -12,6 +12,15 @@ export function logado(token) {
   }
 }
 
+export function isSelected(campo, nome) {
+  if (campo === undefined || campo === "") {
+    toast.error(`Selecione o campo ${nome}`);
+    return false;
+  }
+
+  return true;
+}
+
 export function isVazio(campo, nome) {
   if (campo === "") {
     toast.error(`O campo ${nome} deve ser preenchido!`);

@@ -40,9 +40,7 @@ const Login = () => {
                 sessionStorage.setItem("nomeUser", data.nome)
                 sessionStorage.setItem("idUser", data.userId)
                 sessionStorage.setItem("token", data.token)
-                sessionStorage.setItem("idEmpresa", data.idEmpresa)
                 navigate("/inicio");
-                toast.success("Login realizado com sucesso");
             }).catch(function (error) {
                 console.error(error);
                 const { code } = error;

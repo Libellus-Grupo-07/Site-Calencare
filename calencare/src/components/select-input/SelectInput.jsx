@@ -25,7 +25,7 @@ const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, fu
                             defaultValue={valor}
                             onChange={(e) => mudarValor(e)}
                             isSearchable={true}
-                            value={valor}
+                            // value={valor}
                             options={options}
                             noOptionsMessage={() => "Nenhum resultado encontrado"}
                             onCreateOption={funcaoAdicionar}
