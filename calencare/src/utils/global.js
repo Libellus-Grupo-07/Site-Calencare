@@ -13,7 +13,7 @@ export function logado(token) {
 }
 
 export function isSelected(campo, nome) {
-  if (campo === undefined || campo === "") {
+  if (campo === undefined) {
     toast.error(`Selecione o campo ${nome}`);
     return false;
   }

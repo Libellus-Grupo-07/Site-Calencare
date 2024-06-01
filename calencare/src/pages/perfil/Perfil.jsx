@@ -10,6 +10,9 @@ import Row from './../../components/row/Row';
 import { logado, logoutUsuario, transformarData } from "../../utils/global";
 import Swal from 'sweetalert2'
 import DiaDaSemanaComponente from './../../components/dia-da-semana/DiaDaSemanaComponente';
+import { toast } from "react-toastify";
+import ModalTemplate from "../../components/modal-template/ModalTemplate";
+import Titulo from './../../components/titulo/Titulo';
 
 const Perfil = () => {
 
@@ -57,6 +60,15 @@ const Perfil = () => {
 
     const [dias, setDias] = useState([]);
     const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
+    const vetorSetters = [
+        [setDiaSegundaAberto, setHorario1Segunda, setHorario2Segunda, diaSegundaAberto, horario1Segunda, horario2Segunda],
+        [setDiaTercaAberto, setHorario1Terca, setHorario2Terca, diaTercaAberto, horario1Terca, horario2Terca],
+        [setDiaQuartaAberto, setHorario1Quarta, setHorario2Quarta, diaQuartaAberto, horario1Quarta, horario2Quarta],
+        [setDiaQuintaAberto, setHorario1Quinta, setHorario2Quinta, diaQuintaAberto, horario1Quinta, horario2Quinta],
+        [setDiaSextaAberto, setHorario1Sexta, setHorario2Sexta, diaSextaAberto, horario1Sexta, horario2Sexta],
+        [setDiaSabadoAberto, setHorario1Sabado, setHorario2Sabado, diaSabadoAberto, horario1Sabado, horario2Sabado],
+        [setDiaDomingoAberto, setHorario1Domingo, setHorario2Segunda, diaDomingoAberto, horario1Domingo, horario2Domingo],
+    ];
 
     const [secaoPerfil, setSecaoPerfil] = useState(sessionStorage.getItem("sessaoPerfil") || "informacoes-pessoais");
 
@@ -72,50 +84,38 @@ const Perfil = () => {
         navigate(url);
     }
 
-    const excluir = () => {
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: "btn-roxo",
-                cancelButton: "btn-branco",
-                title: "title-modal",
-                text: "text-modal",
-
-            },
-            buttonsStyling: false
-        });
-        swalWithBootstrapButtons.fire({
-            title: "Exclusão de Conta",
-            text: "Você realmente deseja excluir a sua conta?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sim",
-            cancelButtonText: "Não",
-            showCloseButton: true,
-            reverseButtons: true,
-            width: "32vw"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                api.delete(`/funcionarios/${idUser}`).then((response) => {
-                    swalWithBootstrapButtons.fire({
-                        title: "Exclusão de Conta",
-                        text: "Sua conta foi excluída com sucesso.",
-                        icon: "success"
-                    });
-                    sessionStorage.removeItem("idUser");
-                    sair("/login");
-                }).catch((error) => {
-                    swalWithBootstrapButtons.fire({
-                        title: "Exclusão de Conta",
-                        text: "Não foi possível excluir sua conta.",
-                        icon: "error"
-                    });
-                    console.error("Houve um erro ao tentar excluir a conta")
-                    console.log(error)
-                })
-            }
-        });
-
+    const abrirModal = () => {
+        setModalAberto(!modalAberto);
     }
+
+    const excluir = () => {
+        api.delete(`/funcionarios/${idUser}`).then(() => {
+            abrirModal();
+            toast.sucess("Sua conta foi excluída com sucesso.");
+            sessionStorage.removeItem("idUser");
+            sair("/login");
+        }).catch((error) => {
+            toast.error("Não foi possível excluir sua conta.")
+            console.error("Houve um erro ao tentar excluir a conta")
+            console.log(error)
+        })
+    }
+
+    const tituloModal = "Excluir Conta";
+    const tituloBotao = "Excluir";
+    const corpoModal = (
+        <>
+            <span style={{
+                lineHeight: "1.5rem",
+            }}>
+                Você realmente deseja excluir a sua conta?
+            </span>
+        </>
+    )
+
+    const [modalAberto, setModalAberto] = useState(false);
+
+
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -142,18 +142,35 @@ const Perfil = () => {
             api.get(`/empresas/${id}`).then((response) => {
                 const { data } = response
                 const { horariosFuncionamentos } = data;
+                const ordemDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
                 const vetorDias = [];
 
                 horariosFuncionamentos.forEach((h) => {
                     vetorDias.push({
-                        "id": h.id,
-                        "diaSemana": h.diaSemana,
-                        "fim": h.fim,
-                        "inicio": h.inicio,
-                        "status": h.status
+                        id: h.id,
+                        diaSemana: h.diaSemana.replace("-Feira", ""),
+                        fim: h.fim,
+                        inicio: h.inicio,
+                        aberto: h.status === 0 ? false : true
                     })
                 });
 
+                for (let i = 0; i < ordemDias.length; i++) {
+                    let posicaoTroca = i;
+
+                    for (let j = i; j < ordemDias.length; j++) {
+                        if (vetorDias[j].diaSemana === ordemDias[i]) {
+                            posicaoTroca = j;
+                        }
+                    }
+
+                    console.log(posicaoTroca);
+                    let proximoDia = vetorDias[i];
+                    vetorDias[i] = vetorDias[posicaoTroca];
+                    vetorDias[posicaoTroca] = proximoDia;
+                }
+                
+                abc(vetorDias);
                 setDias(vetorDias);
 
                 console.log(vetorDias)
@@ -166,8 +183,39 @@ const Perfil = () => {
         }).catch((error) => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
-        })
-    });
+        }, [])
+    }, []);
+
+    const abc = (vetor) => {
+        console.log(vetor);
+        setDiaSegundaAberto(vetor[0].aberto);
+        setHorario1Segunda(vetor[0].inicio)
+        setHorario2Segunda(vetor[0].fim)
+
+        setDiaTercaAberto(vetor[1].aberto);
+        setHorario1Terca(vetor[1].inicio);
+        setHorario2Terca(vetor[1].fim)
+
+        setDiaQuartaAberto(vetor[2].aberto);
+        setHorario1Quarta(vetor[2].inicio)
+        setHorario2Quarta(vetor[2].fim)
+
+        setDiaQuintaAberto(vetor[3].aberto);
+        setHorario1Quinta(vetor[3].inicio)
+        setHorario2Quinta(vetor[3].fim)
+
+        setDiaSextaAberto(vetor[4].aberto);
+        setHorario1Sexta(vetor[4].inicio)
+        setHorario2Sexta(vetor[4].fim)
+
+        setDiaSabadoAberto(vetor[5].aberto);
+        setHorario1Sabado(vetor[5].inicio)
+        setHorario2Sabado(vetor[5].fim)
+
+        setDiaDomingoAberto(vetor[6].aberto);
+        setHorario1Domingo(vetor[6].inicio)
+        setHorario2Domingo(vetor[6].fim)
+    }
 
     return (
         <>
@@ -182,7 +230,7 @@ const Perfil = () => {
                                 <Button
                                     cor="branco"
                                     titulo={"Excluir conta"}
-                                    funcaoButton={() => excluir()}
+                                    funcaoButton={() => abrirModal()}
                                     icone={
                                         <IconlyProvider
                                             stroke="bold"
@@ -223,7 +271,6 @@ const Perfil = () => {
                                         secaoPerfil === "informacoes-empresa" ?
                                             "roxo" : "sem-fundo"
                                         ]
-
                                     }
                                 >
                                     Informações da Empresa
@@ -265,20 +312,30 @@ const Perfil = () => {
                                             />
 
                                         </div>
-                                        <div className={styles["card-horarios"]}>
-                                            {
-                                                dias.map((d, index) => (
-                                                    <div key={index}>
-                                                        <DiaDaSemanaComponente
-                                                            aberto={ d.aberto === 1 }
-                                                            diaSemana={d.diaSemana}
-                                                            horario1={d.inicio}
-                                                            horario2={d.fim}
-                                                        />
-                                                    </div>
-                                            
-                                                ))
-                                            }
+                                        <div className={styles["dias-funcionamento"]}>
+                                            <div style={{ width: "100%" }}>
+                                                <Titulo titulo={"Dias de Funcionamento"} />
+                                            </div>
+                                            <div className={styles["card-horarios"]}>
+                                                <div className={styles["card-container"]}>
+                                                    {
+                                                        dias.map((d, index) => (
+                                                            <div key={index}>
+                                                                <DiaDaSemanaComponente
+                                                                    diaSemana={d.diaSemana}
+                                                                    setAberto={vetorSetters[index][0]}
+                                                                    setHorario1={vetorSetters[index][1]}
+                                                                    setHorario2={vetorSetters[index][2]}
+                                                                    aberto={vetorSetters[index][3]}
+                                                                    horario1={vetorSetters[index][4]}
+                                                                    horario2={vetorSetters[index][5]}
+                                                                />
+                                                            </div>
+
+                                                        ))
+                                                    }
+                                                </div>
+                                            </div>
                                         </div>
                                     </div> :
                                     <div className={styles[""]}>
@@ -309,6 +366,14 @@ const Perfil = () => {
                     </div>
                 </div>
             </section>
+            <ModalTemplate
+                aberto={modalAberto}
+                setAberto={setModalAberto}
+                funcaoBotaoConfirmar={excluir}
+                corpo={corpoModal}
+                titulo={tituloModal}
+                tituloBotaoConfirmar={tituloBotao}
+            />
 
         </>
     );

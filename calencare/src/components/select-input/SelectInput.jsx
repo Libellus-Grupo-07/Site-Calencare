@@ -6,6 +6,7 @@ import Select from 'react-select';
 const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar, criarOption }) => {
     const mudarValor = (e) => {
         alterarValor(e.value)
+        console.warn(e.value);
     }
 
     return (
