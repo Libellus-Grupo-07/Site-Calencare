@@ -34,7 +34,7 @@ const Table = ({ titulos, linhas, showEditIcon, showDeleteIcon, funcaoEditar, fu
                                         <td key={index}>
                                             <div className={styles["group-icon"]}>
                                                 {showEditIcon ?
-                                                    <div className={styles["td-div-icon"]} onClick={funcaoEditar(index)}>
+                                                    <div className={styles["td-div-icon"]} onClick={() => funcaoEditar(index)}>
                                                         <IconlyProvider>
                                                             <Edit />
                                                         </IconlyProvider>
@@ -43,7 +43,7 @@ const Table = ({ titulos, linhas, showEditIcon, showDeleteIcon, funcaoEditar, fu
                                                 }
 
                                                 {showDeleteIcon ?
-                                                    <div className={styles["td-div-icon"]} onClick={funcaoDeletar(index)}>
+                                                    <div className={styles["td-div-icon"]} onClick={() => funcaoDeletar(index)}>
                                                         <IconlyProvider>
                                                             <Delete />
                                                         </IconlyProvider>

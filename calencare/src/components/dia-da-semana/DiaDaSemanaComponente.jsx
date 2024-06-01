@@ -14,6 +14,8 @@ const DiaDaSemanaComponente = (
   }) => {
 
   const handleButtonClick = () => {
+    console.log(setAberto);
+    console.log(aberto)
     setAberto(!aberto);
   };
 

@@ -15,6 +15,7 @@ const Inicio = () => {
     const navigate = useNavigate();
     const idUser = sessionStorage.getItem("idUser");
     const [nome, setNome] = useState(sessionStorage.getItem("nomeUser"));
+    const [idEmpresa, setIdEmpresa] = useState(0);
     // const [email, setEmail] = useState("");
     // const [telefone, setTelefone] = useState("");
     const [totalAgendamentosDia, setTotalAgendamentosDia] = useState("");
@@ -85,7 +86,17 @@ const Inicio = () => {
         //     console.log(error);
         // });
 
-        api.get(`/agendamentos/total?data=${data}`).then((response) => {
+        api.get(`/empresas/funcionarios?idUsuario${idUser}`).then((response) => {
+            const { data } = response;
+            const { id } = data;
+
+            setIdEmpresa(id);
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar empresa");
+            console.log(error);
+        });
+
+        api.get(`/agendamentos/total?data=${data}&empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
             setTotalAgendamentosDia(data)
         }).catch((error) => {
@@ -93,7 +104,7 @@ const Inicio = () => {
             console.log(error);
         })
 
-        api.get(`/agendamentos/lucro?data=${data}`).then((response) => {
+        api.get(`/agendamentos/lucro?data=${data}&empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
             console.log("potencial lucro")
             console.log(data);
@@ -103,7 +114,7 @@ const Inicio = () => {
             console.log(error);
         })
 
-        api.get(`/agendamentos/proximos`).then((response) => {
+        api.get(`/agendamentos/proximos?empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
             console.log(data);
             setProximosAgendamentos(data);
