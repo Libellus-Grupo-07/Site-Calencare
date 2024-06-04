@@ -25,6 +25,7 @@ const AdicionarAgendamento = () => {
     const { idAgenda } = useParams();
     const [nomeUser, setNomeUser] = useState("");
     const idUser = sessionStorage.getItem("idUser");
+    const idEmpresa = sessionStorage.getItem("idUser");
     const [cliente, setCliente] = useState();
     const [clientes, setClientes] = useState([]);
     const [nomeCliente, setNomeCliente] = useState("");
@@ -229,10 +230,10 @@ const mapearServico = (dataServico) => {
         //     console.log(error);
         // });
         
-        buscarClientes(0)
+    //     buscarClientes(0)
 
 
-    }, [idUser]);
+    // }, [idUser]);
 
     const mapear = (data, index) => {
         var dataMapp = [];
