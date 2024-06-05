@@ -31,3 +31,17 @@
   column-gap: 8px;
   justify-content: center;
 }
+
+.section-servicos .container-servicos .content-servicos .table-servicos .sem-servicos{
+  position: absolute;
+  width: 70vw;
+  height: fit-content;
+  /* border: 1px solid; */
+  top: 50%;
+  bottom: 50%;
+  text-align: center;
+  letter-spacing: -0.05rem;
+  font-size: 18px;
+  color: var(--texto-cinza);
+  font-weight: 500;
+}

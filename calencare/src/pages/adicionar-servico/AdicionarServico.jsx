@@ -34,21 +34,33 @@ const AdicionarServico = () => {
     const [options, setOptions] = useState([]);
     const [categoria, setCategoria] = useState("");
 
-    const buscarCategoriasServico = (action) => {
+    const buscarCategoriasServico = (action, index, categoria) => {
         api.get("/categoria-servico").then((response) => {
             const { data } = response;
-            console.log("Resposta => " + data.length);
-            mapear("categoria-servico", data, action === "I" ? data.length : 0);
+            let idCategoria = index;
+
+            if (categoria) {
+                let categoriaObj = data.filter(c => c.nome === categoria)[0]
+                idCategoria = data.indexOf(categoriaObj);
+            }
+
+            mapear("categoria-servico", data, action === "I" ? data.length : action === "E" ? idCategoria : -1, action);
 
         }).catch((error) => {
             console.error("Houve um erro ao buscar Categorias de Serviço => " + error);
         });
     }
 
-    const buscarServicos = (action) => {
+    const buscarServicos = (action, index, nome) => {
         api.get("/servicos").then((response) => {
             const { data } = response;
-            mapear("servico", data, action === "I" ? data.length : 0);
+            var indiceServico = index;
+
+            if (nome) {
+                indiceServico = data.indexOf(data.filter(s => s.nome === nome)[0]);
+            }
+
+            mapear("servico", data, action === "I" ? data.length : action === "E" ? indiceServico : -1, action);
         }).catch((error) => {
             console.error("Houve um erro ao buscar os serviços.");
             console.error(error);
@@ -67,50 +79,36 @@ const AdicionarServico = () => {
             setIdEmpresa(id);
             buscarCategoriasServico("C");
             buscarServicos("C");
-            
+
         }).catch((error) => {
-            console.error("Houve um erro ao buscar a empresa")
             console.error(error)
         })
     }, []);
 
     useEffect(() => {
-        buscarCategoriasServico("C");
-        buscarServicos("C");
-
         if (!isAdicionar) {
-            console.log("isEditar")
-            console.warn(servicos)
-
+            alert(idEmpresa)
             api.get(`/servico-preco/${idEmpresa}/${idServico}`).then((response) => {
                 const { data } = response;
-                const { nome, descricao, preco, comissao, duracao, descricaoStatus } = data;
-                console.warn(servicos);
-                console.warn(nome)
-                var a = servicos.filter(s => s.value === nome);
-                console.error(a);
-                console.error(servico)
+                const { nome, descricao, categoria, preco, comissao, duracao, descricaoStatus } = data;
                 setDescricao(descricao);
                 setPreco("R$ " + preco.toFixed(2).replace(".", ","));
                 setComissao(comissao.toFixed(2).replace(".", ",") + "%");
                 setDuracao(duracao);
-                setServico(nome);
-                setCategoria(descricao);
+                buscarServicos("E", undefined, nome);
+                buscarCategoriasServico("E", undefined, data.categoria);
+
             }).catch((error) => {
-                console.log("Houve um erro ao buscar serviço");
                 console.error(error)
             })
         }
     }, [idEmpresa]);
 
 
-    
-
-    const mapear = (campo, data, index) => {
+    const mapear = (campo, data, index, action) => {
         var optionsMap = [];
         let i = 0;
 
-        console.log(data);
         for (i = 0; i < data.length; i++) {
             optionsMap.push({
                 id: data[i].id,
@@ -119,9 +117,7 @@ const AdicionarServico = () => {
             })
         }
 
-        console.log(index)
-        i = index === 0 ? index - 1 : i;
-        console.log(i);
+        i = index === 0 && action !== "E" ? index : action ? index : i;
 
         if (campo === "categoria-servico") {
             setOptions(optionsMap)
@@ -169,15 +165,15 @@ const AdicionarServico = () => {
         return false;
     }
 
-    const isAdicionarServicoValid = (value) => {
-        if (isSelected(categoria, "Categoria do Serviço") &&
-            !isVazio(value, "Nome do Serviço")
-        ) {
-            return true;
-        }
+    // const isAdicionarServicoValid = (value) => {
+    //     if (isSelected(categoria, "Categoria do Serviço") &&
+    //         !isVazio(value, "Nome do Serviço")
+    //     ) {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
     const adicionarCategoria = () => {
         if (isAdicionarCategoriaValid()) {
@@ -200,21 +196,17 @@ const AdicionarServico = () => {
     }
 
     const adicionarServico = (value) => {
-
-        console.log("Função Adicionar Serviço: ")
-        if (isAdicionarServicoValid(value)) {
-            let idCategoria = options.filter(o => o.label === categoria)[0].id;
-            var body = {
-                nome: value,
-                categoriaId: idCategoria
+        if (!isVazio(value)) { 
+            let novoServico = {
+                id: servicos.length,
+                value: value,
+                label: value
             }
 
-            api.post(`/servicos/${idCategoria}`, body).then((response) => {
-                buscarServicos("I");
-            }).catch((error) => {
-                console.error("Houve um erro ao adicionar serviço!");
-                console.error(error);
-            });
+            let servicosCopia = servicos;
+            servicosCopia.push(servico);
+            setServicos(servicosCopia)
+            setServico(novoServico);
         }
     }
 
@@ -226,26 +218,39 @@ const AdicionarServico = () => {
             !isVazio(comissao, "Comissão do Serviço") &&
             !isVazio(duracao, "Duração do Serviço")
         ) {
-            let idCategoria = options.filter(o => o.label === categoria)[0].id;
-            let idServico = servicos.filter(s => s.label === servico)[0].id;
+            console.log(options.filter(o => o.label === categoria));
+            console.log(servicos.filter(o => o.label === servico));
+            let idCategoria = options.filter(o => o === categoria)[0].id;
+            let nomeServico = servicos.filter(s => s === servico)[0].value;
+
             var url = !isAdicionar ? `/servico-preco/${idServico}` : `/servico-preco/${idEmpresa}/${idCategoria}`;
             var body = {
-                "nome": servico,
+                "nome": nomeServico,
                 "descricao": descricao,
                 "preco": preco.replace("R$ ", "").replace(",", "."),
                 "duracao": duracao,
                 "comissao": comissao.replace(",", "."),
                 "bitStatus": 1,
                 "empresaId": idEmpresa,
-                "servicoId": idServico
             };
 
             api.post(url, body).then(() => {
                 toast.success("Serviço adicionado com sucesso!");
                 navigate("/servicos");
             }).catch((error) => {
-                toast.error("Houve um erro ao tentar adicionar serviço!");
+                if (error.code === "ERR_NETWORK") {
+                    toast.error("Ocorreu um erro ao tentar adicionar serviço!")
+                } else {
+                    const { response } = error;
+                    const { data } = response;
+
+                    if (data.status === 409) {
+                        toast.error("Já existe um serviço com o nome selecionado!");
+                    }
+                }
+
                 console.error(error);
+
             });
         }
     }

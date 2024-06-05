@@ -17,7 +17,7 @@ const Servicos = () => {
     const [idEmpresa, setIdEmpresa] = useState(0);
     const [idServico, setIdServico] = useState(0);
     const [nomeServico, setNomeServico] = useState("");
-    const titulos = ["Nome", "Descrição", "Preço", "Comissão em %", "Duração (minutos)", "Status", ""]
+    const titulos = ["Nome", /*"Descrição"*/, "Categoria", "Preço", "Comissão em %", "Duração (minutos)", "Status", ""]
     const [dados, setDados] = useState([]);
     const [dadosResposta, setDadosResposta] = useState([]);
 
@@ -68,7 +68,8 @@ const Servicos = () => {
         for (let i = 0; i < data.length; i++) {
             var dataAtual = [];
             dataAtual.push(data[i].nome);
-            dataAtual.push(data[i].descricao);
+            // dataAtual.push(data[i].descricao);
+            dataAtual.push(data[i].categoria);
             dataAtual.push(`R$ ${data[i].preco.toFixed(2).replace(".", ",")}`);
             dataAtual.push((data[i].comissao).toFixed(2).replace(".", ",") + "%");
             dataAtual.push(data[i].duracao + " minutos");
@@ -143,7 +144,7 @@ const Servicos = () => {
                         </div>
                         <div className={styles["table-servicos"]}>
                             {dados.length === 0 ?
-                                <div>
+                                <div className={styles["sem-servicos"]}>
                                     Nenhum serviço adicionado
                                 </div>
                                 :

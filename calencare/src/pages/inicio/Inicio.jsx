@@ -96,7 +96,7 @@ const Inicio = () => {
             console.log(error);
         });
 
-        api.get(`/agendamentos/total?data=${data}&empresaId=${idEmpresa}`).then((response) => {
+        api.get(`/agendamentos/total/empresa?data=${data}&empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
             setTotalAgendamentosDia(data)
         }).catch((error) => {
@@ -104,7 +104,7 @@ const Inicio = () => {
             console.log(error);
         })
 
-        api.get(`/agendamentos/lucro?data=${data}&empresaId=${idEmpresa}`).then((response) => {
+        api.get(`/agendamentos/potencial-lucro?data=${data}&empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
             console.log("potencial lucro")
             console.log(data);
@@ -134,7 +134,7 @@ const Inicio = () => {
         });
 
 
-        api.get(`/agendamentos/servico-mais-procurado`).then((response) => {
+        api.get(`/agendamentos/servico-mais-procurado/empresa`).then((response) => {
             const { data } = response;
             console.log(data);
             setServicoMaisProcuradoDia(data);
@@ -164,38 +164,44 @@ const Inicio = () => {
                             </IconlyProvider>
                         </div>
                         <div className={styles["group-kpis"]}>
-                            <CardKpi
-                                icon={
-                                    <IconlyProvider
-                                        stroke="bold"
-                                        size="large"
-                                    >
-                                        <Calendar />
-                                    </IconlyProvider>
-                                }
-                                legenda={"Total De Agendamentos Hoje"}
-                                valor={totalAgendamentosDia}
-                            />
-                            <CardKpi
-                                icon={
-                                    <Icon
-                                        icon="fluent:money-16-regular" width="40" height="40" />
-                                }
-                                legenda={"Potencial Lucro Para Hoje"}
-                                valor={potencialLucroDia.length === 0 ? "R$ 0,00" : "R$" + transformarDouble(potencialLucroDia)}
-                            />
-                            <CardKpi
-                                icon={
-                                    <IconlyProvider
-                                        stroke="bold"
-                                        size="large"
-                                    >
-                                        <Work />
-                                    </IconlyProvider>
-                                }
-                                legenda={"Serviço Mais Procurado Hoje"}
-                                valor={servicoMaisProcuradoDia || "Nenhum"}
-                            />
+                            <div className={styles["card-kpi"]}>
+                                <CardKpi
+                                    icon={
+                                        <IconlyProvider
+                                            stroke="bold"
+                                            size="large"
+                                        >
+                                            <Calendar />
+                                        </IconlyProvider>
+                                    }
+                                    legenda={"Total De Agendamentos Hoje"}
+                                    valor={totalAgendamentosDia}
+                                />
+                            </div>
+                            <div className={styles["card-kpi"]}>
+                                <CardKpi
+                                    icon={
+                                        <Icon
+                                            icon="fluent:money-16-regular" width="40" height="40" />
+                                    }
+                                    legenda={"Potencial Lucro Para Hoje"}
+                                    valor={potencialLucroDia.length === 0 ? "R$ 0,00" : "R$" + transformarDouble(potencialLucroDia)}
+                                />
+                            </div>
+                            <div className={styles["card-kpi"]}>
+                                <CardKpi
+                                    icon={
+                                        <IconlyProvider
+                                            stroke="bold"
+                                            size="large"
+                                        >
+                                            <Work />
+                                        </IconlyProvider>
+                                    }
+                                    legenda={"Serviço Mais Procurado Hoje"}
+                                    valor={servicoMaisProcuradoDia || "Nenhum"}
+                                />
+                            </div>
                         </div>
                         <div className={styles["container-agendamentos"]}>
                             <div className={styles["proximos-agendamentos"]}>
@@ -228,7 +234,7 @@ const Inicio = () => {
                             </div>
                             <div className={styles["agendamentos-em-andamento"]}>
                                 <div className={styles["titulo"]} >
-                                    <Titulo tamanho={"sm"} titulo={"Agendamentos em andamento"} cor={"branco"} />
+                                    <Titulo tamanho={"sm"} titulo={"Agendamentos Pendentes Conclusão"} cor={"branco"} />
                                 </div>
                                 {agendamentosEmAndamento.length === 0 ?
                                     <span className={styles["text-sem-agendamentos"]}>

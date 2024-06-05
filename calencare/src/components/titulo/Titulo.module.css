@@ -3,6 +3,7 @@ h1 {
   font-weight: 800;
   letter-spacing: -0.08rem;
   font-size: 24px;
+  line-height: 24px;
   color: var(--texto-preto);
 }
 

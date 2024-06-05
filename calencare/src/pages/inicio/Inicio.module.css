@@ -37,6 +37,11 @@
   row-gap: 16px;
 }
 
+.section-inicio .container-inicio .content-inicio .group-kpis .card-kpi{
+  width: 28%;
+  background-color: aliceblue;
+}
+
 .section-inicio .container-inicio .content-inicio .container-agendamentos {
   width: 100%;
   display: flex;

@@ -4,9 +4,8 @@ import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 
 const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar, criarOption }) => {
-    const mudarValor = (e) => {
-        alterarValor(e.value)
-        console.warn(e.value);
+    const mudarValor = (value) => {
+        alterarValor(value)
     }
 
     return (
@@ -26,7 +25,7 @@ const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, fu
                             defaultValue={valor}
                             onChange={(e) => mudarValor(e)}
                             isSearchable={true}
-                            // value={valor}
+                            value={valor}
                             options={options}
                             noOptionsMessage={() => "Nenhum resultado encontrado"}
                             onCreateOption={funcaoAdicionar}
@@ -49,15 +48,15 @@ const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, fu
                         /> :
                         <Select
                             id={id}
-                            formatCreateLabel={(value) => `Criar "${value}"`}
+                            // formatCreateLabel={(value) => `Criar "${value}"`}
                             placeholder={placeholder || "Selecione"}
                             defaultValue={valor}
-                            onChange={(e) => mudarValor(e)}
+                            onChange={(e) => mudarValor(e.value)}
                             isSearchable={true}
                             value={valor}
                             options={options}
                             noOptionsMessage={() => "Nenhum resultado encontrado"}
-                            onCreateOption={funcaoAdicionar}
+                            // onCreateOption={funcaoAdicionar}
                             styles={{
                                 control: (state) => ({
                                     padding: "0px 24px",

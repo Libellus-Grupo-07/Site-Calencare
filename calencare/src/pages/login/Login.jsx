@@ -74,6 +74,7 @@ const Login = () => {
                                 valor={email}
                                 alterarValor={setEmail}
                                 className={styles["email"]}
+                                sobrepor={true}
                             />
                             <Input
                                 id={"senha"}
@@ -81,6 +82,7 @@ const Login = () => {
                                 type={"password"}
                                 valor={senha}
                                 alterarValor={setSenha}
+                                sobrepor={true}
                             />
                         </div>
                         <div className={styles["container-buttons"]}>

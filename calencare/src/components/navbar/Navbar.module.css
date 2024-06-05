@@ -1,5 +1,6 @@
 #sem-fundo{
   background-color: transparent;
+  backdrop-filter: blur(0);
 }
 
 header {
