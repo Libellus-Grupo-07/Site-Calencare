@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 const Servicos = () => {
     const navigate = useNavigate();
     const idUser = sessionStorage.getItem("idUser");
-    const [idEmpresa, setIdEmpresa] = useState(0);
+    const idEmpresa = sessionStorage.getItem("idEmpresa");
     const [idServico, setIdServico] = useState(0);
     const [nomeServico, setNomeServico] = useState("");
     const titulos = ["Nome", /*"Descrição"*/, "Categoria", "Preço", "Comissão em %", "Duração (minutos)", "Status", ""]
@@ -29,25 +29,7 @@ const Servicos = () => {
             return;
         }
 
-        api.get(`/empresas/funcionarios?idFuncionario=${idUser}`).then((response) => {
-            const { data } = response;
-            const { id } = data;
-            setIdEmpresa(id);
-            buscarServicos(id);
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar a empresa");
-            console.log(error);
-        });
-
-
-        // api.get(`/funcionarios/${idUser}`).then((response) => {
-        //     const { data } = response;
-        //     const { nome } = data;
-        //     setNome(nome);
-        // }).catch((error) => {
-        //     console.log("Houve um erro ao buscar o funcionário");
-        //     console.log(error);
-        // });
+        buscarServicos(idEmpresa);
     }, []);
 
     const buscarServicos = (id) => {

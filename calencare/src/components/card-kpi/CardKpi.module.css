@@ -1,6 +1,5 @@
 .card-kpi {
   background-color: var(--branco);
-  width: 100%;
   border: 1.5px solid rgba(0, 0, 0, 0.15);
   border-radius: 1rem;
   display: flex;

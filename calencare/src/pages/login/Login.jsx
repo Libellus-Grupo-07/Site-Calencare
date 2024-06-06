@@ -40,7 +40,18 @@ const Login = () => {
                 sessionStorage.setItem("nomeUser", data.nome)
                 sessionStorage.setItem("idUser", data.userId)
                 sessionStorage.setItem("token", data.token)
-                navigate("/inicio");
+
+                api.get(`/funcionarios/${data.userId}`).then((response) => {
+                    const { data } = response;
+                    const { empresa } = data;
+                    const { id } = empresa;
+                    sessionStorage.setItem("idEmpresa", Number(id));
+                    navigate("/inicio");
+                }).catch((error) => {
+                    console.error(error)
+                })
+
+
             }).catch(function (error) {
                 console.error(error);
                 const { code } = error;

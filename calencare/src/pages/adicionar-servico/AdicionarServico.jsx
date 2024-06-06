@@ -21,8 +21,7 @@ const AdicionarServico = () => {
     const isAdicionar = location.pathname === "/servicos/adicionar";
     const { idServico } = useParams();
     const nomeUser = sessionStorage.getItem("nomeUser");
-    const idUser = sessionStorage.getItem("idUser");
-    const [idEmpresa, setIdEmpresa] = useState(0);
+    const idEmpresa = sessionStorage.getItem("idEmpresa");
     const [servico, setServico] = useState()
     const [descricao, setDescricao] = useState("");
     const [nomeCategoria, setNomeCategoria] = useState("");
@@ -32,7 +31,48 @@ const AdicionarServico = () => {
     const [duracao, setDuracao] = useState("");
     const [servicos, setServicos] = useState([]);
     const [options, setOptions] = useState([]);
+    const [optionsStatus, setOptionsStatus] = useState([
+        {
+            label: "Ativo",
+            value: 1
+        },
+        {
+            label: "Inativo",
+            value: 0
+        }
+    ]);
+    const [status, setStatus] = useState(optionsStatus[0]);
+
     const [categoria, setCategoria] = useState("");
+
+
+    useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
+
+        buscarCategoriasServico("C");
+        buscarServicos("C");
+    }, []);
+
+    useEffect(() => {
+        if (!isAdicionar) {
+            api.get(`/servico-preco/${idEmpresa}/${idServico}`).then((response) => {
+                const { data } = response;
+                const { nome, descricao, categoria, preco, comissao, duracao, descricaoStatus } = data;
+                setDescricao(descricao);
+                setPreco("R$ " + preco.toFixed(2).replace(".", ","));
+                setComissao(comissao.toFixed(2).replace(".", ",") + "%");
+                setDuracao(duracao);
+                buscarServicos("E", undefined, nome);
+                buscarCategoriasServico("E", undefined, data.categoria);
+
+            }).catch((error) => {
+                console.error(error)
+            })
+        }
+    }, [idEmpresa]);
 
     const buscarCategoriasServico = (action, index, categoria) => {
         api.get("/categoria-servico").then((response) => {
@@ -66,44 +106,6 @@ const AdicionarServico = () => {
             console.error(error);
         });
     }
-
-    useEffect(() => {
-        if (!logado(sessionStorage.getItem("token"))) {
-            navigate("/login");
-            return;
-        }
-
-        api.get(`/empresas/funcionarios?idFuncionario=${idUser}`).then((response) => {
-            const { data } = response;
-            const { id } = data;
-            setIdEmpresa(id);
-            buscarCategoriasServico("C");
-            buscarServicos("C");
-
-        }).catch((error) => {
-            console.error(error)
-        })
-    }, []);
-
-    useEffect(() => {
-        if (!isAdicionar) {
-            alert(idEmpresa)
-            api.get(`/servico-preco/${idEmpresa}/${idServico}`).then((response) => {
-                const { data } = response;
-                const { nome, descricao, categoria, preco, comissao, duracao, descricaoStatus } = data;
-                setDescricao(descricao);
-                setPreco("R$ " + preco.toFixed(2).replace(".", ","));
-                setComissao(comissao.toFixed(2).replace(".", ",") + "%");
-                setDuracao(duracao);
-                buscarServicos("E", undefined, nome);
-                buscarCategoriasServico("E", undefined, data.categoria);
-
-            }).catch((error) => {
-                console.error(error)
-            })
-        }
-    }, [idEmpresa]);
-
 
     const mapear = (campo, data, index, action) => {
         var optionsMap = [];
@@ -165,16 +167,6 @@ const AdicionarServico = () => {
         return false;
     }
 
-    // const isAdicionarServicoValid = (value) => {
-    //     if (isSelected(categoria, "Categoria do Serviço") &&
-    //         !isVazio(value, "Nome do Serviço")
-    //     ) {
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
-
     const adicionarCategoria = () => {
         if (isAdicionarCategoriaValid()) {
             var body = {
@@ -196,7 +188,7 @@ const AdicionarServico = () => {
     }
 
     const adicionarServico = (value) => {
-        if (!isVazio(value)) { 
+        if (!isVazio(value)) {
             let novoServico = {
                 id: servicos.length,
                 value: value,
@@ -204,26 +196,24 @@ const AdicionarServico = () => {
             }
 
             let servicosCopia = servicos;
-            servicosCopia.push(servico);
+            servicosCopia.push(novoServico);
             setServicos(servicosCopia)
             setServico(novoServico);
         }
     }
 
-    const salvar = () => {
+    const cadastrar = () => {
         if (isSelected(categoria, "Categoria do Serviço") &&
-            !isVazio(servico, "Nome do Serviço") &&
+            isSelected(servico, "Nome do Serviço") &&
             !isVazio(descricao, "Descrição do Serviço") &&
             !isVazio(preco, "Preço do Serviço") &&
             !isVazio(comissao, "Comissão do Serviço") &&
             !isVazio(duracao, "Duração do Serviço")
         ) {
-            console.log(options.filter(o => o.label === categoria));
-            console.log(servicos.filter(o => o.label === servico));
             let idCategoria = options.filter(o => o === categoria)[0].id;
             let nomeServico = servicos.filter(s => s === servico)[0].value;
 
-            var url = !isAdicionar ? `/servico-preco/${idServico}` : `/servico-preco/${idEmpresa}/${idCategoria}`;
+            var url = `/servico-preco/${idEmpresa}/${idCategoria}`;
             var body = {
                 "nome": nomeServico,
                 "descricao": descricao,
@@ -255,6 +245,50 @@ const AdicionarServico = () => {
         }
     }
 
+    const editar = () => {
+        console.log("EDITAR")
+        if (isSelected(categoria, "Categoria do Serviço") &&
+            isSelected(servico, "Nome do Serviço") &&
+            !isVazio(descricao, "Descrição do Serviço") &&
+            !isVazio(preco, "Preço do Serviço") &&
+            !isVazio(comissao, "Comissão do Serviço") &&
+            !isVazio(duracao, "Duração do Serviço") &&
+            isSelected(status, "Status do Serviço")
+        ) {
+            let idCategoria = options.filter(o => o === categoria)[0].id;
+            let nomeServico = servicos.filter(s => s === servico)[0].value;
+
+            var url = `/servico-preco/${idEmpresa}/${idServico}/${idCategoria}`;
+            var body = {
+                "nome": nomeServico,
+                "descricao": descricao,
+                "preco": preco.replace("R$ ", "").replace(",", "."),
+                "duracao": duracao,
+                "comissao": comissao.replace(",", ".").replace("%", ""),
+                "bitStatus": status.value,
+                "servicoId": idServico
+            };
+
+            api.put(url, body).then(() => {
+                toast.success("Serviço editado com sucesso!");
+                navigate("/servicos");
+            }).catch((error) => {
+                if (error.code === "ERR_NETWORK") {
+                    toast.error("Ocorreu um erro ao tentar editar serviço!")
+                } else {
+                    const { response } = error;
+                    const { data } = response;
+
+                    if (data.status === 409) {
+                        toast.error("Já existe um serviço com o nome selecionado!");
+                    }
+                }
+
+                console.error(error);
+
+            });
+        }
+    }
 
     return (
         <>
@@ -335,6 +369,17 @@ const AdicionarServico = () => {
                                 maxlength={10}
                                 minlength={1}
                             />
+                            {isAdicionar ? "" :
+                                <SelectInput
+                                    id="statusServico"
+                                    tamanho={"lg"}
+                                    titulo={"Status"}
+                                    valor={status}
+                                    alterarValor={setStatus}
+                                    options={optionsStatus}
+                                    criarOption={false}
+                                />
+                            }
                         </form>
                         <div className={styles["group-button"]}>
                             <Button
@@ -355,7 +400,11 @@ const AdicionarServico = () => {
                                 titulo={isAdicionar ? "Adicionar" : "Editar"}
                                 icone={<FaCheck />}
                                 cor={"roxo"}
-                                funcaoButton={() => salvar()}
+                                funcaoButton={
+                                    isAdicionar ?
+                                        () => cadastrar() :
+                                        () => editar()
+                                }
                             />
                         </div>
                     </div>

@@ -14,8 +14,8 @@ import Swal from "sweetalert2";
 const Inicio = () => {
     const navigate = useNavigate();
     const idUser = sessionStorage.getItem("idUser");
+    const idEmpresa = sessionStorage.getItem("idEmpresa");
     const [nome, setNome] = useState(sessionStorage.getItem("nomeUser"));
-    const [idEmpresa, setIdEmpresa] = useState(0);
     // const [email, setEmail] = useState("");
     // const [telefone, setTelefone] = useState("");
     const [totalAgendamentosDia, setTotalAgendamentosDia] = useState("");
@@ -86,16 +86,6 @@ const Inicio = () => {
         //     console.log(error);
         // });
 
-        api.get(`/empresas/funcionarios?idUsuario${idUser}`).then((response) => {
-            const { data } = response;
-            const { id } = data;
-
-            setIdEmpresa(id);
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar empresa");
-            console.log(error);
-        });
-
         api.get(`/agendamentos/total/empresa?data=${data}&empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
             setTotalAgendamentosDia(data)
@@ -123,7 +113,7 @@ const Inicio = () => {
             console.log(error);
         });
 
-        api.get(`/agendamentos/em-andamento`).then((response) => {
+        api.get(`/agendamentos/em-andamento?empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
             console.log("em andamento")
             console.log(data);
@@ -234,7 +224,7 @@ const Inicio = () => {
                             </div>
                             <div className={styles["agendamentos-em-andamento"]}>
                                 <div className={styles["titulo"]} >
-                                    <Titulo tamanho={"sm"} titulo={"Agendamentos Pendentes Conclusão"} cor={"branco"} />
+                                    <Titulo tamanho={"sm"} titulo={"Pendentes de Conclusão"} cor={"branco"} />
                                 </div>
                                 {agendamentosEmAndamento.length === 0 ?
                                     <span className={styles["text-sem-agendamentos"]}>
