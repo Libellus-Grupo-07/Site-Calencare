@@ -25,7 +25,7 @@ const AdicionarAgendamento = () => {
     const { idAgenda } = useParams();
     const [nomeUser, setNomeUser] = useState("");
     const idUser = sessionStorage.getItem("idUser");
-    const idEmpresa = sessionStorage.getItem("idUser");
+    const [idEmpresa, setIdEmpresa] = useState("");
     const [cliente, setCliente] = useState();
     const [clientes, setClientes] = useState([]);
     const [nomeCliente, setNomeCliente] = useState("");
@@ -186,33 +186,13 @@ const AdicionarAgendamento = () => {
 
     useEffect(() => {
         api.get(`/servico-preco/${idEmpresa}`).then((response) => {
-            const { dataServico } = response;
-            mapearServico(dataServico); 
-            console.log(dataServico);
+            const { data } = response;
+            console.log(data);
         }).catch((error) => {
             console.log("Houve um erro ao buscar um serviço");
             console.log(error);
         });
     }, []);
-    
-// const mapearServico = (dataServico) => {
-//     const ServicosMapeados = dataServico.map(servico => ({
-//         id: servico.id,
-//         label: servico.servico,
-//         value: servico.servico
-//     }));
-//     setDados(ServicosMapeados);
-// };
-const mapearServico = (dataServico) => {
-    var ServicosMapeados = []
-    for (var index = 0; index < dataServico.length; index++) {
-      var dadoAtual = []
-      dadoAtual.push(dataServico[index].id)  
-      dadoAtual.push(dataServico[index].servico) 
-    }
-    setDados(ServicosMapeados)
-    
-}
 
     // useEffect(() => {
     //     if (!logado(sessionStorage.getItem("token"))) {

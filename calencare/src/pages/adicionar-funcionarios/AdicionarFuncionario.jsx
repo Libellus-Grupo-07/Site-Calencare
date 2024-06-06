@@ -20,8 +20,9 @@ const AdicionarFuncionario = () => {
     //const { currentStep, currentComponent, changeStep, isLastStep } = useForm();
     const navigate = useNavigate();
     const location = useLocation();
-    const isEditar = location.pathname === "/funcionarios";
     const { idProfissional } = useParams();
+    const idEmpresa = 8;
+    const isEditar = location.pathname === `/profissional/editar/${idProfissional}`;
     const [nomeUser, setNomeUser] = useState("");
     const [nome, setNome] = useState("");
     const [telefone, setTelefone] = useState("");
@@ -43,7 +44,46 @@ const AdicionarFuncionario = () => {
     
     const [tipoPerfil, setTipoPerfil] = useState("");
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
-    const items = [];
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
+        api.get(`/funcionarios/${idProfissional}`).then((response) => {
+            const { data } = response;
+            console.log(response);
+            const { nome, telefone, email, bitStatus } = data;
+            setNome(nome);
+            setTelefone(telefone);
+            setBitStatus(bitStatus);
+            setEmail(email);
+            //tipo perfil
+            // servico  que realiza
+
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar o funcionário");
+            console.log(error);
+        });
+
+        let urlServicos = isEditar ? 
+            `/servico-por-funcionario/${idEmpresa}/funcionario/${idProfissional}`
+            : `/servico-preco/${idEmpresa}`
+
+        api.get(urlServicos).then((response) => {
+            const { data } = response;
+            console.log(response);
+            setItems(data.length === 0 ? [] : data)
+            
+
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar o serviço");
+            console.log(error);
+        });
+
+    }, [idProfissional]);
+
   
     const validarFuncionario = () => {
         if (!isVazio(nome, "Nome")
@@ -91,37 +131,7 @@ const AdicionarFuncionario = () => {
         }
     };
 
-    useEffect(() => {
-        if (!logado(sessionStorage.getItem("token"))) {
-            navigate("/login");
-            return;
-        }
-        api.get(`/funcionarios/${idProfissional}`).then((response) => {
-            const { data } = response;
-            console.log(response);
-            const { nome, telefone, email, bitStatus } = data;
-            setNomeUser(nome);
-            setTelefone(telefone);
-            setBitStatus(bitStatus);
-            setEmail(email);
-
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
-        });
-
-        // api.get(`/servicos/`).then((response) => {
-        //     const { data } = response;
-        //     console.log(response);
-        //     const { } = data;
-
-        // }).catch((error) => {
-        //     console.log("Houve um erro ao buscar o serviço");
-        //     console.log(error);
-        // });
-
-    }, [idProfissional]);
-
+    
 
     return (
         <>
