@@ -21,7 +21,8 @@ const AdicionarFuncionario = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { idProfissional } = useParams();
-    const idEmpresa = 8;
+    const idUser = sessionStorage.getItem("idUser")
+    const idEmpresa = sessionStorage.getItem("idEmpresa")
     const isEditar = location.pathname === `/profissional/editar/${idProfissional}`;
     const [nomeUser, setNomeUser] = useState("");
     const [nome, setNome] = useState("");
@@ -29,6 +30,7 @@ const AdicionarFuncionario = () => {
     const [bitStatus, setBitStatus] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [empresa, setEmpresa] = useState({});
     const [options, setOptions] = useState([
             {
                 label: "Selecione",
@@ -51,6 +53,19 @@ const AdicionarFuncionario = () => {
             navigate("/login");
             return;
         }
+
+        api.get(`/funcionarios/${idUser}`).then((response) => {
+            const { data } = response;
+            const { empresa } = data;
+            setEmpresa(empresa);
+            //tipo perfil
+            // servico  que realiza
+
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar o funcionário");
+            console.log(error);
+        });
+
         api.get(`/funcionarios/${idProfissional}`).then((response) => {
             const { data } = response;
             console.log(response);
@@ -71,11 +86,11 @@ const AdicionarFuncionario = () => {
             `/servico-por-funcionario/${idEmpresa}/funcionario/${idProfissional}`
             : `/servico-preco/${idEmpresa}`
 
-        api.get(urlServicos).then((response) => {
-            const { data } = response;
+            api.get(urlServicos).then((response) => {
+                console.log("buscar servicos")
+                const { data } = response;
             console.log(response);
             setItems(data.length === 0 ? [] : data)
-            
 
         }).catch((error) => {
             console.log("Houve um erro ao buscar o serviço");
@@ -110,14 +125,33 @@ const AdicionarFuncionario = () => {
             senha,
             options,
             tipoPerfil,
-            servicosSelecionados
+            servicosSelecionados,
+            empresa
         };
         if (validarFuncionario()) {
-            api.post(url, objetoAdicionado).then(() => {
+            api.post(url, objetoAdicionado).then((response) => {
+                const { data } = response;
+                const { id } = data;
+                console.log(id)
+                console.log(data)
+                for (let index = 0; index < servicosSelecionados.length; index++) {
+                    let servicoAdicionado = {
+                        idFuncionario: id,
+                        idServicoPreco: servicosSelecionados[index].id,
+                        dtCriacao: new Date(),
+                        bitStatus: 1
+                    }
+
+                    api.post(`/servico-por-funcionario/${idEmpresa}`, servicoAdicionado).then().catch((error) => {
+                        console.error(error)
+                        toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
+                    })   
+                }
                 toast.success("Funcionario adicionado com sucesso!");
                 sessionStorage.setItem("editado", JSON.stringify(objetoAdicionado));
                 navigate("/equipe");
-            }).catch(() => {
+            }).catch((error) => {
+                console.error(error)
                 toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
             })
         }

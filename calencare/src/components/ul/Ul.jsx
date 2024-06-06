@@ -16,11 +16,12 @@ const Ul = ({ items, titulo, servicosSelecionados, toggleServico }) => {
                             <IconlyProvider
                                 stroke="bold"
                             set={servicosSelecionados.includes(item) ? "bold" : "light border"}
+
                             
                             >
                                 <TickSquare strokeColor={servicosSelecionados.includes(item) ? "#000000" : undefined} />
                             </IconlyProvider>
-                            <span className={servicosSelecionados.includes(item) ? styles["selected-text"] : ""}>{item}</span>
+                            <span className={servicosSelecionados.includes(item) ? styles["selected-text"] : ""}>{item.nome} - R$ {item.preco.toFixed(2).replace(".", ",")} </span>
                         </div>
                     ))}
                 </div>
