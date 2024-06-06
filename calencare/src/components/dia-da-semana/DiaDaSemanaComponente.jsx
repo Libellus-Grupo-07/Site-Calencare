@@ -11,12 +11,15 @@ const DiaDaSemanaComponente = (
     setHorario2,
     aberto,
     setAberto,
+    funcaoClickSwitch
   }) => {
 
   const handleButtonClick = () => {
-    console.log(setAberto);
-    console.log(aberto)
-    setAberto(!aberto);
+    if (funcaoClickSwitch !== undefined) {
+      funcaoClickSwitch();
+    } else {
+      setAberto(!aberto);
+    }
   };
 
   return (

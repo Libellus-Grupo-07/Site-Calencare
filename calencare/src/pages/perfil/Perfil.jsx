@@ -59,7 +59,6 @@ const Perfil = () => {
     const [horario2Domingo, setHorario2Domingo] = useState(hora)
 
     const [dias, setDias] = useState([]);
-    const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
     const vetorSetters = [
         [setDiaSegundaAberto, setHorario1Segunda, setHorario2Segunda, diaSegundaAberto, horario1Segunda, horario2Segunda],
         [setDiaTercaAberto, setHorario1Terca, setHorario2Terca, diaTercaAberto, horario1Terca, horario2Terca],
@@ -114,8 +113,6 @@ const Perfil = () => {
     )
 
     const [modalAberto, setModalAberto] = useState(false);
-
-
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -329,6 +326,7 @@ const Perfil = () => {
                                                                     aberto={vetorSetters[index][3]}
                                                                     horario1={vetorSetters[index][4]}
                                                                     horario2={vetorSetters[index][5]}
+                                                                    funcaoClickSwitch={() => navigate(`/editar-empresa/${idEmpresa}`)}
                                                                 />
                                                             </div>
 

@@ -21,8 +21,7 @@ const AdicionarServico = () => {
     const isAdicionar = location.pathname === "/servicos/adicionar";
     const { idServico } = useParams();
     const nomeUser = sessionStorage.getItem("nomeUser");
-    const idUser = sessionStorage.getItem("idUser");
-    const [idEmpresa, setIdEmpresa] = useState(0);
+    const idEmpresa = sessionStorage.getItem("idEmpresa");
     const [servico, setServico] = useState()
     const [descricao, setDescricao] = useState("");
     const [nomeCategoria, setNomeCategoria] = useState("");
@@ -32,28 +31,20 @@ const AdicionarServico = () => {
     const [duracao, setDuracao] = useState("");
     const [servicos, setServicos] = useState([]);
     const [options, setOptions] = useState([]);
+    const [optionsStatus, setOptionsStatus] = useState([
+        {
+            label: "Ativo",
+            value: 1
+        },
+        {
+            label: "Inativo",
+            value: 0
+        }
+    ]);
+    const [status, setStatus] = useState(optionsStatus[0]);
+
     const [categoria, setCategoria] = useState("");
 
-    const buscarCategoriasServico = (action) => {
-        api.get("/categoria-servico").then((response) => {
-            const { data } = response;
-            console.log("Resposta => " + data.length);
-            mapear("categoria-servico", data, action === "I" ? data.length : 0);
-
-        }).catch((error) => {
-            console.error("Houve um erro ao buscar Categorias de Serviço => " + error);
-        });
-    }
-
-    const buscarServicos = (action) => {
-        api.get("/servicos").then((response) => {
-            const { data } = response;
-            mapear("servico", data, action === "I" ? data.length : 0);
-        }).catch((error) => {
-            console.error("Houve um erro ao buscar os serviços.");
-            console.error(error);
-        });
-    }
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -61,56 +52,65 @@ const AdicionarServico = () => {
             return;
         }
 
-        api.get(`/empresas/funcionarios?idFuncionario=${idUser}`).then((response) => {
-            const { data } = response;
-            const { id } = data;
-            setIdEmpresa(id);
-            buscarCategoriasServico("C");
-            buscarServicos("C");
-            
-        }).catch((error) => {
-            console.error("Houve um erro ao buscar a empresa")
-            console.error(error)
-        })
+        buscarCategoriasServico("C");
+        buscarServicos("C");
     }, []);
 
     useEffect(() => {
-        buscarCategoriasServico("C");
-        buscarServicos("C");
-
         if (!isAdicionar) {
-            console.log("isEditar")
-            console.warn(servicos)
-
             api.get(`/servico-preco/${idEmpresa}/${idServico}`).then((response) => {
                 const { data } = response;
-                const { nome, descricao, preco, comissao, duracao, descricaoStatus } = data;
-                console.warn(servicos);
-                console.warn(nome)
-                var a = servicos.filter(s => s.value === nome);
-                console.error(a);
-                console.error(servico)
+                const { nome, descricao, categoria, preco, comissao, duracao, descricaoStatus } = data;
                 setDescricao(descricao);
                 setPreco("R$ " + preco.toFixed(2).replace(".", ","));
                 setComissao(comissao.toFixed(2).replace(".", ",") + "%");
                 setDuracao(duracao);
-                setServico(nome);
-                setCategoria(descricao);
+                buscarServicos("E", undefined, nome);
+                buscarCategoriasServico("E", undefined, data.categoria);
+
             }).catch((error) => {
-                console.log("Houve um erro ao buscar serviço");
                 console.error(error)
             })
         }
     }, [idEmpresa]);
 
+    const buscarCategoriasServico = (action, index, categoria) => {
+        api.get("/categoria-servico").then((response) => {
+            const { data } = response;
+            let idCategoria = index;
 
-    
+            if (categoria) {
+                let categoriaObj = data.filter(c => c.nome === categoria)[0]
+                idCategoria = data.indexOf(categoriaObj);
+            }
 
-    const mapear = (campo, data, index) => {
+            mapear("categoria-servico", data, action === "I" ? data.length : action === "E" ? idCategoria : -1, action);
+
+        }).catch((error) => {
+            console.error("Houve um erro ao buscar Categorias de Serviço => " + error);
+        });
+    }
+
+    const buscarServicos = (action, index, nome) => {
+        api.get("/servicos").then((response) => {
+            const { data } = response;
+            var indiceServico = index;
+
+            if (nome) {
+                indiceServico = data.indexOf(data.filter(s => s.nome === nome)[0]);
+            }
+
+            mapear("servico", data, action === "I" ? data.length : action === "E" ? indiceServico : -1, action);
+        }).catch((error) => {
+            console.error("Houve um erro ao buscar os serviços.");
+            console.error(error);
+        });
+    }
+
+    const mapear = (campo, data, index, action) => {
         var optionsMap = [];
         let i = 0;
 
-        console.log(data);
         for (i = 0; i < data.length; i++) {
             optionsMap.push({
                 id: data[i].id,
@@ -119,9 +119,7 @@ const AdicionarServico = () => {
             })
         }
 
-        console.log(index)
-        i = index === 0 ? index - 1 : i;
-        console.log(i);
+        i = index === 0 && action !== "E" ? index : action ? index : i;
 
         if (campo === "categoria-servico") {
             setOptions(optionsMap)
@@ -169,16 +167,6 @@ const AdicionarServico = () => {
         return false;
     }
 
-    const isAdicionarServicoValid = (value) => {
-        if (isSelected(categoria, "Categoria do Serviço") &&
-            !isVazio(value, "Nome do Serviço")
-        ) {
-            return true;
-        }
-
-        return false;
-    }
-
     const adicionarCategoria = () => {
         if (isAdicionarCategoriaValid()) {
             var body = {
@@ -200,56 +188,107 @@ const AdicionarServico = () => {
     }
 
     const adicionarServico = (value) => {
-
-        console.log("Função Adicionar Serviço: ")
-        if (isAdicionarServicoValid(value)) {
-            let idCategoria = options.filter(o => o.label === categoria)[0].id;
-            var body = {
-                nome: value,
-                categoriaId: idCategoria
+        if (!isVazio(value)) {
+            let novoServico = {
+                id: servicos.length,
+                value: value,
+                label: value
             }
 
-            api.post(`/servicos/${idCategoria}`, body).then((response) => {
-                buscarServicos("I");
-            }).catch((error) => {
-                console.error("Houve um erro ao adicionar serviço!");
-                console.error(error);
-            });
+            let servicosCopia = servicos;
+            servicosCopia.push(novoServico);
+            setServicos(servicosCopia)
+            setServico(novoServico);
         }
     }
 
-    const salvar = () => {
+    const cadastrar = () => {
         if (isSelected(categoria, "Categoria do Serviço") &&
-            !isVazio(servico, "Nome do Serviço") &&
+            isSelected(servico, "Nome do Serviço") &&
             !isVazio(descricao, "Descrição do Serviço") &&
             !isVazio(preco, "Preço do Serviço") &&
             !isVazio(comissao, "Comissão do Serviço") &&
             !isVazio(duracao, "Duração do Serviço")
         ) {
-            let idCategoria = options.filter(o => o.label === categoria)[0].id;
-            let idServico = servicos.filter(s => s.label === servico)[0].id;
-            var url = !isAdicionar ? `/servico-preco/${idServico}` : `/servico-preco/${idEmpresa}/${idCategoria}`;
+            let idCategoria = options.filter(o => o === categoria)[0].id;
+            let nomeServico = servicos.filter(s => s === servico)[0].value;
+
+            var url = `/servico-preco/${idEmpresa}/${idCategoria}`;
             var body = {
-                "nome": servico,
+                "nome": nomeServico,
                 "descricao": descricao,
                 "preco": preco.replace("R$ ", "").replace(",", "."),
                 "duracao": duracao,
                 "comissao": comissao.replace(",", "."),
                 "bitStatus": 1,
                 "empresaId": idEmpresa,
-                "servicoId": idServico
             };
 
             api.post(url, body).then(() => {
                 toast.success("Serviço adicionado com sucesso!");
                 navigate("/servicos");
             }).catch((error) => {
-                toast.error("Houve um erro ao tentar adicionar serviço!");
+                if (error.code === "ERR_NETWORK") {
+                    toast.error("Ocorreu um erro ao tentar adicionar serviço!")
+                } else {
+                    const { response } = error;
+                    const { data } = response;
+
+                    if (data.status === 409) {
+                        toast.error("Já existe um serviço com o nome selecionado!");
+                    }
+                }
+
                 console.error(error);
+
             });
         }
     }
 
+    const editar = () => {
+        console.log("EDITAR")
+        if (isSelected(categoria, "Categoria do Serviço") &&
+            isSelected(servico, "Nome do Serviço") &&
+            !isVazio(descricao, "Descrição do Serviço") &&
+            !isVazio(preco, "Preço do Serviço") &&
+            !isVazio(comissao, "Comissão do Serviço") &&
+            !isVazio(duracao, "Duração do Serviço") &&
+            isSelected(status, "Status do Serviço")
+        ) {
+            let idCategoria = options.filter(o => o === categoria)[0].id;
+            let nomeServico = servicos.filter(s => s === servico)[0].value;
+
+            var url = `/servico-preco/${idEmpresa}/${idServico}/${idCategoria}`;
+            var body = {
+                "nome": nomeServico,
+                "descricao": descricao,
+                "preco": preco.replace("R$ ", "").replace(",", "."),
+                "duracao": duracao,
+                "comissao": comissao.replace(",", ".").replace("%", ""),
+                "bitStatus": status.value,
+                "servicoId": idServico
+            };
+
+            api.put(url, body).then(() => {
+                toast.success("Serviço editado com sucesso!");
+                navigate("/servicos");
+            }).catch((error) => {
+                if (error.code === "ERR_NETWORK") {
+                    toast.error("Ocorreu um erro ao tentar editar serviço!")
+                } else {
+                    const { response } = error;
+                    const { data } = response;
+
+                    if (data.status === 409) {
+                        toast.error("Já existe um serviço com o nome selecionado!");
+                    }
+                }
+
+                console.error(error);
+
+            });
+        }
+    }
 
     return (
         <>
@@ -330,6 +369,17 @@ const AdicionarServico = () => {
                                 maxlength={10}
                                 minlength={1}
                             />
+                            {isAdicionar ? "" :
+                                <SelectInput
+                                    id="statusServico"
+                                    tamanho={"lg"}
+                                    titulo={"Status"}
+                                    valor={status}
+                                    alterarValor={setStatus}
+                                    options={optionsStatus}
+                                    criarOption={false}
+                                />
+                            }
                         </form>
                         <div className={styles["group-button"]}>
                             <Button
@@ -350,7 +400,11 @@ const AdicionarServico = () => {
                                 titulo={isAdicionar ? "Adicionar" : "Editar"}
                                 icone={<FaCheck />}
                                 cor={"roxo"}
-                                funcaoButton={() => salvar()}
+                                funcaoButton={
+                                    isAdicionar ?
+                                        () => cadastrar() :
+                                        () => editar()
+                                }
                             />
                         </div>
                     </div>

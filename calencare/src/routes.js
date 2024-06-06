@@ -14,6 +14,7 @@ import Equipe from "./pages/minha-equipe/MinhaEquipe";
 import AdicionarFuncionario from "./pages/adicionar-funcionarios/AdicionarFuncionario";
 import AdicionarAgendamento from "./pages/adicionar-agendamento/AdicionarAgendamento";
 import Agenda from "./pages/agenda/Agenda";
+import EditarEmpresa from "./pages/editar-empresa/EditarEmpresa";
 
 function Rotas() {
   return (
@@ -31,7 +32,7 @@ function Rotas() {
           <Route path="clientes" element={<Clientes />} />
           <Route path="perfil/:idUser" element={<Perfil />} />
           <Route path="editar-perfil/:idUser" element={<EditarPerfil />} />
-          <Route path="editar-empresa/:idEmpresa" element={<EditarPerfil />} />
+          <Route path="editar-empresa/:idEmpresa" element={<EditarEmpresa />} />
           <Route path="equipe" element={<Equipe/>}/>
           <Route path="profissional/adicionar" element={<AdicionarFuncionario/>}/>
           <Route path="profissional/editar/:idProfissional" element={<AdicionarFuncionario/>}/>

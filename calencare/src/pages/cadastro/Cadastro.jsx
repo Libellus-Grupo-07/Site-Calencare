@@ -327,6 +327,8 @@ const Cadastro = () => {
                 })
             }
 
+            console.log(telefone)
+
             let bodyFuncionario = {
                 nome,
                 telefone,
@@ -345,8 +347,9 @@ const Cadastro = () => {
                 toast.success("Cadastro realizado com sucesso!");
                 navigate("/login");
                 sessionStorage.removeItem("currentStep");
-            }).catch(() => {
+            }).catch((error) => {
                 toast.error("Houve um erro ao tentar cadatrar funcionario")
+                console.error(error)
             });
 
         }).catch((error) => {
