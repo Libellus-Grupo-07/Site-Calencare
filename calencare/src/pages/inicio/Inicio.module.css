@@ -33,12 +33,10 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  column-gap: 16px;
-  row-gap: 16px;
 }
 
-.section-inicio .container-inicio .content-inicio .group-kpis .card-kpi{
-  width: 30%;
+.section-inicio .container-inicio .content-inicio .group-kpis .card-kpi {
+  width: 32%;
   background-color: aliceblue;
 }
 
@@ -55,8 +53,8 @@
   .container-agendamentos
   .proximos-agendamentos {
   width: 60%;
-  height: 318px;
-  min-height: 318px;
+  height: 55vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -107,8 +105,9 @@
   .agendamentos-em-andamento {
   background-color: var(--preto);
   width: 40%;
+  height: 55vh;
   padding: 24px;
-  min-height: 320px;
+  min-height: 5vh;
   border: none;
   border-radius: 1rem;
   display: flex;
@@ -116,8 +115,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   row-gap: 16px;
-  border: 1px solid white;
-  max-width: 440px;
+  max-width: 26vw;
 }
 
 .section-inicio

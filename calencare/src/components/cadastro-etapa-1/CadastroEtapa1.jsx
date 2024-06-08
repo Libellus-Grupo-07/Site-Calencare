@@ -6,7 +6,8 @@ const CadastroEtapa1 = ({
     RazaoSocial, setRazaoSocial,
     CNPJ, setCNPJ,
     TelefoneDaEmpresa, setTelefoneDaEmpresa,
-    EmailDaEmpresa, setEmailDaEmpresa
+    EmailDaEmpresa, setEmailDaEmpresa,
+    IntervaloAtendimento, setIntervaloAtendimento
 }
 ) => {
 
@@ -49,6 +50,14 @@ const CadastroEtapa1 = ({
                         regex={"/^[a-z0-9.]+@[a-z0-9]+.[a-z]+(.[a-z]+)?$/i"}
                         minlength={10}
                         maxlength={40}
+                    />
+                    <Input
+                        id="intervaloAtendimentoEmpresa"
+                        valor={IntervaloAtendimento}
+                        alterarValor={setIntervaloAtendimento}
+                        titulo={"Intervalo entre Atendimentos (minutos)"}
+                        minlength={1}
+                        maxlength={3}
                     />
                 </div>
             </div>

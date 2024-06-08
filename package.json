@@ -1,0 +1,10 @@
+{
+  "name": "site-calencare",
+  "version": "1.0.0",
+  "private": true,
+  
+  "scripts": {
+    "install": "cd calencare && npm install",
+    "start": "cd calencare && npm start"
+  }
+}

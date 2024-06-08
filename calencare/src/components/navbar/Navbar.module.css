@@ -1,17 +1,17 @@
-#sem-fundo{
+#sem-fundo {
   background-color: transparent;
   backdrop-filter: blur(0);
 }
 
-header {
+.header {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(239, 232, 245, 0.95);
   position: fixed;
-  backdrop-filter: blur(4px);
-  z-index: 1;
+  background-color: var(--lilas-fundo);
+  /* backdrop-filter: blur(4px); */
+  z-index: 9999999999;
 }
 
 .nav {
@@ -22,19 +22,19 @@ header {
   align-items: center;
 }
 
-header .img-logo {
+.header .img-logo {
   height: 48px;
   cursor: pointer;
 }
 
-header .list {
+.header .list {
   list-style: none;
   display: flex;
   align-items: center;
   column-gap: 64px;
 }
 
-header .link-item {
+.header .link-item {
   cursor: pointer;
   font-size: 16px;
   transition: 0.15s all ease-in-out;
@@ -42,11 +42,11 @@ header .link-item {
   font-family: "Poppins";
 }
 
-header .link-item:hover {
+.header .link-item:hover {
   color: var(--roxo-principal);
 }
 
-header .group-button {
+.header .group-button {
   display: flex;
   column-gap: 24px;
   align-items: center;

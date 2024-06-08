@@ -11,7 +11,7 @@ const Navbar = ({ irParaInicio, irParaProduto, irParaBeneficios, irParaPrecos })
 
     return (
         <>
-            <header id={styles[!isHome ? "sem-fundo" : ""]}>
+            <header className={styles["header"]} id={styles[!isHome ? "sem-fundo" : ""]}>
                 <div className={styles["nav"]}>
                     <div className={styles["logo"]}>
                         <img
@@ -22,7 +22,7 @@ const Navbar = ({ irParaInicio, irParaProduto, irParaBeneficios, irParaPrecos })
                         />
                     </div>
                     <ul className={styles["list"]} style={{
-                        display: isHome ? "flex" : "none"
+                        display: isHome ? "flex" : "flex"
                     }}>
                         <li className={styles["list-item"]}>
                             <span className={styles["link-item"]} onClick={irParaInicio}> Início </span> </li>

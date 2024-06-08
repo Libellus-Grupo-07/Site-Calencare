@@ -5,12 +5,10 @@ import { FaAngleRight } from "react-icons/fa6";
 import { IconlyProvider, Home, Calendar, Work, Chart, TwoUsers, AddUser, Graph } from "react-iconly";
 import iconProfile from "./../../utils/assets/perfil_padrao.svg"
 import { LuMenu } from "react-icons/lu";
-import Equipe from "../../pages/minha-equipe/MinhaEquipe";
 
 const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const idUser = sessionStorage.getItem("idUser");
     const nomeUser = sessionStorage.getItem("nomeUser");
 
     return (
@@ -30,7 +28,7 @@ const Header = () => {
                         onClick={() => navigate("/inicio")}
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <Home />
@@ -48,7 +46,7 @@ const Header = () => {
                         onClick={() => navigate("/agenda")}
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <Calendar />
@@ -66,7 +64,7 @@ const Header = () => {
                         onClick={() => navigate("/servicos")}
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <Work />
@@ -83,7 +81,7 @@ const Header = () => {
                         }
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <Chart
@@ -102,7 +100,7 @@ const Header = () => {
                         onClick={() => navigate("/equipe")}
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <TwoUsers />
@@ -120,7 +118,7 @@ const Header = () => {
                         onClick={() => navigate("/clientes")}
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <AddUser />
@@ -129,7 +127,7 @@ const Header = () => {
                             Clientes
                         </span>
                     </li>
-                    <li
+                    {/* <li
                         className={
                             styles[
                             location.pathname === "/financas" ? "roxo" : "cinza"
@@ -137,7 +135,7 @@ const Header = () => {
                         }
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <Graph />
@@ -145,13 +143,13 @@ const Header = () => {
                         <span className={styles["text-link"]}>
                             Finanças
                         </span>
-                    </li>
+                    </li> */}
                 </ul>
                 <div
                     className={styles["user-profile"]}
-                    onClick={() => navigate(`/perfil/${idUser}`)} id={
+                    onClick={() => navigate(`/perfil`)} id={
                         styles[
-                        location.pathname === `/perfil/${idUser}` ? "roxo" : "cinza"
+                        location.pathname === `/perfil` ? "roxo" : "cinza"
                         ]
                     }
                 >

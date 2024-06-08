@@ -14,10 +14,11 @@ h1 {
 .md {
   font-size: 23px;
   font-weight: 700;
+  letter-spacing: -0.05rem;
 }
 
 .sm {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.05rem;
 }

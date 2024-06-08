@@ -30,7 +30,7 @@ section {
 }
 
 .section-inicio .container-inicio .title {
-  font-size: 64px;
+  font-size: 3.8rem;
   line-height: 104px;
   font-weight: 900;
   letter-spacing: -0.1rem;
@@ -115,7 +115,7 @@ section {
 
 .section-precos {
   width: 100%;
-  padding: 32px 0;
+  padding: 2rem 0;
   /* background-color: var(--texto-branco); */
   display: flex;
   flex-direction: column;

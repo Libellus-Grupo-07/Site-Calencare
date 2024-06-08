@@ -4,7 +4,7 @@ import api from "../../api";
 import styles from "./Clientes.module.css";
 import { logado } from "../../utils/global";
 import { useNavigate } from "react-router-dom";
-import { AddUser, Delete, Edit, IconlyProvider } from "react-iconly";
+import { Edit, IconlyProvider } from "react-iconly";
 import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Table from "../../components/table/Table";
@@ -13,7 +13,7 @@ import Input from "../../components/input/Input";
 
 const Clientes = () => {
     const navigate = useNavigate();
-    const idUser = sessionStorage.getItem("idUser");
+    const idEmpresa = sessionStorage.getItem("idEmpresa");
     const titulos = ["Nome", "Email", "Telefone", "Cliente Desde", "Último Agendamento", ""]
     const dados = [];
     const [nomeCliente, setNomeCliente] = useState("");
@@ -76,28 +76,13 @@ const Clientes = () => {
             return;
         }
 
-        api.get(`/funcionarios/${idUser}`).then((response) => {
-            const { data } = response;
-            const { nome } = data;
-            setNome(nome);
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
-        });
-
-
-    }, [idUser]);
-
-
-    const cadastrarCliente = () => {
-
-    }
+    }, [idEmpresa]);
 
     return (
         <>
             <section className={styles["section-clientes"]}>
                 <div>
-                    <Header nomeUser={nome} />
+                    <Header />
                 </div>
                 <div className={styles["container-clientes"]}>
                     <div className={styles["content-clientes"]}>
@@ -121,7 +106,7 @@ const Clientes = () => {
                         <div className={styles["table-clientes"]}>
                             {
                                 dados.length === 0 ?
-                                    <div>
+                                    <div className={styles["sem-clientes"]}>
                                         Nenhum cliente cadastrado
                                     </div>
                                     :

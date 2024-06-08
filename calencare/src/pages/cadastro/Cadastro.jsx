@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import api from "../../api";
 import { useForm } from "../../hooks/useForm";
 import { useNavigate } from "react-router-dom";
+import Titulo from './../../components/titulo/Titulo';
 
 const Cadastro = () => {
     const hora = new Date();
@@ -22,6 +23,7 @@ const Cadastro = () => {
     const [cnpj, setCNPJ] = useState("")
     const [telefonePrincipal, setTelefonePrincipal] = useState("")
     const [emailPrincipal, setEmailPrincipal] = useState("")
+    const [intervaloAtendimento, setIntervaloAtendimento] = useState("")
 
     const [cep, setCep] = useState("")
     const [logradouro, setLogradouro] = useState("")
@@ -76,6 +78,9 @@ const Cadastro = () => {
 
         EmailDaEmpresa={emailPrincipal}
         setEmailDaEmpresa={setEmailPrincipal}
+
+        IntervaloAtendimento={intervaloAtendimento}
+        setIntervaloAtendimento = { setIntervaloAtendimento }
     />, <CadastroEtapa2
         Cep={cep}
         setCep={setCep}
@@ -174,6 +179,7 @@ const Cadastro = () => {
             !isVazio(cnpj, "CNPJ") &&
             !isVazio(telefonePrincipal, "Telefone da Empresa") &&
             !isVazio(emailPrincipal, "Email da Empresa") &&
+            !isVazio(intervaloAtendimento, "Intervalo entre Atendimentos") && 
             isValidEmail(emailPrincipal, "Email da Empresa")
         ) {
             return true
@@ -247,7 +253,8 @@ const Cadastro = () => {
             razaoSocial,
             cnpj,
             telefonePrincipal,
-            emailPrincipal
+            emailPrincipal,
+            intervaloAtendimento
         }
 
         api.post("/empresas", body).then((response) => {
@@ -316,7 +323,8 @@ const Cadastro = () => {
                         razaoSocial,
                         cnpj,
                         telefonePrincipal,
-                        emailPrincipal
+                        emailPrincipal,
+                        intervaloAtendimento
                     }
                 };
 
@@ -339,7 +347,8 @@ const Cadastro = () => {
                     razaoSocial,
                     cnpj,
                     telefonePrincipal,
-                    emailPrincipal
+                    emailPrincipal,
+                    intervaloAtendimento
                 }
             }
 
@@ -389,7 +398,7 @@ const Cadastro = () => {
                 <div className={styles["formulario-cadastro"]}>
                     <div className={styles["engloba-formulario"]}>
                         <div className={styles["texto"]}>
-                            <h1> Cadastro </h1>
+                            <Titulo titulo={"Cadastro"} tamanho={"md"}/>
                             <p className={styles["text"]}>Informe {currentStep === 2 ? "os dias" : currentStep === 1 ? "a localidade" : "os dados"} da <b>{currentStep < 2 ? "empresa" : currentStep === 2 ? "funcionamento" : "usuário"}</b> para começar a realizar os agendamentos.</p>
                         </div>
                         <div className={styles["inputs-container"]}>
