@@ -35,7 +35,7 @@ function Rotas() {
           <Route path="empresa/editar/:idEmpresa" element={<EditarEmpresa />} />
           <Route path="equipe" element={<Equipe/>}/>
           <Route path="profissional/adicionar" element={<AdicionarFuncionario/>}/>
-          <Route path="profissional/:idProfissional" element={<AdicionarFuncionario />} />
+          <Route path="profissional/editar/:idProfissional" element={<AdicionarFuncionario/>}/>
           <Route path="agenda" element={<Agenda/>} />
           <Route path="agenda/adicionar" element={<AdicionarAgendamento/>}/>
 

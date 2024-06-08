@@ -20,9 +20,12 @@ const AdicionarAgendamento = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const isEditar = location.pathname === "/agendas";
+    const [dados, setDados] = useState("");
+
     const { idAgenda } = useParams();
     const [nomeUser, setNomeUser] = useState("");
     const idUser = sessionStorage.getItem("idUser");
+    const [idEmpresa, setIdEmpresa] = useState("");
     const [cliente, setCliente] = useState();
     const [clientes, setClientes] = useState([]);
     const [nomeCliente, setNomeCliente] = useState("");
@@ -182,10 +185,20 @@ const AdicionarAgendamento = () => {
     }
 
     useEffect(() => {
-        if (!logado(sessionStorage.getItem("token"))) {
-            navigate("/login");
-            return;
-        }
+        api.get(`/servico-preco/${idEmpresa}`).then((response) => {
+            const { data } = response;
+            console.log(data);
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar um serviço");
+            console.log(error);
+        });
+    }, []);
+
+    // useEffect(() => {
+    //     if (!logado(sessionStorage.getItem("token"))) {
+    //         navigate("/login");
+    //         return;
+    //     }
       
         // api.get(`/agendas/${idUser}`).then((response) => {
         //     const { data } = response;
@@ -197,10 +210,10 @@ const AdicionarAgendamento = () => {
         //     console.log(error);
         // });
         
-        buscarClientes(0)
+    //     buscarClientes(0)
 
 
-    }, [idUser]);
+    // }, [idUser]);
 
     const mapear = (data, index) => {
         var dataMapp = [];
