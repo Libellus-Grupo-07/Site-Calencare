@@ -36,6 +36,7 @@
 }
 
 .container-table .table .body-table tr {
+  cursor: pointer;
   width: 100%;
   border-bottom: 1px solid;
   border-bottom-color: rgba(159, 53, 240, 0.5);

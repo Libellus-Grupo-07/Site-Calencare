@@ -29,6 +29,9 @@ const Perfil = () => {
     const [cnpj, setCNPJ] = useState("")
     const [telefonePrincipal, setTelefonePrincipal] = useState("")
     const [emailPrincipal, setEmailPrincipal] = useState("")
+    const [endereco, setEndereco] = useState("")
+
+
     const [diaSegundaAberto, setDiaSegundaAberto] = useState(true);
     const [horario1Segunda, setHorario1Segunda] = useState(hora)
     const [horario2Segunda, setHorario2Segunda] = useState(hora)
@@ -91,7 +94,13 @@ const Perfil = () => {
 
         api.get(`/empresas/${idEmpresa}`).then((response) => {
             const { data } = response
-            const { horariosFuncionamentos } = data;
+            const { razaoSocial, cnpj, emailPrincipal, telefonePrincipal, horariosFuncionamentos } = data;
+
+            setRazaoSocial(razaoSocial);
+            setCNPJ(cnpj);
+            setEmailPrincipal(emailPrincipal);
+            setTelefonePrincipal(telefonePrincipal);
+
             const ordemDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
             const vetorDias = [];
 
@@ -129,21 +138,23 @@ const Perfil = () => {
             console.log(error);
         })
 
+        api.get(`/enderecos/empresa/${idEmpresa}`).then((response) => {
+            const { data } = response;
+            const { descricaoEndereco } = data;
+            setEndereco(descricaoEndereco);
+            console.log(response)
+        }).catch((error) => {
+            console.log(error)
+        })
 
         api.get(`/funcionarios/${idUser}`).then((response) => {
             const { data } = response;
-            const { nome, email, telefone, dtCriacao, empresa } = data;
-            const { razaoSocial, cnpj, emailPrincipal, telefonePrincipal } = empresa;
+            const { nome, email, telefone, dtCriacao } = data;
 
             setNome(nome);
             setEmail(email);
             setTelefone(telefone);
             setDtCriacao(dtCriacao);
-
-            setRazaoSocial(razaoSocial);
-            setCNPJ(cnpj);
-            setEmailPrincipal(emailPrincipal);
-            setTelefonePrincipal(telefonePrincipal);
         }).catch((error) => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
@@ -307,6 +318,9 @@ const Perfil = () => {
                                             <Row
                                                 titulo="Telefone Principal"
                                                 valor={telefonePrincipal}
+                                            />                                            <Row
+                                                titulo="Endereço"
+                                                valor={endereco}
                                             />
 
                                         </div>

@@ -3,10 +3,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 48px;
-  cursor: pointer;
 }
 
-.row:hover .text-title .value, .row:hover .icon-arrow {
+.row:hover .text-title .value,
+.row:hover .icon-arrow {
   color: var(--roxo-principal);
 }
 

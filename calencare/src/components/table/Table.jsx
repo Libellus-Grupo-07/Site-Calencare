@@ -21,7 +21,9 @@ const Table = ({ titulos, linhas, showEditIcon, showDeleteIcon, funcaoEditar, fu
                     <tbody className={styles["body-table"]}>
                         {
                             linhas.map((linha, index) => (
-                                <tr className={styles[index % 2 === 0 ? "branco" : "roxo"]} key={index}>
+                                <tr className={styles[index % 2 === 0 ? "branco" : "roxo"]} key={index}
+                                onClick={() => funcaoEditar(index)}
+                                >
                                     {linha.map((dado, index) => (
                                         <td key={index}>
                                             <div className={styles["td-div"]}>

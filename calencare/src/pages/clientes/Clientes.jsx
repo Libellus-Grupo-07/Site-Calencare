@@ -15,7 +15,7 @@ const Clientes = () => {
     const navigate = useNavigate();
     const idEmpresa = sessionStorage.getItem("idEmpresa");
     const titulos = ["Nome", "Email", "Telefone", "Cliente Desde", "Último Agendamento", ""]
-    const dados = [];
+    const [dados, setDados] = useState([]);
     const [nomeCliente, setNomeCliente] = useState("");
     const [sobrenomeCliente, setSobrenomeCliente] = useState("");
     const [emailCliente, setEmailCliente] = useState("");
@@ -77,6 +77,16 @@ const Clientes = () => {
         }
 
     }, [idEmpresa]);
+
+    const buscarClientes = () => {
+        api.get(`clientes/empresa/${idEmpresa}`).then((response) => {
+            const { data } = response;
+            console.log(data)
+            setDados(data);
+        }).catch((error) => {
+            console.error(error);
+        })
+    }
 
     return (
         <>

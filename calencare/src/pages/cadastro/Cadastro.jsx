@@ -238,7 +238,7 @@ const Cadastro = () => {
             && !isVazio(telefone, "Telefone")
             && !isVazio(email, "Email")
             && !isVazio(senha, "Senha") &&
-            isValidEmail(email, "Email da Empresa")
+            isValidEmail(email, "Email")
 
         ) {
             return true;
@@ -260,7 +260,12 @@ const Cadastro = () => {
         api.post("/empresas", body).then((response) => {
             const { data } = response;
             const { id } = data;
-            api.post(`/enderecos/${id}/${cep}/${numero}`).then().catch((error) => {
+            const bodyEndereco = {
+                cep,
+                numero,
+                complemento
+            }
+            api.post(`/enderecos/${id}`, bodyEndereco).then().catch((error) => {
                 toast.error("Houve um erro ao tentar cadastrar o endereço")
             });
 
@@ -335,13 +340,12 @@ const Cadastro = () => {
                 })
             }
 
-            console.log(telefone)
-
             let bodyFuncionario = {
                 nome,
                 telefone,
                 email,
                 senha,
+                perfilAcesso: "Administrador",
                 "empresa": {
                     id,
                     razaoSocial,

@@ -211,11 +211,13 @@ const AdicionarServico = () => {
             !isVazio(duracao, "Duração do Serviço")
         ) {
             let idCategoria = options.filter(o => o === categoria)[0].id;
+            let nomeCategoria = options.filter(o => o === categoria)[0].value;
             let nomeServico = servicos.filter(s => s === servico)[0].value;
 
             var url = `/servico-preco/${idEmpresa}/${idCategoria}`;
             var body = {
                 "nome": nomeServico,
+                "categoria": nomeCategoria,
                 "descricao": descricao,
                 "preco": preco.replace("R$ ", "").replace(",", "."),
                 "duracao": duracao,

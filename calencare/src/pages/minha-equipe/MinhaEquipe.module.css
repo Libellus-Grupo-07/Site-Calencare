@@ -31,3 +31,16 @@
     column-gap: 8px;
     justify-content: center;
   }
+
+  .section-equipe .container-equipe .content-equipe .table-equipe .sem-funcionarios{
+  position: absolute;
+  width: 70vw;
+  height: fit-content;
+  top: 49%;
+  bottom: 49%;
+  text-align: center;
+  letter-spacing: -0.05rem;
+  font-size: 1.2rem;
+  color: var(--texto-cinza);
+  font-weight: 500;
+}
