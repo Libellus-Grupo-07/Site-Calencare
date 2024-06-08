@@ -17,8 +17,6 @@ const EditarEmpresa = () => {
 
     const { idEmpresa } = useParams();
     const hora = new Date();
-    const [nome, setNome] = useState("");
-
 
     const [razaoSocial, setRazaoSocial] = useState("")
     const [cnpj, setCNPJ] = useState("")
@@ -64,30 +62,6 @@ const EditarEmpresa = () => {
         [setDiaDomingoAberto, setHorario1Domingo, setHorario2Segunda, diaDomingoAberto, horario1Domingo, horario2Domingo],
     ];
 
-
-    const voltar = () => {
-        navigate(`/perfil/${idEmpresa}`);
-    }
-
-    const editar = () => {
-        let body = {
-            "id": idEmpresa,
-            "nome": nome,
-            emailPrincipal,
-            telefonePrincipal,
-            // dtCriacao,  
-            // empresa
-        }
-        api.put(`/empresas/${idEmpresa}`, body).then((response) => {
-            console.log(response);
-            toast.success("Informações atualizadas com sucesso!")
-            voltar();
-        }).catch((error) => {
-            console.log("Houve um erro ao atualizar o funcionário");
-            console.log(error);
-        });
-    }
-
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
             navigate("/login");
@@ -130,7 +104,7 @@ const EditarEmpresa = () => {
                 vetorDias[posicaoTroca] = proximoDia;
             }
 
-            abc(vetorDias);
+            vetorToSetters(vetorDias);
             setDias(vetorDias);
 
             console.log(vetorDias)
@@ -138,10 +112,34 @@ const EditarEmpresa = () => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
         })
-    });
+    }, [idEmpresa]);
 
-    const abc = (vetor) => {
-        console.log(vetor);
+
+
+    const voltar = () => {
+        navigate(-1);
+    }
+
+    const editar = () => {
+        let body = {
+            "id": idEmpresa,
+            razaoSocial,
+            emailPrincipal,
+            telefonePrincipal,
+            // dtCriacao,  
+            // empresa
+        }
+        api.put(`/empresas/${idEmpresa}`, body).then((response) => {
+            console.log(response);
+            toast.success("Informações atualizadas com sucesso!")
+            navigate("/perfil");
+        }).catch((error) => {
+            console.log("Houve um erro ao atualizar o funcionário");
+            console.log(error);
+        });
+    }
+
+    const vetorToSetters = (vetor) => {
         setDiaSegundaAberto(vetor[0].aberto);
         setHorario1Segunda(vetor[0].inicio)
         setHorario2Segunda(vetor[0].fim)

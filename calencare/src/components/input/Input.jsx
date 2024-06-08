@@ -42,9 +42,9 @@ const Input = ({
                         onInput={validarEntrada ? (e) => validarEntrada(e) : null}
                         mask={mascara}
                         style={{
-                            height: tamanho ? "32px" : "",
-                            fontSize: tamanho ? "14px" : "",
-                            padding: tamanho ? "6px 28px" : "",
+                            height: tamanho ? "1rem" : "",
+                            fontSize: tamanho ? "0.9rem" : "",
+                            padding: tamanho ? "0.9rem 1.8rem" : "",
                         }}
                         type={type}
                         maxLength={maxlength}
@@ -60,9 +60,9 @@ const Input = ({
                         required
                         readOnly={readonly || false}
                         style={{
-                            height: tamanho ? "32px" : "",
+                            height: tamanho ? "1rem" : "",
                             fontSize: tamanho ? "14px" : "",
-                            padding: tamanho ? "8px 28px" : "",
+                            padding: tamanho ? "0.9rem 1.8rem" : "",
                             zIndex: sobrepor ? "99999" : ""
                         }}
                         pattern={regex}

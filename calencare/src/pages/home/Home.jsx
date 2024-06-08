@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./Home.module.css";
 import Titulo from "../../components/titulo/Titulo";
 import Navbar from "../../components/navbar/Navbar";
@@ -9,23 +9,41 @@ import imgBeneficios1 from "../../utils/assets/beneficios_1.png";
 import imgBeneficios2 from "../../utils/assets/beneficios_2.png";
 import imgBeneficios3 from "../../utils/assets/beneficios_3.png";
 import CardBeneficios from './../../components/card-beneficios/CardBeneficios';
-import { SiGooglecalendar, SiSpring, SiMicrosoftsqlserver } from "react-icons/si";
-import { FaReact } from "react-icons/fa6";
 import CardPrecos from './../../components/card-precos/CardPrecos';
 import CarouselProduto from './../../components/carousel-produto/CarouselProduto';
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
-  const sectionInicio = useRef()
-  const sectionProduto = useRef()
-  const sectionBeneficios = useRef()
-  const sectionPrecos = useRef()
+  const secao = sessionStorage.getItem("secao");
+  const sectionInicio = useRef();
+  const sectionProduto = useRef();
+  const sectionBeneficios = useRef();
+  const sectionPrecos = useRef();
 
-  const irParaInicio = () => sectionInicio.current.scrollIntoView()
-  const irParaProduto = () => sectionProduto.current.scrollIntoView()
-  const irParaBeneficios = () => sectionBeneficios.current.scrollIntoView()
-  const irParaPrecos = () => sectionPrecos.current.scrollIntoView()
+  const irParaInicio = () => sectionInicio.current.scrollIntoView();
+  const irParaProduto = () => sectionProduto.current.scrollIntoView();
+  const irParaBeneficios = () => sectionBeneficios.current.scrollIntoView();
+  const irParaPrecos = () => sectionPrecos.current.scrollIntoView();
+
+  useEffect(() => {
+    if (secao) {
+      switch (secao) {
+        case "produto":
+          irParaProduto();
+          break;
+        case "beneficios":
+          irParaBeneficios();
+          break;
+        case "precos":
+          irParaPrecos();
+          break;
+        default:
+          irParaInicio();
+          break;
+      }
+    }
+  });
 
   return (
     <>

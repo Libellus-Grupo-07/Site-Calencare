@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Ul.module.css";
 import { TickSquare, IconlyProvider } from "react-iconly";
 
-const Ul = ({ items, titulo, servicosSelecionados, toggleServico }) => {
+const Ul = ({ items, titulo, servicosSelecionados, toggleServico, nomeCampo }) => {
     return (
         <div className={styles["servicos-container"]}>
             <span className={styles["titulo-input"]}>{titulo}</span>
@@ -21,7 +21,7 @@ const Ul = ({ items, titulo, servicosSelecionados, toggleServico }) => {
                             >
                                 <TickSquare strokeColor={servicosSelecionados.includes(item) ? "#000000" : undefined} />
                             </IconlyProvider>
-                            <span className={servicosSelecionados.includes(item) ? styles["selected-text"] : ""}>{item.nome} - R$ {item.preco.toFixed(2).replace(".", ",")} </span>
+                            <span className={servicosSelecionados.includes(item) ? styles["selected-text"] : ""}>{ nomeCampo ? item.nomeServico : item.nome} - R$ {item.preco.toFixed(2).replace(".", ",")} </span>
                         </div>
                     ))}
                 </div>

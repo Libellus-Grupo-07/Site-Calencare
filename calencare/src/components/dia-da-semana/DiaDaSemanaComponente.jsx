@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from "./DiaDaSemanaComponente.module.css";
-import { Switch } from 'antd';
+import { Input, Switch } from 'antd';
 import { Box, Typography } from '@mui/material';
+import { IMaskInput } from 'react-imask';
 
 const DiaDaSemanaComponente = (
   { diaSemana,
@@ -25,7 +26,7 @@ const DiaDaSemanaComponente = (
   return (
     <Box
       width="100%"
-      height="40px"
+      height="5vh"
       display="flex"
       justifyContent="space-between"
       alignItems="center"
@@ -39,7 +40,7 @@ const DiaDaSemanaComponente = (
         <Typography
           style={{
             width: "7.5vw",
-            fontSize: "17px",
+            fontSize: "1.1rem",
             fontFamily: "Poppins",
             fontWeight: "bold",
             textAlign: "left",
@@ -67,6 +68,7 @@ const DiaDaSemanaComponente = (
           >
           </Switch>
           <span style={{
+            width: "134px",
             fontFamily: "Poppins",
             color: aberto ? '#9f35f0' : "#585858",
             fontWeight: 600
@@ -79,10 +81,10 @@ const DiaDaSemanaComponente = (
         <div
           style={{
             display: "flex",
-            width: "100%",
+            width: "75%",
             height: "100%",
             alignItems: "center",
-            columnGap: "8px"
+            columnGap: "0.5rem"
           }}
         >
           <input
@@ -96,7 +98,7 @@ const DiaDaSemanaComponente = (
           }}>
             às
           </span>
-          <input
+          <IMaskInput
             type='time'
             className={styles["input-time"]}
             value={horario2}

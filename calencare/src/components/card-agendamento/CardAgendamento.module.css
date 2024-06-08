@@ -1,7 +1,8 @@
 .card-agendamento {
-  width: 100%;
+  /* width: 100%; */
   /* min-width: 320px; */
-  padding: 16px 0px;
+  width: 28rem;
+  padding: 16px 0;
   border-radius: 1rem;
   display: flex;
   align-items: center;
@@ -26,7 +27,7 @@
 }
 
 .card-agendamento .informations-agendamento .text-agendamento {
-  width: 85%;
+  width: 100%;
   display: grid;
   row-gap: 8px;
 }
@@ -39,6 +40,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border: 1px solid;
 }
 
 .card-agendamento
@@ -102,6 +104,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  border: 1px solid;
   padding-top: 12px;
   border-top: 1.5px solid rgba(0, 0, 0, 0.25);
   column-gap: 8px;

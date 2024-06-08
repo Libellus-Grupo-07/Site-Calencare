@@ -13,15 +13,12 @@ import { toast } from "react-toastify";
 
 const Servicos = () => {
     const navigate = useNavigate();
-    const idUser = sessionStorage.getItem("idUser");
     const idEmpresa = sessionStorage.getItem("idEmpresa");
     const [idServico, setIdServico] = useState(0);
     const [nomeServico, setNomeServico] = useState("");
     const titulos = ["Nome", /*"Descrição"*/, "Categoria", "Preço", "Comissão em %", "Duração (minutos)", "Status", ""]
     const [dados, setDados] = useState([]);
     const [dadosResposta, setDadosResposta] = useState([]);
-
-    // const [nome, setNome] = useState("");
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -30,7 +27,7 @@ const Servicos = () => {
         }
 
         buscarServicos(idEmpresa);
-    }, []);
+    }, [idEmpresa]);
 
     const buscarServicos = (id) => {
         api.get(`/servico-preco/${id}`).then((response) => {
@@ -45,12 +42,10 @@ const Servicos = () => {
 
     const mapear = (data) => {
         var dataMapp = [];
-        // ["Coloração", "Coloração de fios", "Categoria", "R$ 45,00", "20% em %", "60 minutos"], ["Coloração", "Coloração de fios", "Categoria", "R$ 45,00", "20% em %", "60 minutos"
 
         for (let i = 0; i < data.length; i++) {
             var dataAtual = [];
             dataAtual.push(data[i].nome);
-            // dataAtual.push(data[i].descricao);
             dataAtual.push(data[i].categoria);
             dataAtual.push(`R$ ${data[i].preco.toFixed(2).replace(".", ",")}`);
             dataAtual.push((data[i].comissao).toFixed(2).replace(".", ",") + "%");

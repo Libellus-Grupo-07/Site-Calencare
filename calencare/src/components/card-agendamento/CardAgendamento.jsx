@@ -32,7 +32,7 @@ const CardAgendamento = ({
                     }
                 >
                     <div className={styles["informations-agendamento"]}>
-                        <div className={styles["photo-funcionario"]}>
+                        {/* <div className={styles["photo-funcionario"]}>
                             <img
                                 className={styles["img-funcionario"]}
                                 src={
@@ -40,12 +40,12 @@ const CardAgendamento = ({
                                 }
                                 alt="Foto de perfil do funcionário"
                                 style={{
-                                    width: tamanho ? "48px" : "",
-                                    height: tamanho ? "48px" : "",
+                                    width: tamanho ? "48px" : "48px",
+                                    height: tamanho ? "48px" : "48px",
                                     borderRadius: tamanho ? "0.3rem" : ""
                                 }}
                             />
-                        </div>
+                        </div> */}
                         <div
                             className={styles["text-agendamento"]}
                             style={{

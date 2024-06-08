@@ -18,10 +18,27 @@ const Equipe = () => {
     const titulos = ["", "Nome", "Email", "Perfil", "Status", "Serviços", ""]
 
     let pilha = new Pilha()
+    const idEmpresa = sessionStorage.getItem("idEmpresa")
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
     const [dadosResposta, setDadosResposta] = useState([]);
+
+    useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
+
+        api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
+            const { data } = response;
+            mapear(data);
+            console.log(data)
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar o funcionário");
+            console.log(error);
+        });
+    }, []);
 
     const desfazer = () => {
         const id = pilha.pop()
@@ -81,22 +98,6 @@ const Equipe = () => {
         })
     }
 
-    useEffect(() => {
-        if (!logado(sessionStorage.getItem("token"))) {
-            navigate("/login");
-            return;
-        }
-
-        api.get(`/funcionarios`).then((response) => {
-            const { data } = response;
-            mapear(data);
-            console.log(data)
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
-        });
-    }, []);
-
     const mapear = (data) => {
         var dadosMapeados = []
         for (var index = 0; index < data.length; index++) {
@@ -120,7 +121,7 @@ const Equipe = () => {
                 <div className={styles["container-equipe"]}>
                     <div className={styles["content-equipe"]}>
                         <div className={styles["header"]}>
-                            <Titulo tamanho={"md"} titulo={"Equipe"} />
+                            <Titulo tamanho={"md"} titulo={"Minha Equipe"} />
                             <div className={styles["group-button"]}>
 
                                 <Button
@@ -153,7 +154,10 @@ const Equipe = () => {
                         </div>
                         <div className={styles["table-equipe"]}>
 
-                            {dados.length === 0 ? "Nenhum funcionário cadastrado!" : <Table
+                            {dados.length === 0 ?
+                            <div className={styles["sem-funcionarios"]}>
+                                Nenhum funcionário cadastrado
+                            </div> : <Table
                                 titulos={titulos}
                                 linhas={dados}
                                 showEditIcon={true}

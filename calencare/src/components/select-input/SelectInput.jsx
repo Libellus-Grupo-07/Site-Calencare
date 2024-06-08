@@ -31,12 +31,12 @@ const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, fu
                             onCreateOption={funcaoAdicionar}
                             styles={{
                                 control: (state) => ({
-                                    padding: "0px 24px",
-                                    height: "44px",
+                                    padding: "0px 1.2rem",
+                                    height: "2.5rem",
                                     display: "flex",
                                     alignItems: "center",
-                                    borderRadius: "100px",
-                                    fontSize: "14.5px",
+                                    borderRadius: "2rem",
+                                    fontSize: "0.9rem",
                                     border: "1.5px solid",
                                     letterSpacing: "-0.03rem",
                                     color: "var(--texto-preto)",

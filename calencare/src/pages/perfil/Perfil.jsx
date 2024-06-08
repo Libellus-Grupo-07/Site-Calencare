@@ -15,21 +15,23 @@ import ModalTemplate from "../../components/modal-template/ModalTemplate";
 import Titulo from './../../components/titulo/Titulo';
 
 const Perfil = () => {
-
     const navigate = useNavigate();
     const hora = new Date();
-
-    const { idUser } = useParams();
+    const idUser  = sessionStorage.getItem('idUser');
+    const idEmpresa = sessionStorage.getItem('idEmpresa');
+    
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
     const [dtCriacao, setDtCriacao] = useState("");
 
-    const [idEmpresa, setIdEmpresa] = useState(0);
     const [razaoSocial, setRazaoSocial] = useState("")
     const [cnpj, setCNPJ] = useState("")
     const [telefonePrincipal, setTelefonePrincipal] = useState("")
     const [emailPrincipal, setEmailPrincipal] = useState("")
+    const [endereco, setEndereco] = useState("")
+
+
     const [diaSegundaAberto, setDiaSegundaAberto] = useState(true);
     const [horario1Segunda, setHorario1Segunda] = useState(hora)
     const [horario2Segunda, setHorario2Segunda] = useState(hora)
@@ -69,7 +71,99 @@ const Perfil = () => {
         [setDiaDomingoAberto, setHorario1Domingo, setHorario2Segunda, diaDomingoAberto, horario1Domingo, horario2Domingo],
     ];
 
-    const [secaoPerfil, setSecaoPerfil] = useState(sessionStorage.getItem("sessaoPerfil") || "informacoes-pessoais");
+    const [secaoPerfil, setSecaoPerfil] = useState(sessionStorage.getItem("sessaoPerfil") || "informacoes-empresa");
+    const tituloModal = "Excluir Conta";
+    const tituloBotao = "Excluir";
+    const corpoModal = (
+        <>
+            <span style={{
+                lineHeight: "1.5rem",
+            }}>
+                Você realmente deseja excluir a sua conta?
+            </span>
+        </>
+    )
+
+    const [modalAberto, setModalAberto] = useState(false);
+
+    useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
+
+        api.get(`/empresas/${idEmpresa}`).then((response) => {
+            const { data } = response
+            const { razaoSocial, cnpj, emailPrincipal, telefonePrincipal, horariosFuncionamentos } = data;
+
+            setRazaoSocial(razaoSocial);
+            setCNPJ(cnpj);
+            setEmailPrincipal(emailPrincipal);
+            setTelefonePrincipal(telefonePrincipal);
+
+            const ordemDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+            const vetorDias = [];
+
+            horariosFuncionamentos.forEach((h) => {
+                vetorDias.push({
+                    id: h.id,
+                    diaSemana: h.diaSemana.replace("-Feira", ""),
+                    fim: h.fim,
+                    inicio: h.inicio,
+                    aberto: h.status === 0 ? false : true
+                })
+            });
+
+            for (let i = 0; i < ordemDias.length; i++) {
+                let posicaoTroca = i;
+
+                for (let j = i; j < ordemDias.length; j++) {
+                    if (vetorDias[j].diaSemana === ordemDias[i]) {
+                        posicaoTroca = j;
+                    }
+                }
+
+                console.log(posicaoTroca);
+                let proximoDia = vetorDias[i];
+                vetorDias[i] = vetorDias[posicaoTroca];
+                vetorDias[posicaoTroca] = proximoDia;
+            }
+
+            vetorToSetters(vetorDias);
+            setDias(vetorDias);
+
+            console.log(vetorDias)
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar o funcionário");
+            console.log(error);
+        })
+
+        api.get(`/enderecos/empresa/${idEmpresa}`).then((response) => {
+            const { data } = response;
+            const { descricaoEndereco } = data;
+            setEndereco(descricaoEndereco);
+            console.log(response)
+        }).catch((error) => {
+            console.log(error)
+        })
+
+        api.get(`/funcionarios/${idUser}`).then((response) => {
+            const { data } = response;
+            const { nome, email, telefone, dtCriacao } = data;
+
+            setNome(nome);
+            setEmail(email);
+            setTelefone(telefone);
+            setDtCriacao(dtCriacao);
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar o funcionário");
+            console.log(error);
+        }, [])
+    }, [idEmpresa]);
+
+    const navegar = (tipoPagina) => {
+        navigate(tipoPagina === "usuario" ? `/usuario/editar/${idUser}` : `/empresa/editar/${idEmpresa}`);
+    }
 
     const mudarSecao = (secao) => {
         setSecaoPerfil(secao);
@@ -100,90 +194,8 @@ const Perfil = () => {
         })
     }
 
-    const tituloModal = "Excluir Conta";
-    const tituloBotao = "Excluir";
-    const corpoModal = (
-        <>
-            <span style={{
-                lineHeight: "1.5rem",
-            }}>
-                Você realmente deseja excluir a sua conta?
-            </span>
-        </>
-    )
 
-    const [modalAberto, setModalAberto] = useState(false);
-
-    useEffect(() => {
-        if (!logado(sessionStorage.getItem("token"))) {
-            navigate("/login");
-            return;
-        }
-
-        api.get(`/funcionarios/${idUser}`).then((response) => {
-            const { data } = response;
-            const { nome, email, telefone, dtCriacao, empresa } = data;
-            const { id, razaoSocial, cnpj, emailPrincipal, telefonePrincipal } = empresa;
-
-            setIdEmpresa(id);
-            setNome(nome);
-            setEmail(email);
-            setTelefone(telefone);
-            setDtCriacao(dtCriacao);
-
-            setRazaoSocial(razaoSocial);
-            setCNPJ(cnpj);
-            setEmailPrincipal(emailPrincipal);
-            setTelefonePrincipal(telefonePrincipal);
-
-            api.get(`/empresas/${id}`).then((response) => {
-                const { data } = response
-                const { horariosFuncionamentos } = data;
-                const ordemDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
-                const vetorDias = [];
-
-                horariosFuncionamentos.forEach((h) => {
-                    vetorDias.push({
-                        id: h.id,
-                        diaSemana: h.diaSemana.replace("-Feira", ""),
-                        fim: h.fim,
-                        inicio: h.inicio,
-                        aberto: h.status === 0 ? false : true
-                    })
-                });
-
-                for (let i = 0; i < ordemDias.length; i++) {
-                    let posicaoTroca = i;
-
-                    for (let j = i; j < ordemDias.length; j++) {
-                        if (vetorDias[j].diaSemana === ordemDias[i]) {
-                            posicaoTroca = j;
-                        }
-                    }
-
-                    console.log(posicaoTroca);
-                    let proximoDia = vetorDias[i];
-                    vetorDias[i] = vetorDias[posicaoTroca];
-                    vetorDias[posicaoTroca] = proximoDia;
-                }
-                
-                abc(vetorDias);
-                setDias(vetorDias);
-
-                console.log(vetorDias)
-            }).catch((error) => {
-                console.log("Houve um erro ao buscar o funcionário");
-                console.log(error);
-            })
-
-
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
-        }, [])
-    }, []);
-
-    const abc = (vetor) => {
+    const vetorToSetters = (vetor) => {
         console.log(vetor);
         setDiaSegundaAberto(vetor[0].aberto);
         setHorario1Segunda(vetor[0].inicio)
@@ -291,21 +303,24 @@ const Perfil = () => {
                                             <Row
                                                 titulo="Razão Social"
                                                 valor={razaoSocial}
-                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                                funcao={() => navegar("empresa")}
                                             />
                                             <Row
                                                 titulo="CNPJ"
                                                 valor={cnpj}
-                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                                funcao={() => navegar("empresa")}
                                             />
                                             <Row
                                                 titulo="Email Principal"
                                                 valor={emailPrincipal}
-                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                                funcao={() => navegar("empresa")}
                                             />
                                             <Row
                                                 titulo="Telefone Principal"
                                                 valor={telefonePrincipal}
+                                            />                                            <Row
+                                                titulo="Endereço"
+                                                valor={endereco}
                                             />
 
                                         </div>
@@ -326,7 +341,7 @@ const Perfil = () => {
                                                                     aberto={vetorSetters[index][3]}
                                                                     horario1={vetorSetters[index][4]}
                                                                     horario2={vetorSetters[index][5]}
-                                                                    funcaoClickSwitch={() => navigate(`/editar-empresa/${idEmpresa}`)}
+                                                                    funcaoClickSwitch={() => navegar("empresa")}
                                                                 />
                                                             </div>
 
@@ -341,17 +356,17 @@ const Perfil = () => {
                                             <Row
                                                 titulo="Nome"
                                                 valor={nome}
-                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                                funcao={() => navegar("usuario")}
                                             />
                                             <Row
                                                 titulo="Telefone"
                                                 valor={telefone}
-                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                                funcao={() => navegar("usuario")}
                                             />
                                             <Row
                                                 titulo="Email"
                                                 valor={email}
-                                                funcao={() => navigate(`/editar-perfil/${idUser}`)}
+                                                funcao={() => navegar("usuario")}
                                             />
                                             <Row
                                                 titulo="Data de Cadastro"

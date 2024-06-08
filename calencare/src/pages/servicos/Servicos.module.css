@@ -37,11 +37,11 @@
   width: 70vw;
   height: fit-content;
   /* border: 1px solid; */
-  top: 50%;
-  bottom: 50%;
+  top: 49%;
+  bottom: 49%;
   text-align: center;
   letter-spacing: -0.05rem;
-  font-size: 18px;
+  font-size: 1.2rem;
   color: var(--texto-cinza);
   font-weight: 500;
 }

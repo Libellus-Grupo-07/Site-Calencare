@@ -13,11 +13,8 @@ import Swal from "sweetalert2";
 
 const Inicio = () => {
     const navigate = useNavigate();
-    const idUser = sessionStorage.getItem("idUser");
     const idEmpresa = sessionStorage.getItem("idEmpresa");
-    const [nome, setNome] = useState(sessionStorage.getItem("nomeUser"));
-    // const [email, setEmail] = useState("");
-    // const [telefone, setTelefone] = useState("");
+    const nome = sessionStorage.getItem("nomeUser");
     const [totalAgendamentosDia, setTotalAgendamentosDia] = useState("");
     const [potencialLucroDia, setPotencialLucroDia] = useState("");
     const [servicoMaisProcuradoDia, setServicoMaisProcuradoDia] = useState("");
@@ -73,19 +70,6 @@ const Inicio = () => {
 
         const data = transformarDataBd(new Date());
 
-        // api.get(`/funcionarios/${idUser}`).then((response) => {
-        //     const { data } = response;
-        //     // const { nome, email, telefone } = data;
-        //     const { nome } = data;
-        //     setNome(nome);
-        //     // setEmail(email);
-        //     // setTelefone(telefone);
-        //     sessionStorage.setItem("nomeUser", nome);
-        // }).catch((error) => {
-        //     console.log("Houve um erro ao buscar o funcionário");
-        //     console.log(error);
-        // });
-
         api.get(`/agendamentos/total/empresa?data=${data}&empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
             setTotalAgendamentosDia(data)
@@ -104,9 +88,8 @@ const Inicio = () => {
             console.log(error);
         })
 
-        api.get(`/agendamentos/proximos?empresaId=${idEmpresa}`).then((response) => {
+        api.get(`/agendamentos/proximos/empresa?empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
-            console.log(data);
             setProximosAgendamentos(data);
         }).catch((error) => {
             console.log("Houve um erro ao buscar próximos agendamentos")
@@ -115,32 +98,27 @@ const Inicio = () => {
 
         api.get(`/agendamentos/em-andamento?empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
-            console.log("em andamento")
-            console.log(data);
             setAgendamentosEmAndamento(data);
         }).catch((error) => {
-            console.log("Houve um erro ao buscar agendamentos em andamentos")
             console.log(error);
         });
 
 
-        api.get(`/agendamentos/servico-mais-procurado/empresa`).then((response) => {
+        api.get(`/agendamentos/servico-mais-procurado/empresa?empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
-            console.log(data);
             setServicoMaisProcuradoDia(data);
         }).catch((error) => {
-            console.log("Houve um erro ao buscar agendamentos em andamentos")
             console.log(error);
         });
 
 
-    }, [idUser]);
+    }, [idEmpresa]);
 
     return (
         <>
             <section className={styles["section-inicio"]}>
                 <div>
-                    <Header nomeUser={nome} />
+                    <Header />
                 </div>
                 <div className={styles["container-inicio"]}>
                     <div className={styles["content-inicio"]}>
@@ -228,7 +206,7 @@ const Inicio = () => {
                                 </div>
                                 {agendamentosEmAndamento.length === 0 ?
                                     <span className={styles["text-sem-agendamentos"]}>
-                                        Sem agendamentos em andamento
+                                        Sem agendamentos pendentes de conclusão
                                     </span> :
                                     <div className={styles["group-agendamentos-em-andamento"]}>
                                         {

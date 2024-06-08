@@ -10,11 +10,23 @@ import { ArrowLeft, IconlyProvider } from "react-iconly";
 const NotFound = () => {
     const navigate = useNavigate();
 
+    const navegar = (url, secao) => {
+        navigate(url);
+        sessionStorage.removeItem("secao");
+
+        if (secao) {
+            sessionStorage.setItem("secao", secao);
+        }
+    }
+
     return (
         <>
             <section className={styles["section-not-found"]}>
                 <Navbar
-                    irParaInicio={() => navigate("/")}
+                    irParaInicio={() => navegar("/")}
+                    irParaProduto={() => navegar("/", "produto")}
+                    irParaBeneficios={() => navegar("/", "beneficios")}
+                    irParaPrecos={() => navegar("/", "precos")}
                 />
                 <div className={styles["container-not-found"]}>
                     <div className={styles["content-not-found"]}>

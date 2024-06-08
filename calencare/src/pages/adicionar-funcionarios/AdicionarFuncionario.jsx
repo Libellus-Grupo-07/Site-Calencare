@@ -27,24 +27,24 @@ const AdicionarFuncionario = () => {
     const [nomeUser, setNomeUser] = useState("");
     const [nome, setNome] = useState("");
     const [telefone, setTelefone] = useState("");
-    const [bitStatus, setBitStatus] = useState("");
+    const [bitStatus, setBitStatus] = useState(1);
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [empresa, setEmpresa] = useState({});
     const [options, setOptions] = useState([
-            {
-                label: "Selecione",
-                value: null
-            }, {
-                label: "Administrador",
-                value: "Adminstrador"
-            },
-            {
-                label: "Funcionário",
-                value: "Funcionário"
-            }]);
-    
-    const [tipoPerfil, setTipoPerfil] = useState("");
+        {
+            label: "Selecione",
+            value: null
+        }, {
+            label: "Administrador",
+            value: "Administrador"
+        },
+        {
+            label: "Funcionário",
+            value: "Funcionário"
+        }]);
+
+    const [tipoPerfil, setTipoPerfil] = useState(options[0])
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
     const [items, setItems] = useState([]);
 
@@ -82,13 +82,13 @@ const AdicionarFuncionario = () => {
             console.log(error);
         });
 
-        let urlServicos = isEditar ? 
+        let urlServicos = isEditar ?
             `/servico-por-funcionario/${idEmpresa}/funcionario/${idProfissional}`
             : `/servico-preco/${idEmpresa}`
 
-            api.get(urlServicos).then((response) => {
-                console.log("buscar servicos")
-                const { data } = response;
+        api.get(urlServicos).then((response) => {
+            console.log("buscar servicos")
+            const { data } = response;
             console.log(response);
             setItems(data.length === 0 ? [] : data)
 
@@ -99,7 +99,7 @@ const AdicionarFuncionario = () => {
 
     }, [idProfissional]);
 
-  
+
     const validarFuncionario = () => {
         if (!isVazio(nome, "Nome")
             && !isVazio(telefone, "Telefone")
@@ -117,23 +117,20 @@ const AdicionarFuncionario = () => {
 
     const handleSave = () => {
         var url = isEditar ? `/funcionarios/${idProfissional}` : "/funcionarios"
+        var perfil = tipoPerfil.value;
         const objetoAdicionado = {
             nome,
             telefone,
-            bitStatus,
             email,
             senha,
-            options,
-            tipoPerfil,
-            servicosSelecionados,
+            perfilAcesso: perfil,
             empresa
         };
         if (validarFuncionario()) {
             api.post(url, objetoAdicionado).then((response) => {
                 const { data } = response;
                 const { id } = data;
-                console.log(id)
-                console.log(data)
+
                 for (let index = 0; index < servicosSelecionados.length; index++) {
                     let servicoAdicionado = {
                         idFuncionario: id,
@@ -145,7 +142,7 @@ const AdicionarFuncionario = () => {
                     api.post(`/servico-por-funcionario/${idEmpresa}`, servicoAdicionado).then().catch((error) => {
                         console.error(error)
                         toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
-                    })   
+                    })
                 }
                 toast.success("Funcionario adicionado com sucesso!");
                 sessionStorage.setItem("editado", JSON.stringify(objetoAdicionado));
@@ -164,8 +161,6 @@ const AdicionarFuncionario = () => {
             setServicosSelecionados([...servicosSelecionados, item]);
         }
     };
-
-    
 
     return (
         <>
@@ -196,76 +191,77 @@ const AdicionarFuncionario = () => {
                                 titulo={"Telefone"}
                                 mascara={"(00) 00000-0000"}
                             />
-                  
-                        <Input
-                            id="email"
-                            valor={email}
-                            alterarValor={setEmail}
-                            titulo={"Email"}
-                        />
-                        <Input
-                            id="senha"
-                            valor={senha}
-                            alterarValor={setSenha}
-                            titulo={"Senha"}
-                        />
 
-                        <div className={styles["group-input"]}>
-                            <SelectInput
-                                id={"tipoPerfil"}
-                                tamanho={"lg"}
-                                options={options}
-                                valor={tipoPerfil}
-                                alterarValor={setTipoPerfil}
-                                titulo={"Tipo de Perfil"}
+                            <Input
+                                id="email"
+                                valor={email}
+                                alterarValor={setEmail}
+                                titulo={"Email"}
+                            />
+                            <Input
+                                id="senha"
+                                valor={senha}
+                                alterarValor={setSenha}
+                                titulo={"Senha"}
                             />
 
-                            <div className={styles[isEditar ? "selectInput-status" : "none-selectInput-status"]}>
+                            <div className={styles["group-input"]}>
                                 <SelectInput
-                                    id={"status"}
+                                    id={"tipoPerfil"}
                                     tamanho={"lg"}
                                     options={options}
-                                    valor={bitStatus}
-                                    alterarValor={setBitStatus}
-                                    titulo={"Status"}
+                                    valor={tipoPerfil}
+                                    alterarValor={setTipoPerfil}
+                                    titulo={"Tipo de Perfil"}
                                 />
-                            </div>
-                        </div>
 
-                        <Ul className={styles["servicos-grid"]}
-                            titulo={"Serviços que realiza"}
-                            items={items}
-                            servicosSelecionados={servicosSelecionados}
-                            toggleServico={toggleServico}
-                        />
-                    </div>
-                    <div className={styles["group-button"]}>
-                        <Button
-
-                            funcaoButton={() => navigate(-1)}
-                            titulo={"Cancelar"}
-                            cor={"branco"}
-                            icone={
-                                <div style={{
-                                    fontSize: "18px",
-                                    display: "flex",
-                                    alignItens: "center",
-                                    justifyContent: "center"
-                                }}>
-                                    <TiCancel />
+                                <div className={styles[isEditar ? "selectInput-status" : "none-selectInput-status"]}>
+                                    <SelectInput
+                                        id={"status"}
+                                        tamanho={"lg"}
+                                        options={options}
+                                        valor={bitStatus}
+                                        alterarValor={setBitStatus}
+                                        titulo={"Status"}
+                                    />
                                 </div>
-                            } />
-                        <Button
-                            //(e) => avancar(e)
-                            funcaoButton={handleSave}
-                            titulo={isEditar ? "Editar" : "Adicionar"}
-                            icone={<FaCheck />}
-                            cor={"roxo"}
-                        />
-                    </div>
+                            </div>
+
+                            <Ul className={styles["servicos-grid"]}
+                                titulo={"Serviços que realiza"}
+                                items={items}
+                                servicosSelecionados={servicosSelecionados}
+                                toggleServico={toggleServico}
+                                nomeCampo={isEditar ? "nomeServico" : undefined}
+                            />
+                        </div>
+                        <div className={styles["group-button"]}>
+                            <Button
+
+                                funcaoButton={() => navigate(-1)}
+                                titulo={"Cancelar"}
+                                cor={"branco"}
+                                icone={
+                                    <div style={{
+                                        fontSize: "18px",
+                                        display: "flex",
+                                        alignItens: "center",
+                                        justifyContent: "center"
+                                    }}>
+                                        <TiCancel />
+                                    </div>
+                                } />
+                            <Button
+                                //(e) => avancar(e)
+                                funcaoButton={handleSave}
+                                titulo={isEditar ? "Editar" : "Adicionar"}
+                                icone={<FaCheck />}
+                                cor={"roxo"}
+                            />
+                        </div>
                     </div>
                 </div>
-        </section >
+            </section >
 
         </>
     );
