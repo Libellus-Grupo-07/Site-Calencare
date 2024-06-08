@@ -17,7 +17,7 @@ const Equipe = () => {
     const navigate = useNavigate();
     const titulos = ["", "Nome", "Email", "Perfil", "Status", "Serviços", ""]
 
-    let pilha = new Pilha()
+    let pilha = sessionStorage.getItem("pilha")
     const idEmpresa = sessionStorage.getItem("idEmpresa")
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
@@ -28,6 +28,11 @@ const Equipe = () => {
         if (!logado(sessionStorage.getItem("token"))) {
             navigate("/login");
             return;
+        }
+
+        if (!pilha) {
+            pilha = new Pilha()
+            sessionStorage.setItem("pilha", pilha)
         }
 
         api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
@@ -41,10 +46,23 @@ const Equipe = () => {
     }, []);
 
     const desfazer = () => {
-        const id = pilha.pop()
-        //PENDENTE
-        // patch do back-end
-    }
+        const id = pilha.pop();
+        const funcionarioStatusDto = {
+            bitStatus: 1
+        };
+
+        api.patch(`/funcionarios/status/${id}`, funcionarioStatusDto)
+            .then(response => {
+                const { data } = response;
+                mapear(data);
+                console.log(data);
+            })
+            .catch(error => {
+                console.log("Houve um erro ao desfazer a ação");
+                console.log(error);
+            });
+    };
+
 
     const corpoModal = (
         <>
@@ -125,7 +143,7 @@ const Equipe = () => {
                             <div className={styles["group-button"]}>
 
                                 <Button
-                                    funcaoButton={() => desfazer}
+                                    funcaoButton={desfazer}
                                     cor="branco"
                                     titulo={"Desfazer"}
                                     icone={<IconlyProvider
@@ -155,16 +173,16 @@ const Equipe = () => {
                         <div className={styles["table-equipe"]}>
 
                             {dados.length === 0 ?
-                            <div className={styles["sem-funcionarios"]}>
-                                Nenhum funcionário cadastrado
-                            </div> : <Table
-                                titulos={titulos}
-                                linhas={dados}
-                                showEditIcon={true}
-                                showDeleteIcon={true}
-                                funcaoEditar={editar}
-                                funcaoDeletar={deletar}
-                            />}
+                                <div className={styles["sem-funcionarios"]}>
+                                    Nenhum funcionário cadastrado
+                                </div> : <Table
+                                    titulos={titulos}
+                                    linhas={dados}
+                                    showEditIcon={true}
+                                    showDeleteIcon={true}
+                                    funcaoEditar={editar}
+                                    funcaoDeletar={deletar}
+                                />}
                         </div>
                     </div>
                 </div>

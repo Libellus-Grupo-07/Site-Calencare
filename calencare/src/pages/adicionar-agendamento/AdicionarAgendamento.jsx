@@ -51,9 +51,9 @@ const AdicionarAgendamento = () => {
             value: "Funcionário"
         }]);
   
-    const [tipoPerfil, setTipoPerfil] = useState("");
+        const [tipoPerfil, setTipoPerfil] = useState(options[0])
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
-    const items = [];
+    const [items, setItems] = useState([]);
 
     const validarAgenda = () => {
         if (!isVazio(cliente, "Cliente")
@@ -76,8 +76,7 @@ const AdicionarAgendamento = () => {
         }
     };
 
-    const tituloModal = "Adicionar Cliente";
-    const tituloBotao = "Adicionar";
+
     const corpoModal = (
         <>
             <Input
@@ -185,14 +184,18 @@ const AdicionarAgendamento = () => {
     }
 
     useEffect(() => {
-        api.get(`/servico-preco/${idEmpresa}`).then((response) => {
+        api.get(`servico-preco`).then((response) => {
+            console.log("buscar servicos")
             const { data } = response;
-            console.log(data);
+            console.log(response);
+            setItems(data.length === 0 ? [] : data)
+
         }).catch((error) => {
-            console.log("Houve um erro ao buscar um serviço");
+            console.log("Houve um erro ao buscar o serviço");
             console.log(error);
         });
-    }, []);
+
+    }, [idAgenda]);
 
     // useEffect(() => {
     //     if (!logado(sessionStorage.getItem("token"))) {
@@ -243,11 +246,28 @@ const AdicionarAgendamento = () => {
             servicosSelecionados
         };
         if (validarAgenda()) {
-            api.post(url, objetoAdicionado).then(() => {
-                toast.success("Agenda adicionada com sucesso!");
+            api.post(url, objetoAdicionado).then((response) => {
+                const { data } = response;
+                const { id } = data;
+
+                for (let index = 0; index < servicosSelecionados.length; index++) {
+                    let servicoAdicionado = {
+                        idAgenda: id,
+                        idServicoPreco: servicosSelecionados[index].id,
+                        dtCriacao: new Date(),
+                        bitStatus: 1
+                    }
+
+                    api.post(`/servicos/${idEmpresa}`, servicoAdicionado).then().catch((error) => {
+                        console.error(error)
+                        toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
+                    })
+                }
+                toast.success("Agendamento adicionada com sucesso!");
                 sessionStorage.setItem("editado", JSON.stringify(objetoAdicionado));
                 navigate("/agendas");
-            }).catch(() => {
+            }).catch((error) => {
+                console.error(error)
                 toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
             })
         }
@@ -281,6 +301,7 @@ const AdicionarAgendamento = () => {
                                 items={items}
                                 servicosSelecionados={servicosSelecionados}
                                 toggleServico={toggleServico}
+                                nomeCampo={undefined}
                             />
                             <SelectInput
                                 id={"tipoPerfil"}
@@ -289,6 +310,7 @@ const AdicionarAgendamento = () => {
                                 valor={tipoPerfil}
                                 alterarValor={setTipoPerfil}
                                 titulo={"Profissional"}
+                                
 
                             />
 
@@ -334,8 +356,8 @@ const AdicionarAgendamento = () => {
                         aberto={modalAberto}
                         setAberto={setModalAberto}
                         corpo={corpoModal}
-                        titulo={tituloModal}
-                        tituloBotaoConfirmar={tituloBotao}
+                        titulo={"Adicionar Cliente"}
+                        tituloBotaoConfirmar={"Adicionar"}
                         funcaoBotaoConfirmar={adicionarCliente}
                     />
                 </div>

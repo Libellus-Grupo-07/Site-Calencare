@@ -130,6 +130,8 @@ const AdicionarFuncionario = () => {
             api.post(url, objetoAdicionado).then((response) => {
                 const { data } = response;
                 const { id } = data;
+                console.log(data)
+                console.log(response)
 
                 for (let index = 0; index < servicosSelecionados.length; index++) {
                     let servicoAdicionado = {
