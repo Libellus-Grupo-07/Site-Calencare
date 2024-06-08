@@ -38,6 +38,15 @@ export function isValidEmail(email, nomeCampo) {
   return false;
 }
 
+export function isLengthValid(campo, tamanho, nome) {
+  if (campo.length >= tamanho) {
+    return true;
+  }
+
+  toast.error(`O campo ${nome} deve ter no mínimo ${tamanho} caracteres`);
+  return false;
+}
+
 export function transformarDouble(dataString) {
   const valor = dataString.toString();
   return parseFloat(valor).toFixed(2).replace(".", ",");

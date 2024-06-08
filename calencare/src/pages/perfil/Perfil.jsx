@@ -17,9 +17,9 @@ import Titulo from './../../components/titulo/Titulo';
 const Perfil = () => {
     const navigate = useNavigate();
     const hora = new Date();
-    const idUser  = sessionStorage.getItem('idUser');
+    const idUser = sessionStorage.getItem('idUser');
     const idEmpresa = sessionStorage.getItem('idEmpresa');
-    
+
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
@@ -162,7 +162,12 @@ const Perfil = () => {
     }, [idEmpresa]);
 
     const navegar = (tipoPagina) => {
-        navigate(tipoPagina === "usuario" ? `/usuario/editar/${idUser}` : `/empresa/editar/${idEmpresa}`);
+        navigate(
+            tipoPagina === "usuario" ? `/usuario/editar/${idUser}`
+                : tipoPagina === "empresa" ? `/empresa/editar/${idEmpresa}`
+                    : `/dias-funcionamento/editar/${idEmpresa}`
+
+        );
     }
 
     const mudarSecao = (secao) => {
@@ -318,7 +323,8 @@ const Perfil = () => {
                                             <Row
                                                 titulo="Telefone Principal"
                                                 valor={telefonePrincipal}
-                                            />                                            <Row
+                                            />
+                                            <Row
                                                 titulo="Endereço"
                                                 valor={endereco}
                                             />
@@ -341,7 +347,7 @@ const Perfil = () => {
                                                                     aberto={vetorSetters[index][3]}
                                                                     horario1={vetorSetters[index][4]}
                                                                     horario2={vetorSetters[index][5]}
-                                                                    funcaoClickSwitch={() => navegar("empresa")}
+                                                                    funcaoClickSwitch={() => navegar("dias-funcionamento")}
                                                                 />
                                                             </div>
 
