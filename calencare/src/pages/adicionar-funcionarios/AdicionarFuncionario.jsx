@@ -5,15 +5,13 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Input from "../../components/input/Input";
-import { inputSomenteTexto, logado, isVazio } from "../../utils/global";
+import { inputSomenteTexto, logado, isVazio, isLengthValid, isValidEmail } from "../../utils/global";
 import styles from "./AdicionarFuncionario.module.css";
 import Ul from "../../components/ul/Ul";
-import { TickSquare } from "react-iconly";
 import SelectInput from "../../components/select-input/SelectInput";
 import { FaCheck } from "react-icons/fa6";
 import { TiCancel } from "react-icons/ti";
 import { toast } from "react-toastify";
-import { useForm } from "../../hooks/useForm";
 
 const AdicionarFuncionario = () => {
 
@@ -24,18 +22,18 @@ const AdicionarFuncionario = () => {
     const idUser = sessionStorage.getItem("idUser")
     const idEmpresa = sessionStorage.getItem("idEmpresa")
     const isEditar = location.pathname === `/profissional/editar/${idProfissional}`;
-    const [nomeUser, setNomeUser] = useState("");
     const [nome, setNome] = useState("");
     const [telefone, setTelefone] = useState("");
     const [bitStatus, setBitStatus] = useState(1);
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [empresa, setEmpresa] = useState({});
-    const [options, setOptions] = useState([
+    const [options] = useState([
+        // {
+        //     label: "Selecione",
+        //     value: null
+        // }, 
         {
-            label: "Selecione",
-            value: null
-        }, {
             label: "Administrador",
             value: "Administrador"
         },
@@ -44,7 +42,8 @@ const AdicionarFuncionario = () => {
             value: "Funcionário"
         }]);
 
-    const [tipoPerfil, setTipoPerfil] = useState(options[0])
+    // const [tipoPerfil, setTipoPerfil] = useState(options[0])
+    const [tipoPerfil, setTipoPerfil] = useState("")
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
     const [items, setItems] = useState([]);
 
@@ -58,9 +57,6 @@ const AdicionarFuncionario = () => {
             const { data } = response;
             const { empresa } = data;
             setEmpresa(empresa);
-            //tipo perfil
-            // servico  que realiza
-
         }).catch((error) => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
@@ -97,17 +93,18 @@ const AdicionarFuncionario = () => {
             console.log(error);
         });
 
-    }, [idProfissional]);
+    }, [navigate, isEditar, idProfissional, idUser, idEmpresa]);
 
 
     const validarFuncionario = () => {
         if (!isVazio(nome, "Nome")
             && !isVazio(telefone, "Telefone")
-            && !isVazio(email, "Email")
+            && !isVazio(email, "Email") && isValidEmail(email, "Email")
             && !isVazio(senha, "Senha")
             && !isVazio(options, "Tipo de Perfil")
             && !isVazio(tipoPerfil, "Tipo de Perfil")
             && !isVazio(servicosSelecionados, "Serviços que realiza")
+            && isLengthValid(senha, 6, "Senha")
         ) {
             return true;
         }
@@ -166,7 +163,7 @@ const AdicionarFuncionario = () => {
         <>
             <section className={styles["section-adicionar-funcionario"]}>
                 <div>
-                    <Header nomeUser={nomeUser} />
+                    <Header />
                 </div>
                 <div className={styles["container-adicionar-funcionario"]}>
                     <div className={styles["content-adicionar-funcionario"]}>
@@ -195,14 +192,18 @@ const AdicionarFuncionario = () => {
                             <Input
                                 id="email"
                                 valor={email}
+                                tamanho={"lg"}
+
                                 alterarValor={setEmail}
                                 titulo={"Email"}
                             />
                             <Input
                                 id="senha"
+                                tamanho={"lg"}
                                 valor={senha}
                                 alterarValor={setSenha}
                                 titulo={"Senha"}
+                                type={"password"}
                             />
 
                             <div className={styles["group-input"]}>
@@ -237,7 +238,6 @@ const AdicionarFuncionario = () => {
                         </div>
                         <div className={styles["group-button"]}>
                             <Button
-
                                 funcaoButton={() => navigate(-1)}
                                 titulo={"Cancelar"}
                                 cor={"branco"}

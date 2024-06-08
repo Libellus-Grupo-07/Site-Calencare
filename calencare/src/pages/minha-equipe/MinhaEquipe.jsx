@@ -4,7 +4,7 @@ import api from "../../api";
 import styles from "./MinhaEquipe.module.css";
 import { logado } from "../../utils/global";
 import { useNavigate } from "react-router-dom";
-import { AddUser, Edit, IconlyProvider } from "react-iconly";
+import { AddUser, IconlyProvider } from "react-iconly";
 import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Table from "../../components/table/Table";
@@ -22,7 +22,6 @@ const Equipe = () => {
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
-    const [dadosResposta, setDadosResposta] = useState([]);
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -38,7 +37,7 @@ const Equipe = () => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
         });
-    }, []);
+    }, [navigate, idEmpresa]);
 
     const desfazer = () => {
         const id = pilha.pop()
