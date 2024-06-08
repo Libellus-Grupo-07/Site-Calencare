@@ -50,7 +50,7 @@ const CadastroEtapa2 = ({
                     alterarValor={setLogradouro}
                     titulo={"Logradouro"}
                     minlength={5}
-                    maxlength={50}
+                    maxlength={45}
                 />
                 <div className={styles["container-adrress"]}>
                     <Input
@@ -58,12 +58,16 @@ const CadastroEtapa2 = ({
                         valor={Numero}
                         alterarValor={setNumero}
                         titulo={"Número"}
+                        maxlength={9}
+                        minlength={1}
                     />
                     <Input
                         id="complemento"
                         valor={Complemento}
                         alterarValor={setComplemento}
                         titulo={"Complemento"}
+                        minlength={0}
+                        maxlength={9}
                     />
                 </div>
                 <Input
@@ -71,6 +75,8 @@ const CadastroEtapa2 = ({
                     valor={Bairro}
                     alterarValor={setBairro}
                     titulo={"Bairro"}
+                    minlength={5}
+                    maxlength={45}
                 />
                 <div className={styles["container-adrress"]}>
                     <Input
@@ -78,6 +84,8 @@ const CadastroEtapa2 = ({
                         valor={Cidade}
                         alterarValor={setCidade}
                         titulo={"Cidade"}
+                        minlength={5}
+                        maxlength={45}
                     />
                     <div className={styles["uf"]}>
                         <Input
@@ -85,6 +93,8 @@ const CadastroEtapa2 = ({
                             valor={UF}
                             alterarValor={setUF}
                             titulo={"UF"}
+                            minlength={2}
+                            maxlength={2}
                         />
                     </div>
                 </div>

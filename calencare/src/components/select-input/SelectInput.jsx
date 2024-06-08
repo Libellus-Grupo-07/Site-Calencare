@@ -3,7 +3,7 @@ import styles from "./SelectInput.module.css";
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 
-const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar, criarOption }) => {
+const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar, criarOption }) => {
     const mudarValor = (value) => {
         alterarValor(value)
     }
@@ -31,8 +31,8 @@ const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, fu
                             onCreateOption={funcaoAdicionar}
                             styles={{
                                 control: (state) => ({
-                                    padding: "0px 1.2rem",
-                                    height: "2.5rem",
+                                    padding: tamanho ? "0.9rem 1.8rem" : "0px 1.2rem",
+                                    height: tamanho ? "1rem" : "44px",
                                     display: "flex",
                                     alignItems: "center",
                                     borderRadius: "2rem",
@@ -59,8 +59,8 @@ const SelectInput = ({ placeholder, titulo, id, options, alterarValor, valor, fu
                             // onCreateOption={funcaoAdicionar}
                             styles={{
                                 control: (state) => ({
-                                    padding: "0px 24px",
-                                    height: "44px",
+                                    padding: tamanho ? "0.9rem 1.8rem" : "0px 1.2rem",
+                                    height: tamanho ? "1rem" : "44px",
                                     display: "flex",
                                     alignItems: "center",
                                     borderRadius: "100px",

@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from "./DiaDaSemanaComponente.module.css";
-import { Input, Switch } from 'antd';
+import { Switch } from 'antd';
 import { Box, Typography } from '@mui/material';
 import { IMaskInput } from 'react-imask';
 
@@ -26,7 +26,7 @@ const DiaDaSemanaComponente = (
   return (
     <Box
       width="100%"
-      height="5vh"
+      height="5.5vh"
       display="flex"
       justifyContent="space-between"
       alignItems="center"

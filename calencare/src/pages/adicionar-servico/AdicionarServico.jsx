@@ -31,7 +31,7 @@ const AdicionarServico = () => {
     const [duracao, setDuracao] = useState("");
     const [servicos, setServicos] = useState([]);
     const [options, setOptions] = useState([]);
-    const [optionsStatus, setOptionsStatus] = useState([
+    const [optionsStatus] = useState([
         {
             label: "Ativo",
             value: 1
@@ -44,35 +44,6 @@ const AdicionarServico = () => {
     const [status, setStatus] = useState(optionsStatus[0]);
 
     const [categoria, setCategoria] = useState("");
-
-
-    useEffect(() => {
-        if (!logado(sessionStorage.getItem("token"))) {
-            navigate("/login");
-            return;
-        }
-
-        buscarCategoriasServico("C");
-        buscarServicos("C");
-    }, []);
-
-    useEffect(() => {
-        if (!isAdicionar) {
-            api.get(`/servico-preco/${idEmpresa}/${idServico}`).then((response) => {
-                const { data } = response;
-                const { nome, descricao, categoria, preco, comissao, duracao, descricaoStatus } = data;
-                setDescricao(descricao);
-                setPreco("R$ " + preco.toFixed(2).replace(".", ","));
-                setComissao(comissao.toFixed(2).replace(".", ",") + "%");
-                setDuracao(duracao);
-                buscarServicos("E", undefined, nome);
-                buscarCategoriasServico("E", undefined, data.categoria);
-
-            }).catch((error) => {
-                console.error(error)
-            })
-        }
-    }, [idEmpresa]);
 
     const buscarCategoriasServico = (action, index, categoria) => {
         api.get("/categoria-servico").then((response) => {
@@ -129,6 +100,35 @@ const AdicionarServico = () => {
             setServico(optionsMap[i]);
         }
     }
+
+    useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
+
+        buscarCategoriasServico("C");
+        buscarServicos("C");
+    }, [navigate]);
+
+    useEffect(() => {
+        if (!isAdicionar) {
+            api.get(`/servico-preco/${idEmpresa}/${idServico}`).then((response) => {
+                const { data } = response;
+                const { nome, descricao, categoria, preco, comissao, duracao, /*descricaoStatus*/ } = data;
+                setDescricao(descricao);
+                setPreco("R$ " + preco.toFixed(2).replace(".", ","));
+                setComissao(comissao.toFixed(2).replace(".", ",") + "%");
+                setDuracao(duracao);
+                setNomeCategoria(categoria)
+                buscarServicos("E", undefined, nome);
+                buscarCategoriasServico("E", undefined, categoria);
+
+            }).catch((error) => {
+                console.error(error)
+            })
+        }
+    }, [isAdicionar, idEmpresa, idServico]);
 
     const tituloModal = "Adicionar Categoria de Serviço";
     const tituloBotao = "Adicionar";
@@ -258,17 +258,19 @@ const AdicionarServico = () => {
             isSelected(status, "Status do Serviço")
         ) {
             let idCategoria = options.filter(o => o === categoria)[0].id;
+            let nomeCategoria = options.filter(o => o === categoria)[0].value;
             let nomeServico = servicos.filter(s => s === servico)[0].value;
 
             var url = `/servico-preco/${idEmpresa}/${idServico}/${idCategoria}`;
             var body = {
-                "nome": nomeServico,
-                "descricao": descricao,
-                "preco": preco.replace("R$ ", "").replace(",", "."),
-                "duracao": duracao,
-                "comissao": comissao.replace(",", ".").replace("%", ""),
-                "bitStatus": status.value,
-                "servicoId": idServico
+                nome: nomeServico,
+                descricao: descricao,
+                preco: preco.replace("R$ ", "").replace(",", "."),
+                duracao: duracao,
+                comissao: comissao.replace(",", ".").replace("%", ""),
+                bitStatus: status.value,
+                servicoId: idServico,
+                categoria: nomeCategoria
             };
 
             api.put(url, body).then(() => {
@@ -307,15 +309,25 @@ const AdicionarServico = () => {
                             />
                         </div>
                         <form className={styles["informations-adicionar-servico"]}>
-                            <SelectInput
-                                id={"categoriaServico"}
-                                tamanho={"lg"}
-                                options={options}
-                                valor={categoria}
-                                alterarValor={setCategoria}
-                                funcaoAdicionar={abrirModal}
-                                titulo={"Categoria"}
-                            />
+                            {isAdicionar ?
+                                <SelectInput
+                                    id={"categoriaServico"}
+                                    tamanho={"lg"}
+                                    options={options}
+                                    valor={categoria}
+                                    alterarValor={setCategoria}
+                                    funcaoAdicionar={abrirModal}
+                                    titulo={"Categoria"}
+                                /> :
+                                <Input
+                                    id={"categoriaServico"}
+                                    tamanho={"lg"}
+                                    valor={nomeCategoria}
+                                    alterarValor={setNomeCategoria}
+                                    funcaoAdicionar={abrirModal}
+                                    titulo={"Categoria"}
+                                    readonly={true}
+                                />}
                             <SelectInput
                                 id="nomeServico"
                                 tamanho={"lg"}

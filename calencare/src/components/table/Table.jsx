@@ -22,10 +22,10 @@ const Table = ({ titulos, linhas, showEditIcon, showDeleteIcon, funcaoEditar, fu
                         {
                             linhas.map((linha, index) => (
                                 <tr className={styles[index % 2 === 0 ? "branco" : "roxo"]} key={index}
-                                onClick={() => funcaoEditar(index)}
+        
                                 >
-                                    {linha.map((dado, index) => (
-                                        <td key={index}>
+                                    {linha.map((dado, index2) => (
+                                        <td key={index2} onClick={() => funcaoEditar(index)}>
                                             <div className={styles["td-div"]}>
                                                 {dado}
                                             </div>

@@ -36,6 +36,7 @@ const Input = ({
                     <IMaskInput
                         id={id}
                         value={valor}
+                        className={styles["input"]}
                         placeholder={placeholder || titulo}
                         onChange={(e) => mudarValor(e)}
                         onKeyUp={funcao}
@@ -54,10 +55,10 @@ const Input = ({
                         id={id}
                         type={type}
                         value={valor}
+                        className={styles["input"]}
                         placeholder={placeholder || titulo}
                         onChange={(e) => mudarValor(e)}
                         onInput={validarEntrada ? (e) => validarEntrada(e) : null}
-                        required
                         readOnly={readonly || false}
                         style={{
                             height: tamanho ? "1rem" : "",
