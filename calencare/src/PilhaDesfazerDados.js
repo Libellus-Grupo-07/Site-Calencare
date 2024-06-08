@@ -3,13 +3,22 @@ class Pilha {
         this.items = [];
     }
 
+    
+    getPilha() {
+        return this.items
+    }
+
+    setPilha(items){
+        this.items = items
+    }
+    
     push(item) {
         this.items.push(item);
     }
 
     pop() {
         if (this.items.length === 0) {
-            return null; 
+            return null;
         }
         return this.items.pop();
     }

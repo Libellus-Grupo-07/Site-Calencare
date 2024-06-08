@@ -17,7 +17,7 @@ const Equipe = () => {
     const navigate = useNavigate();
     const titulos = ["", "Nome", "Email", "Perfil", "Status", "Serviços", ""]
 
-    let pilha = sessionStorage.getItem("pilha")
+    const [pilha, setPilha] = useState(new Pilha())
     const idEmpresa = sessionStorage.getItem("idEmpresa")
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
@@ -29,11 +29,15 @@ const Equipe = () => {
             return;
         }
 
-        if (!pilha) {
-            pilha = new Pilha()
-            sessionStorage.setItem("pilha", pilha)
-        }
+        var pilhaSecundaria = new Pilha()
+        pilhaSecundaria.setPilha(sessionStorage.pilha ? JSON.parse(sessionStorage.pilha) : [])
+        setPilha(pilhaSecundaria)
+        buscarFuncionarios()
+    
+    }, [navigate, idEmpresa]);
 
+
+    const buscarFuncionarios = () => {
         api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
             const { data } = response;
             mapear(data);
@@ -42,19 +46,17 @@ const Equipe = () => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
         });
-    }, [navigate, idEmpresa]);
-
+    }
     const desfazer = () => {
         const id = pilha.pop();
         const funcionarioStatusDto = {
             bitStatus: 1
         };
-
+        console.log(pilha)
         api.patch(`/funcionarios/status/${id}`, funcionarioStatusDto)
             .then(response => {
                 const { data } = response;
-                mapear(data);
-                console.log(data);
+                buscarFuncionarios()
             })
             .catch(error => {
                 console.log("Houve um erro ao desfazer a ação");
@@ -74,7 +76,7 @@ const Equipe = () => {
     )
 
     const buscarProfissional = (id) => {
-        api.get(`/funcionario/${id}`).then((response) => {
+        api.get(`/funcionarios/${id}`).then((response) => {
             const { data } = response;
             setDados(data);
             mapear(data);
@@ -96,7 +98,6 @@ const Equipe = () => {
     }
 
     const deletar = (index) => {
-
         var id = dados[index][0];
         var nome = dados[index][1];
         setIdProfissional(id)
@@ -105,12 +106,20 @@ const Equipe = () => {
     }
 
     const excluir = () => {
-        api.delete(`/funcionarios/${idprofissional}`).then(() => {
-            toast.success("Serviço excluído com sucesso!");
-            buscarProfissional(idprofissional);
+        const funcionarioStatusDto = {
+            bitStatus: 4
+        };
+        console.log(funcionarioStatusDto)
+        api.patch(`/funcionarios/status/${idprofissional}`, funcionarioStatusDto).then(() => {
+            toast.success("Funcionário excluído com sucesso!");
+            buscarFuncionarios()
+            pilha.push(idprofissional)
+            sessionStorage.pilha = JSON.stringify(pilha.getPilha())
+            setIdProfissional("")
+            setNome("")
             abrirModal();
         }).catch((error) => {
-            toast.error("Ocorreu um erro ao tentar excluir serviço!");
+            toast.error("Ocorreu um erro ao tentar excluir funcionário!");
             console.error(error);
         })
     }

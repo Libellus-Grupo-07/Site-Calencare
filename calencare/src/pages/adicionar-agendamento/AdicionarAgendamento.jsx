@@ -24,8 +24,7 @@ const AdicionarAgendamento = () => {
 
     const { idAgenda } = useParams();
     const [nomeUser, setNomeUser] = useState("");
-    const idUser = sessionStorage.getItem("idUser");
-    const [idEmpresa, setIdEmpresa] = useState("");
+    const idEmpresa = sessionStorage.getItem("idEmpresa");
     const [cliente, setCliente] = useState();
     const [clientes, setClientes] = useState([]);
     const [nomeCliente, setNomeCliente] = useState("");
@@ -51,7 +50,7 @@ const AdicionarAgendamento = () => {
             value: "Funcionário"
         }]);
   
-        const [tipoPerfil, setTipoPerfil] = useState(options[0])
+    const [tipoPerfil, setTipoPerfil] = useState(options[0])
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
     const [items, setItems] = useState([]);
 
@@ -184,7 +183,7 @@ const AdicionarAgendamento = () => {
     }
 
     useEffect(() => {
-        api.get(`servico-preco`).then((response) => {
+        api.get(`/servico-preco/${idEmpresa}`).then((response) => {
             console.log("buscar servicos")
             const { data } = response;
             console.log(response);
@@ -195,7 +194,7 @@ const AdicionarAgendamento = () => {
             console.log(error);
         });
 
-    }, [idAgenda]);
+    }, [idEmpresa]);
 
     // useEffect(() => {
     //     if (!logado(sessionStorage.getItem("token"))) {
@@ -340,6 +339,7 @@ const AdicionarAgendamento = () => {
                                     </div>
                                 } />
                             <Button
+                                funcaoButton={handleSave}
                                 titulo={isEditar ? "Editar" : "Adicionar"}
                                 icone={<FaCheck />}
                                 cor={"roxo"}
