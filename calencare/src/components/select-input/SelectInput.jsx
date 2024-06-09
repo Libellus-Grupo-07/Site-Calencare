@@ -3,14 +3,18 @@ import styles from "./SelectInput.module.css";
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 
-const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar, criarOption }) => {
+const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar, criarOption, exibir }) => {
     const mudarValor = (value) => {
-        alterarValor(value)
+        if (value.label === "Criar") {
+            funcaoAdicionar()
+        } else {
+            alterarValor(value)
+        }
     }
 
     return (
         <>
-            <div className={styles["component-select"]}>
+            <div className={styles["component-select"]} style={{ display: exibir ? "none" : "flex" }}>
                 <label for={id}>
                     <span
                         className={styles["titulo-select"]}
@@ -43,6 +47,8 @@ const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, 
                                     fontWeight: 500,
                                     borderColor: state.isFocused ? "var(--preto)" : "var(--texto-cinza)",
                                     borderWidth: state.isFocused ? "2px" : "1.5px",
+                                    width: tamanho === "md" ? "80%" : "",
+                                    background: "white"
                                 }),
                             }}
                         /> :
@@ -71,6 +77,8 @@ const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, 
                                     fontWeight: 500,
                                     borderColor: state.isFocused ? "var(--preto)" : "var(--texto-cinza)",
                                     borderWidth: state.isFocused ? "2px" : "1.5px",
+                                    width: tamanho === "md" ? "80%" : "",
+                                    background: "white"
                                 }),
                             }}
                         />

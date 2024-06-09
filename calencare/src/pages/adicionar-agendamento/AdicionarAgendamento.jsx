@@ -49,7 +49,7 @@ const AdicionarAgendamento = () => {
             label: "Funcionário",
             value: "Funcionário"
         }]);
-  
+
     const [tipoPerfil, setTipoPerfil] = useState(options[0])
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
     const [items, setItems] = useState([]);
@@ -132,7 +132,7 @@ const AdicionarAgendamento = () => {
         if (!isVazio(nomeCliente, "Nome do Cliente") &&
             !isVazio(sobrenomeCliente, "Sobrenome do Cliente") &&
             (emailCliente == "" || (
-            !isVazio(emailCliente, "Email do Cliente") && isValidEmail(emailCliente, "Email do Cliente")
+                !isVazio(emailCliente, "Email do Cliente") && isValidEmail(emailCliente, "Email do Cliente")
             )) &&
             !isVazio(telefoneCliente, "Telefone do Cliente") &&
             !isVazio(dataNascimentoCliente, "Data de Nascimento do Cliente")
@@ -193,6 +193,7 @@ const AdicionarAgendamento = () => {
             console.log("Houve um erro ao buscar o serviço");
             console.log(error);
         });
+        buscarClientes()
 
     }, [idEmpresa]);
 
@@ -201,27 +202,31 @@ const AdicionarAgendamento = () => {
     //         navigate("/login");
     //         return;
     //     }
-      
-        // api.get(`/agendas/${idUser}`).then((response) => {
-        //     const { data } = response;
-        //     console.log(response);
-        //     const { nome } = data;
-        //     setNomeUser(nome);
-        // }).catch((error) => {
-        //     console.log("Houve um erro ao buscar o funcionário");
-        //     console.log(error);
-        // });
-        
+
+    // api.get(`/agendas/${idUser}`).then((response) => {
+    //     const { data } = response;
+    //     console.log(response);
+    //     const { nome } = data;
+    //     setNomeUser(nome);
+    // }).catch((error) => {
+    //     console.log("Houve um erro ao buscar o funcionário");
+    //     console.log(error);
+    // });
+
     //     buscarClientes(0)
 
 
     // }, [idUser]);
 
     const mapear = (data, index) => {
-        var dataMapp = [];
+        var dataMapp = [{
+            //id: data[i].id,
+            label: "Criar",
+            value: "Criar"
+        }];
         let i = 0;
 
-        for (i = 0; i < data.length; i++){
+        for (i = 0; i < data.length; i++) {
             dataMapp.push({
                 id: data[i].id,
                 label: data[i].nome,
@@ -309,7 +314,7 @@ const AdicionarAgendamento = () => {
                                 valor={tipoPerfil}
                                 alterarValor={setTipoPerfil}
                                 titulo={"Profissional"}
-                                
+
 
                             />
 

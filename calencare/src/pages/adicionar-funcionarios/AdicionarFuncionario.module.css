@@ -46,13 +46,15 @@
   display: flex;
   height: 100%;
   column-gap: 24px;
+  width: 100%;
+  justify-content: space-between;
 }
 .servicos-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  list-style: none; /* Remover marcadores de lista */
-  padding: 0; /* Remover padding padrão da lista */
+  list-style: none; 
+  padding: 0; 
 }
 
 .servicos-grid li {
@@ -95,6 +97,7 @@
 
 .selectInput-status{
   display: inline;
+  width: 100%;
 }
 
 .none-selectInput-status{

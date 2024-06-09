@@ -1,5 +1,5 @@
 .servicos-container {
-  margin-bottom: 20px; /* Espaçamento entre a input e os outros elementos */
+  margin-bottom: 20px; 
 }
 
 .servicos-input {
@@ -7,6 +7,7 @@
   border-radius: 24px;
   padding: 24px;
   margin-top: 10px;
+  background: white
 }
 
 .servicos-grid {

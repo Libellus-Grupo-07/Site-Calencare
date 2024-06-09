@@ -24,7 +24,17 @@ const AdicionarFuncionario = () => {
     const isEditar = location.pathname === `/profissional/editar/${idProfissional}`;
     const [nome, setNome] = useState("");
     const [telefone, setTelefone] = useState("");
-    const [bitStatus, setBitStatus] = useState(1);
+    const [optionsStatus] = useState([
+        {
+            label: "Ativo",
+            value: 1
+        },
+        {
+            label: "Inativo",
+            value: 0
+        }
+    ]);
+    const [bitStatus, setBitStatus] = useState(optionsStatus[0]);
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [empresa, setEmpresa] = useState({});
@@ -45,6 +55,7 @@ const AdicionarFuncionario = () => {
     // const [tipoPerfil, setTipoPerfil] = useState(options[0])
     const [tipoPerfil, setTipoPerfil] = useState("")
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
+    const [servicosPorFuncionario, setServicosPorFuncionario] = useState([]);
     const [items, setItems] = useState([]);
 
     useEffect(() => {
@@ -65,33 +76,54 @@ const AdicionarFuncionario = () => {
         api.get(`/funcionarios/${idProfissional}`).then((response) => {
             const { data } = response;
             console.log(response);
-            const { nome, telefone, email, bitStatus } = data;
+            const { nome, telefone, email, bitStatus, perfilAcesso } = data;
             setNome(nome);
             setTelefone(telefone);
-            setBitStatus(bitStatus);
+            var tipoStatus = optionsStatus.filter(s => s.value === bitStatus)
+            setBitStatus(tipoStatus[0]);
             setEmail(email);
-            //tipo perfil
-            // servico  que realiza
+            var tipoPerfil = options.filter(s => s.label === perfilAcesso)
+            setTipoPerfil(tipoPerfil[0])
+            setSenha("123456")
 
         }).catch((error) => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
         });
 
-        let urlServicos = isEditar ?
-            `/servico-por-funcionario/${idEmpresa}/funcionario/${idProfissional}`
-            : `/servico-preco/${idEmpresa}`
-
-        api.get(urlServicos).then((response) => {
-            console.log("buscar servicos")
+        api.get(`/servico-preco/${idEmpresa}`).then((response) => {
             const { data } = response;
-            console.log(response);
-            setItems(data.length === 0 ? [] : data)
+            const resposta = data
+            setItems(resposta.length === 0 ? [] : resposta)
+
+
+            if (isEditar) {
+                api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${idProfissional}`
+                ).then((response) => {
+                    const { data } = response;
+                    setServicosPorFuncionario(data)
+                    var servicosRealizados = []
+                    // Percorrendo a lista de servicos realizados pelo funcionario
+                    for (let index = 0; index < data.length; index++) {
+                        const element = data[index];
+                        // resposta do servico preco(todos os servicos cadastrados da empresa) e filtrando apartir do serivco atual 
+                        var servicoFuncionario = resposta.filter(s => s.nome === element.nomeServico)
+                        servicosRealizados.push(servicoFuncionario[0])
+                    }
+                    setServicosSelecionados(servicosRealizados)
+
+
+                }).catch((error) => {
+                    console.log("Houve um erro ao buscar o serviço");
+                    console.log(error);
+                });
+            }
 
         }).catch((error) => {
             console.log("Houve um erro ao buscar o serviço");
             console.log(error);
         });
+
 
     }, [navigate, isEditar, idProfissional, idUser, idEmpresa]);
 
@@ -100,11 +132,11 @@ const AdicionarFuncionario = () => {
         if (!isVazio(nome, "Nome")
             && !isVazio(telefone, "Telefone")
             && !isVazio(email, "Email") && isValidEmail(email, "Email")
-            && !isVazio(senha, "Senha")
+            && (isEditar || !isVazio(senha, "Senha"))
             && !isVazio(options, "Tipo de Perfil")
             && !isVazio(tipoPerfil, "Tipo de Perfil")
             && !isVazio(servicosSelecionados, "Serviços que realiza")
-            && isLengthValid(senha, 6, "Senha")
+            && (isEditar || isLengthValid(senha, 6, "Senha"))
         ) {
             return true;
         }
@@ -121,35 +153,58 @@ const AdicionarFuncionario = () => {
             email,
             senha,
             perfilAcesso: perfil,
-            empresa
+            empresa,
+            bitStatus: bitStatus.value
         };
         if (validarFuncionario()) {
-            api.post(url, objetoAdicionado).then((response) => {
-                const { data } = response;
-                const { id } = data;
-                console.log(data)
-                console.log(response)
+            if (isEditar) {
+                api.put(url, objetoAdicionado).then((response) => {
+                    const { data } = response;
+                    console.log(data)
+                    console.log(response)
 
-                for (let index = 0; index < servicosSelecionados.length; index++) {
-                    let servicoAdicionado = {
-                        idFuncionario: id,
-                        idServicoPreco: servicosSelecionados[index].id,
-                        dtCriacao: new Date(),
-                        bitStatus: 1
+                    for (let index = 0; index < servicosPorFuncionario.length; index++) {
+                        var servicoFuncionario = servicosPorFuncionario[index]
+                        api.patch(`/servico-por-funcionario/${idEmpresa}/${idProfissional}/${servicoFuncionario.id}`).then().catch((error) => {
+                            console.error(error)
+                        })
                     }
+                    toast.success("Funcionario atualizado com sucesso!");
+                    navigate("/equipe");
+                }).catch((error) => {
+                    console.error(error)
+                    toast.error("Ocorreu um erro ao atualizar os dados, por favor, tente novamente.");
+                })
 
-                    api.post(`/servico-por-funcionario/${idEmpresa}`, servicoAdicionado).then().catch((error) => {
-                        console.error(error)
-                        toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
-                    })
-                }
-                toast.success("Funcionario adicionado com sucesso!");
-                sessionStorage.setItem("editado", JSON.stringify(objetoAdicionado));
-                navigate("/equipe");
-            }).catch((error) => {
-                console.error(error)
-                toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
-            })
+            } else {
+
+                api.post(url, objetoAdicionado).then((response) => {
+                    const { data } = response;
+                    const { id } = data;
+                    console.log(data)
+                    console.log(response)
+
+                    for (let index = 0; index < servicosSelecionados.length; index++) {
+                        let servicoAdicionado = {
+                            idFuncionario: id,
+                            idServicoPreco: servicosSelecionados[index].id,
+                            dtCriacao: new Date(),
+                            bitStatus: 1
+                        }
+
+                        api.post(`/servico-por-funcionario/${idEmpresa}`, servicoAdicionado).then().catch((error) => {
+                            console.error(error)
+                            toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
+                        })
+                    }
+                    toast.success("Funcionario adicionado com sucesso!");
+                    sessionStorage.setItem("editado", JSON.stringify(objetoAdicionado));
+                    navigate("/equipe");
+                }).catch((error) => {
+                    console.error(error)
+                    toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
+                })
+            }
         }
     };
 
@@ -199,35 +254,35 @@ const AdicionarFuncionario = () => {
                                 alterarValor={setEmail}
                                 titulo={"Email"}
                             />
-                            <Input
+                            {isEditar ? "" : <Input
                                 id="senha"
                                 tamanho={"lg"}
                                 valor={senha}
                                 alterarValor={setSenha}
                                 titulo={"Senha"}
                                 type={"password"}
-                            />
+                            />}
 
                             <div className={styles["group-input"]}>
                                 <SelectInput
                                     id={"tipoPerfil"}
-                                    tamanho={"lg"}
+                                    tamanho={isEditar ? "md" : "lg"}
                                     options={options}
                                     valor={tipoPerfil}
                                     alterarValor={setTipoPerfil}
                                     titulo={"Tipo de Perfil"}
                                 />
 
-                                <div className={styles[isEditar ? "selectInput-status" : "none-selectInput-status"]}>
-                                    <SelectInput
-                                        id={"status"}
-                                        tamanho={"lg"}
-                                        options={options}
-                                        valor={bitStatus}
-                                        alterarValor={setBitStatus}
-                                        titulo={"Status"}
-                                    />
-                                </div>
+                                {/* <div className={styles[isEditar ? "selectInput-status" : "none-selectInput-status"]}> */}
+                                <SelectInput exibir={!isEditar || undefined}
+                                    id={"status"}
+                                    tamanho={"md"}
+                                    options={optionsStatus}
+                                    valor={bitStatus}
+                                    alterarValor={setBitStatus}
+                                    titulo={"Status"}
+                                />
+                                {/* </div> */}
                             </div>
 
                             <Ul className={styles["servicos-grid"]}
@@ -235,7 +290,6 @@ const AdicionarFuncionario = () => {
                                 items={items}
                                 servicosSelecionados={servicosSelecionados}
                                 toggleServico={toggleServico}
-                                nomeCampo={isEditar ? "nomeServico" : undefined}
                             />
                         </div>
                         <div className={styles["group-button"]}>
