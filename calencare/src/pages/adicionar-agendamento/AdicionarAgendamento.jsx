@@ -25,6 +25,7 @@ const AdicionarAgendamento = () => {
     const { idAgenda } = useParams();
     const [nomeUser, setNomeUser] = useState("");
     const idEmpresa = sessionStorage.getItem("idEmpresa");
+    const [clienteId, setClienteId] = useState(localStorage.getItem("clienteId") || "");
     const [cliente, setCliente] = useState();
     const [clientes, setClientes] = useState([]);
     const [nomeCliente, setNomeCliente] = useState("");
@@ -54,19 +55,35 @@ const AdicionarAgendamento = () => {
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
     const [items, setItems] = useState([]);
 
+
+    useEffect(() => {
+        if (clienteId) {
+            // Buscar os detalhes do cliente usando o ID do cliente armazenado
+            api.get(`/clientes/${clienteId}`)
+                .then(response => {
+                    setCliente(response.data);
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar detalhes do cliente:", error);
+                });
+        }
+    }, [clienteId]);
+
     const validarAgenda = () => {
-        if (!isVazio(cliente, "Cliente")
-            && !isVazio(dataAgenda, "Data")
-            && !isVazio(options, "Tipo de Perfil")
-            && !isVazio(tipoPerfil, "Tipo de Perfil")
-            && !isVazio(servicosSelecionados, "Serviços que realiza")
+        if (
+            !isVazio(cliente, "Cliente") &&
+            !isVazio(dataAgenda, "Data") &&
+            !isVazio(options, "Tipo de Perfil") &&
+            !isVazio(tipoPerfil, "Tipo de Perfil") &&
+            !isVazio(servicosSelecionados, "Serviços que realiza") &&
+            !isVazio(data, "Data")
         ) {
             return true;
         }
-
+    
         return false;
-    }
-
+    };
+    
     const toggleServico = (item) => {
         if (servicosSelecionados.includes(item)) {
             setServicosSelecionados(servicosSelecionados.filter(servico => servico !== item));
@@ -143,32 +160,45 @@ const AdicionarAgendamento = () => {
         return false
     }
 
-    const adicionarCliente = () => {
-        if (validarCadastroCliente()) {
-            let body = {
-                "nome": nomeCliente,
-                // "sobrenome": sobrenomeCliente,
-                "telefone": telefoneCliente,
-                "email": emailCliente,
-                // "dtNascimento": dataNascimentoCliente
-            }
+    const atualizarClientes = (novoCliente) => {
+        setClientes([...clientes, novoCliente]); // Adicione o novo cliente à lista de clientes
+        setCliente(novoCliente); // Defina o novo cliente como o cliente selecionado
+    };
 
-            api.post("/clientes", body).then(() => {
-                setNomeCliente("");
-                setSobrenomeCliente("");
-                setEmailCliente("");
-                setTelefoneCliente("");
-                setDataNascimentoCliente("");
-                toast.success("Cliente adicionado com sucesso!");
-                abrirModal();
-                buscarClientes()
-            }).catch((error) => {
-                toast.error("Houve um erro ao tentar adicionar cliente");
-                console.error("Houve um erro ao tentar adicionar cliente!");
-                console.error(error)
-            })
+    const adicionarCliente = () => {
+    if (validarCadastroCliente()) {
+        let body = {
+            "nome": nomeCliente,
+            "telefone": telefoneCliente,
+            "email": emailCliente,
         }
+
+        api.post("/clientes", body)
+        .then((response) => {
+            setNomeCliente("");
+            setSobrenomeCliente("");
+            setEmailCliente("");
+            setTelefoneCliente("");
+            setDataNascimentoCliente("");
+            toast.success("Cliente adicionado com sucesso!");
+            abrirModal();
+            const novoCliente = {
+                id: response.data.id,
+                label: nomeCliente,
+                value: nomeCliente
+            };
+            atualizarClientes(novoCliente); 
+            setCliente(novoCliente); 
+            //abrirModal(novoCliente);
+            setOptions([...options, novoCliente]);
+        }).catch((error) => {
+            toast.error("Houve um erro ao tentar adicionar cliente");
+            console.error("Houve um erro ao tentar adicionar cliente!");
+            console.error(error)
+        })
     }
+}
+
 
     const buscarClientes = (index) => {
         api.get(`/clientes/${sessionStorage.getItem("idEmpresa")}`).then((response) => {
