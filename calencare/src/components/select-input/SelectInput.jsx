@@ -5,7 +5,7 @@ import Select from 'react-select';
 
 const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar, criarOption, exibir }) => {
     const mudarValor = (value) => {
-        if (value.label === "Criar") {
+        if (value.value === "Criar") {
             funcaoAdicionar()
         } else {
             alterarValor(value)
@@ -47,7 +47,7 @@ const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, 
                                     fontWeight: 500,
                                     borderColor: state.isFocused ? "var(--preto)" : "var(--texto-cinza)",
                                     borderWidth: state.isFocused ? "2px" : "1.5px",
-                                    width: tamanho === "md" ? "80%" : "",
+                                    // width: tamanho === "md" ? "100%" : "",
                                     background: "white"
                                 }),
                             }}
@@ -77,7 +77,7 @@ const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, 
                                     fontWeight: 500,
                                     borderColor: state.isFocused ? "var(--preto)" : "var(--texto-cinza)",
                                     borderWidth: state.isFocused ? "2px" : "1.5px",
-                                    width: tamanho === "md" ? "80%" : "",
+                                    // width: tamanho === "md" ? "80%" : "",
                                     background: "white"
                                 }),
                             }}

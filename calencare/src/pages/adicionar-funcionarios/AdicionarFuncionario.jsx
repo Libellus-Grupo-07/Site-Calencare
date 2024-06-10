@@ -125,7 +125,7 @@ const AdicionarFuncionario = () => {
         });
 
 
-    }, [navigate, isEditar, idProfissional, idUser, idEmpresa]);
+    }, [navigate, isEditar, idProfissional, idUser, idEmpresa, options, optionsStatus]);
 
 
     const validarFuncionario = () => {

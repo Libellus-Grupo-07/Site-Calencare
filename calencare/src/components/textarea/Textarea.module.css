@@ -1,4 +1,4 @@
-textarea{
+.textarea{
     padding: 16px 24px;
     height: 96px;
     border-radius: 1.2rem;
@@ -8,6 +8,13 @@ textarea{
     letter-spacing: -0.03rem;
     color: var(--texto-preto);
     font-weight: 500;
+}
+
+
+.textarea:focus {
+  outline: none;
+  border-width: 2px;
+  box-shadow: 0px 7px 4px var(--texto-cinza-opacidade-15);
 }
 
 .componet-input{

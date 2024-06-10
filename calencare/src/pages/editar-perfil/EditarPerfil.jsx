@@ -10,17 +10,22 @@ import Input from "../../components/input/Input";
 import { FaCheck } from "react-icons/fa6";
 import { TiCancel } from "react-icons/ti";
 import { toast } from "react-toastify";
+import Ul from "../../components/ul/Ul";
 
 const EditarPerfil = () => {
     const navigate = useNavigate();
 
     const { idUser } = useParams();
+    const idEmpresa  = sessionStorage.idEmpresa;
     const [nome, setNome] = useState("");
     const [nomeUser, setNomeUser] = useState("");
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
     const [dtCriacao, setDtCriacao] = useState("");
     const [empresa, setEmpresa] = useState({});
+    const [servicosSelecionados, setServicosSelecionados] = useState([]);
+    const [servicosPorFuncionario, setServicosPorFuncionario] = useState([]);
+    const [items, setItems] = useState([]);
 
     const voltar = () => {
         navigate(`/perfil/${idUser}`);
@@ -64,7 +69,48 @@ const EditarPerfil = () => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
         });
-    }, [idUser]);
+
+        api.get(`/servico-preco/${idEmpresa}`).then((response) => {
+            const { data } = response;
+            const resposta = data
+            setItems(resposta.length === 0 ? [] : resposta)
+
+            api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${idUser}`
+            ).then((response) => {
+                const { data } = response;
+                setServicosPorFuncionario(data)
+                var servicosRealizados = []
+                // Percorrendo a lista de servicos realizados pelo funcionario
+                for (let index = 0; index < data.length; index++) {
+                    const element = data[index];
+                    // resposta do servico preco(todos os servicos cadastrados da empresa) e filtrando apartir do serivco atual 
+                    var servicoFuncionario = resposta.filter(s => s.nome === element.nomeServico)
+                    servicosRealizados.push(servicoFuncionario[0])
+                }
+                setServicosSelecionados(servicosRealizados)
+
+
+            }).catch((error) => {
+                console.log("Houve um erro ao buscar o serviço");
+                console.log(error);
+                });
+
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar o serviço");
+            console.log(error);
+        });
+
+
+    }, [navigate, idUser, idEmpresa]);
+
+    const toggleServico = (item) => {
+        if (servicosSelecionados.includes(item)) {
+            setServicosSelecionados(servicosSelecionados.filter(servico => servico !== item));
+        } else {
+            setServicosSelecionados([...servicosSelecionados, item]);
+        }
+    };
+
 
     return (
         <>
@@ -108,6 +154,12 @@ const EditarPerfil = () => {
                                 valor={"Administrador"}
                                 readonly={true}
                                 titulo={"Perfil"}
+                            />
+                            <Ul className={styles["servicos-grid"]}
+                                titulo={"Serviços que realiza"}
+                                items={items}
+                                servicosSelecionados={servicosSelecionados}
+                                toggleServico={toggleServico}
                             />
                         </div>
                         <div className={styles["group-button"]}>

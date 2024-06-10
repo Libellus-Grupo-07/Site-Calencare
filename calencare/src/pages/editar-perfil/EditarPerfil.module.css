@@ -77,3 +77,15 @@
   border: none;
   color: var(--texto-cinza);
 }
+
+.servicos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  list-style: none; 
+  padding: 0; 
+}
+
+.servicos-grid li {
+  text-align: center;
+}
