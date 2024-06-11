@@ -2,42 +2,33 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import api from "../../api";
 import styles from "./Clientes.module.css";
-import { logado } from "../../utils/global";
+import { isValidEmail, isVazio, logado, transformarData } from "../../utils/global";
 import { useNavigate } from "react-router-dom";
-import { Edit, IconlyProvider } from "react-iconly";
-import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Table from "../../components/table/Table";
 import ModalTemplate from "../../components/modal-template/ModalTemplate";
 import Input from "../../components/input/Input";
+import { toast } from "react-toastify";
 
 const Clientes = () => {
     const navigate = useNavigate();
     const idEmpresa = sessionStorage.getItem("idEmpresa");
     const titulos = ["Nome", "Email", "Telefone", "Cliente Desde", "Último Agendamento", ""]
     const [dados, setDados] = useState([]);
+    const [dadosResposta, setDadosResposta] = useState([]);
+    const [idCliente, setIdCliente] = useState(0);
     const [nomeCliente, setNomeCliente] = useState("");
-    const [sobrenomeCliente, setSobrenomeCliente] = useState("");
     const [emailCliente, setEmailCliente] = useState("");
     const [telefoneCliente, setTelefoneCliente] = useState("");
     const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
 
-    const tituloModal = "Adicionar Cliente";
-    const tituloBotao = "Adicionar";
-    const corpoModal = (
+    const corpoModalEditar = (
         <>
             <Input
                 id={"nomeCliente"}
                 titulo={"Nome"}
                 valor={nomeCliente}
                 alterarValor={setNomeCliente}
-            />
-
-            <Input
-                id={"sobrenomeCliente"}
-                titulo={"Sobrenome"}
-                valor={sobrenomeCliente}
-                alterarValor={setSobrenomeCliente}
             />
             <Input
                 id={"emailCliente"}
@@ -63,11 +54,25 @@ const Clientes = () => {
         </>
     )
 
-    const [nome, setNome] = useState("");
+    const corpoModalExcluir = (
+        <>
+            <span style={{
+                lineHeight: "1.5rem",
+            }}>
+                Você realmente deseja excluir o cliente <b>"{nomeCliente}"</b>?
+            </span>
+        </>
+    )
+
     const [modalAberto, setModalAberto] = useState(false);
+    const [modalExcluirAberto, setModalExcluirAberto] = useState(false);
 
     const abrirModal = () => {
         setModalAberto(!modalAberto);
+    }
+
+    const abrirModalExcluir = () => {
+        setModalExcluirAberto(!modalExcluirAberto);
     }
 
     useEffect(() => {
@@ -76,16 +81,121 @@ const Clientes = () => {
             return;
         }
 
-    }, [idEmpresa]);
+        buscarClientes();
+
+    }, [navigate]);
 
     const buscarClientes = () => {
-        api.get(`clientes/empresa/${idEmpresa}`).then((response) => {
+        // api.get(`/clientes/empresa/${idEmpresa}}`).then((response) => {
+        api.get(`/clientes`).then((response) => {
             const { data } = response;
-            console.log(data)
-            setDados(data);
+            setDadosResposta(data)
+            mapear(data);
+            // setDados(data);
         }).catch((error) => {
             console.error(error);
         })
+    }
+
+    const mapear = (data) => {
+        var dadosMapp = [];
+
+        for (let i = 0; i < data.length; i++) {
+            var dataMappAtual = [];
+            dataMappAtual.push(data[i].nome);
+            dataMappAtual.push(data[i].email);
+            dataMappAtual.push(data[i].telefone);
+            dataMappAtual.push(transformarData(data[i].dtCriacao));
+            dataMappAtual.push(
+                data[i].dtUltimoAgendamento ?
+                    transformarData(data[i].dtUltimoAgendamento)
+                    : "Não Há"
+            );
+            // dataMappAtual.push(data[i].dtAgendamento);
+            dadosMapp.push(dataMappAtual);
+        }
+
+        console.log(dadosMapp)
+        setDados(dadosMapp);
+    }
+
+    const funcaoEditar = (index) => {
+        setIdCliente(dadosResposta[index].id);
+        setNomeCliente(dadosResposta[index].nome);
+        setEmailCliente(dadosResposta[index].email);
+        setTelefoneCliente(dadosResposta[index].telefone);
+        setDataNascimentoCliente(dadosResposta[index].dtNascimento);
+        abrirModal()
+    }
+
+    const validarCamposEditar = () => {
+        if (!isVazio(nomeCliente, "Nome do Cliente") &&
+            (emailCliente === "" || (
+                !isVazio(emailCliente, "Email do Cliente") && isValidEmail(emailCliente, "Email do Cliente")
+            )) &&
+            !isVazio(telefoneCliente, "Telefone do Cliente") &&
+            !isVazio(dataNascimentoCliente, "Data de Nascimento do Cliente")
+        ) {
+            return true;
+        }
+
+        return false
+    }
+
+
+    const editar = () => {
+        if (validarCamposEditar()) {
+            let body = {
+                nome: nomeCliente,
+                email: emailCliente,
+                telefone: telefoneCliente,
+                dtNascimento: dataNascimentoCliente
+            }
+
+            api.put(`/clientes/${idCliente}`, body).then(() => {
+                limparCampos()
+                toast.success("Cliente editado com sucesso!");
+                buscarClientes();
+                abrirModal()
+            }).catch((error) => {
+                toast.error("Ocorreu um erro ao tentar editar o cliente.");
+                console.error(error)
+            })
+        }
+    }
+
+    const deletar = (index) => {
+        setIdCliente(dadosResposta[index].id);
+        setNomeCliente(dadosResposta[index].nome);
+        abrirModalExcluir()
+    }
+
+    const excluir = () => {
+        api.delete(`/clientes/${idCliente}`).then(() => {
+            toast.success("Cliente excluído com sucesso!");
+            abrirModalExcluir();
+            limparCampos()
+        }).catch((error) => {
+            toast.error("Ocorreu um erro ao tentar excluir o cliente.");
+            console.error(error)
+        })
+    }
+
+    const limparCampos = () => {
+        setIdCliente("");
+        setNomeCliente("");
+        setEmailCliente("");
+        setDataNascimentoCliente("");
+    }
+
+    const cancelar = () => {
+        abrirModal()
+       limparCampos()
+    }
+    
+    const cancelarExcluir = () => {
+        abrirModalExcluir()
+       limparCampos()
     }
 
     return (
@@ -120,12 +230,14 @@ const Clientes = () => {
                                         Nenhum cliente cadastrado
                                     </div>
                                     :
-                                    <Table titulos={titulos} linhas={dados} icones={[
-                                        <IconlyProvider>
-                                            <Edit />
-                                            {/* <Delete /> */}
-                                        </IconlyProvider>]
-                                    } />
+                                    <Table
+                                        titulos={titulos}
+                                        linhas={dados}
+                                        showEditIcon={true}
+                                        showDeleteIcon={true}
+                                        funcaoEditar={funcaoEditar}
+                                        funcaoDeletar={deletar}
+                                    />
                             }
                         </div>
                     </div>
@@ -138,9 +250,20 @@ const Clientes = () => {
                     <ModalTemplate
                         aberto={modalAberto}
                         setAberto={setModalAberto}
-                        corpo={corpoModal}
-                        titulo={tituloModal}
-                        tituloBotaoConfirmar={tituloBotao}
+                        corpo={corpoModalEditar}
+                        titulo={"Editar Cliente"}
+                        tituloBotaoConfirmar={"Editar"}
+                        funcaoBotaoCancelar={cancelar}
+                        funcaoBotaoConfirmar={editar}
+                    />
+                    <ModalTemplate
+                        aberto={modalExcluirAberto}
+                        setAberto={setModalExcluirAberto}
+                        corpo={corpoModalExcluir}
+                        titulo={"Excluir Cliente"}
+                        tituloBotaoConfirmar={"Excluir"}
+                        funcaoBotaoCancelar={cancelarExcluir}
+                        funcaoBotaoConfirmar={excluir}
                     />
                 </div>
             </section>

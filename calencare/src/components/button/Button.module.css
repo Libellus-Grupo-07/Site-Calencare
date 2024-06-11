@@ -51,3 +51,13 @@
   background-color: var(--texto-branco);
   color: var(--texto-preto);
 }
+
+#desabilitado {
+  opacity: 0.5;
+}
+
+#desabilitado:hover {
+  background-color: transparent;
+  border: 1.5px solid;
+  color: var(--texto-cinza);
+}

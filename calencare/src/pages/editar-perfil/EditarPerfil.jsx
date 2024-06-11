@@ -16,7 +16,7 @@ const EditarPerfil = () => {
     const navigate = useNavigate();
 
     const { idUser } = useParams();
-    const idEmpresa  = sessionStorage.idEmpresa;
+    const idEmpresa = sessionStorage.idEmpresa;
     const [nome, setNome] = useState("");
     const [nomeUser, setNomeUser] = useState("");
     const [email, setEmail] = useState("");
@@ -93,7 +93,7 @@ const EditarPerfil = () => {
             }).catch((error) => {
                 console.log("Houve um erro ao buscar o serviço");
                 console.log(error);
-                });
+            });
 
         }).catch((error) => {
             console.log("Houve um erro ao buscar o serviço");

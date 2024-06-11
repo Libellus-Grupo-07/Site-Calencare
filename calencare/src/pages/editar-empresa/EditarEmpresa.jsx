@@ -5,7 +5,7 @@ import api from "../../api";
 import Titulo from '../../components/titulo/Titulo';
 import Button from "../../components/button/Button";
 import { useNavigate, useParams } from "react-router-dom";
-import {inputSomenteTexto, logado } from "../../utils/global";
+import { inputSomenteTexto, logado } from "../../utils/global";
 import Input from "../../components/input/Input";
 import { FaCheck } from "react-icons/fa6";
 import { TiCancel } from "react-icons/ti";
@@ -18,7 +18,7 @@ const EditarEmpresa = () => {
     const [cnpj, setCNPJ] = useState("")
     const [telefonePrincipal, setTelefonePrincipal] = useState("")
     const [emailPrincipal, setEmailPrincipal] = useState("")
-    const [intervaloAtendimento, setIntervaloAtendimento] = useState("")
+    const [intervaloAtendimento, setIntervaloAtendimento] = useState(0)
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -58,7 +58,7 @@ const EditarEmpresa = () => {
         }
         api.put(`/empresas/${idEmpresa}`, body).then((response) => {
             console.log(response);
-            toast.success("Informações atualizadas com sucesso!")
+            toast.success("Informações da Empresa atualizadas com sucesso!")
             navigate("/perfil");
         }).catch((error) => {
             console.log("Houve um erro ao atualizar o funcionário");
@@ -94,12 +94,13 @@ const EditarEmpresa = () => {
                                 alterarValor={setCNPJ}
                                 titulo={"CNPJ"}
                                 mascara={"00.000.000/0000-00"}
+                                readonly={true}
                             />
                             <Input
                                 tamanho={"lg"}
                                 valor={emailPrincipal}
                                 alterarValor={setEmailPrincipal}
-                                titulo={"Email"}
+                                titulo={"Email Principal"}
                                 type={"email"}
                             />
                             <Input
@@ -113,9 +114,10 @@ const EditarEmpresa = () => {
                                 tamanho={"lg"}
                                 valor={intervaloAtendimento}
                                 alterarValor={setIntervaloAtendimento}
-                            
+
                                 titulo={"Intervalo entre Atendimentos (em minutos)"}
                             />
+
                         </div>
                         <div className={styles["group-button"]}>
                             <Button

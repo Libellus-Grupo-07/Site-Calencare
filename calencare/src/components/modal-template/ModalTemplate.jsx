@@ -8,7 +8,7 @@ import Titulo from '../titulo/Titulo';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 
-const ModalTemplate = ({ aberto, setAberto, titulo, corpo, tituloBotaoConfirmar, funcaoBotaoConfirmar, funcaoBotaoCancelar }) => {
+const ModalTemplate = ({ tamanho, aberto, setAberto, titulo, corpo, tituloBotaoConfirmar, funcaoBotaoConfirmar, funcaoBotaoCancelar }) => {
 
     const handleClose = () => setAberto(false);
     // const handleShow = () => setAberto(true);
@@ -20,6 +20,7 @@ const ModalTemplate = ({ aberto, setAberto, titulo, corpo, tituloBotaoConfirmar,
                 onClose={handleClose}
                 center
                 showCloseIcon={false}
+                modalId={tamanho ? styles[tamanho] : ""}
                 classNames={{
                     modal: styles['modal']
                 }}
