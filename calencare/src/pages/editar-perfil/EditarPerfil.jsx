@@ -21,6 +21,7 @@ const EditarPerfil = () => {
     const [nomeUser, setNomeUser] = useState("");
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
+    const [perfilAcesso, setPerfilAcesso] = useState("");
     const [dtCriacao, setDtCriacao] = useState("");
     const [empresa, setEmpresa] = useState({});
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
@@ -28,7 +29,7 @@ const EditarPerfil = () => {
     const [items, setItems] = useState([]);
 
     const voltar = () => {
-        navigate(`/perfil/${idUser}`);
+        navigate(`/perfil`);
     }
 
     const editar = () => {
@@ -41,11 +42,44 @@ const EditarPerfil = () => {
             empresa
         }
         api.put(`/funcionarios/${idUser}`, body).then((response) => {
-            console.log(response);
+            sessionStorage.nomeUser = response.data.nome;
+
+            if (servicosPorFuncionario.length > 0) {
+                for (let index = 0; index < servicosPorFuncionario.length; index++) {
+                    console.log(servicosPorFuncionario);
+                    // Serviço por Funcionário atual
+                    var servicoFuncionario = servicosPorFuncionario[index]
+                    // Filtrando o serviço preço pelo nome do Serviço Por Funcionário atual
+                    var servicoPreco = items.filter(s => s.nome === servicoFuncionario.nomeServico);
+                    // Variavel utilizada para checar se o serviço atual está selecionado e definir o status
+                    var isSelecionado = servicosSelecionados.includes(servicoPreco[0]) ? 1 : 0;
+
+                    // Se o status do serviço vindo do BD estiver diferente do status atual, então atualiza no BD
+                    if (servicoFuncionario.bitStatus !== isSelecionado) {
+                        api.patch(`/servico-por-funcionario/${idEmpresa}/${idUser}/${servicoFuncionario.id}`).then().catch((error) => {
+                            console.error(error)
+                        })
+                    }
+                }
+            } else {
+                for (let index = 0; index < items.length; index++) {
+                    let servicoAdicionado = {
+                        idFuncionario: idUser,
+                        idServicoPreco: items[index].id,
+                        dtCriacao: new Date(),
+                        bitStatus: servicosSelecionados.includes(items[index]) ? 1 : 0
+                    }
+
+                    api.post(`/servico-por-funcionario/${idEmpresa}`, servicoAdicionado).then().catch((error) => {
+                        console.error(error)
+                    })
+                }
+            }
+
             toast.success("Informações atualizadas com sucesso!")
             voltar();
         }).catch((error) => {
-            console.log("Houve um erro ao atualizar o funcionário");
+            toast.error("Ocorreu um erro ao atualizar o funcionário");
             console.log(error);
         });
     }
@@ -58,11 +92,12 @@ const EditarPerfil = () => {
         api.get(`/funcionarios/${idUser}`).then((response) => {
             const { data } = response;
             console.log(response);
-            const { nome, email, telefone, dtCriacao, empresa } = data;
+            const { nome, email, telefone, dtCriacao, perfilAcesso, empresa } = data;
             setNome(nome);
             setNomeUser(nome)
             setEmail(email);
             setTelefone(telefone);
+            setPerfilAcesso(perfilAcesso);
             setDtCriacao(dtCriacao);
             setEmpresa(empresa);
         }).catch((error) => {
@@ -84,9 +119,10 @@ const EditarPerfil = () => {
                 for (let index = 0; index < data.length; index++) {
                     const element = data[index];
                     // resposta do servico preco(todos os servicos cadastrados da empresa) e filtrando apartir do serivco atual 
-                    var servicoFuncionario = resposta.filter(s => s.nome === element.nomeServico)
+                    var servicoFuncionario = resposta.filter(s => s.nome === element.nomeServico && element.bitStatus === 1);
                     servicosRealizados.push(servicoFuncionario[0])
                 }
+
                 setServicosSelecionados(servicosRealizados)
 
 
@@ -110,7 +146,6 @@ const EditarPerfil = () => {
             setServicosSelecionados([...servicosSelecionados, item]);
         }
     };
-
 
     return (
         <>
@@ -151,7 +186,7 @@ const EditarPerfil = () => {
                             />
                             <Input
                                 tamanho={"lg"}
-                                valor={"Administrador"}
+                                valor={perfilAcesso}
                                 readonly={true}
                                 titulo={"Perfil"}
                             />

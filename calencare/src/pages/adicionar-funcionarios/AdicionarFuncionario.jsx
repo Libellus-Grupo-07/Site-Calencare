@@ -96,7 +96,6 @@ const AdicionarFuncionario = () => {
             const resposta = data
             setItems(resposta.length === 0 ? [] : resposta)
 
-
             if (isEditar) {
                 api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${idProfissional}`
                 ).then((response) => {
@@ -107,7 +106,7 @@ const AdicionarFuncionario = () => {
                     for (let index = 0; index < data.length; index++) {
                         const element = data[index];
                         // resposta do servico preco(todos os servicos cadastrados da empresa) e filtrando apartir do serivco atual 
-                        var servicoFuncionario = resposta.filter(s => s.nome === element.nomeServico)
+                        var servicoFuncionario = resposta.filter(s => s.nome === element.nomeServico && element.bitStatus === 1)
                         servicosRealizados.push(servicoFuncionario[0])
                     }
                     setServicosSelecionados(servicosRealizados)
@@ -164,11 +163,24 @@ const AdicionarFuncionario = () => {
                     console.log(response)
 
                     for (let index = 0; index < servicosPorFuncionario.length; index++) {
+                        // Serviço por Funcionário atual
                         var servicoFuncionario = servicosPorFuncionario[index]
-                        api.patch(`/servico-por-funcionario/${idEmpresa}/${idProfissional}/${servicoFuncionario.id}`).then().catch((error) => {
-                            console.error(error)
-                        })
+                        // Filtrando o serviço preço pelo nome do Serviço Por Funcionário atual
+                        var servicoPreco = items.filter(s => s.nome === servicoFuncionario.nomeServico);
+                        // Variavel utilizada para checar se o serviço atual está selecionado e definir o status
+                        var isSelecionado = servicosSelecionados.includes(servicoPreco[0]) ? 1 : 0;
+
+                        // Se o status do serviço vindo do BD estiver diferente do status atual, então atualiza no BD
+                        if (servicoFuncionario.bitStatus !== isSelecionado) {
+                            api.patch(`/servico-por-funcionario/${idEmpresa}/${idProfissional}/${servicoFuncionario.id}`).then((response) => {
+                                console.warn("opa patch")
+                                console.error(response)
+                            }).catch((error) => {
+                                console.error(error)
+                            })
+                        }
                     }
+                    
                     toast.success("Funcionario atualizado com sucesso!");
                     navigate("/equipe");
                 }).catch((error) => {
@@ -184,12 +196,12 @@ const AdicionarFuncionario = () => {
                     console.log(data)
                     console.log(response)
 
-                    for (let index = 0; index < servicosSelecionados.length; index++) {
+                    for (let index = 0; index < items.length; index++) {
                         let servicoAdicionado = {
                             idFuncionario: id,
-                            idServicoPreco: servicosSelecionados[index].id,
+                            idServicoPreco: items[index].id,
                             dtCriacao: new Date(),
-                            bitStatus: 1
+                            bitStatus: servicosSelecionados.includes(items[index]) ? 1 : 0
                         }
 
                         api.post(`/servico-por-funcionario/${idEmpresa}`, servicoAdicionado).then().catch((error) => {

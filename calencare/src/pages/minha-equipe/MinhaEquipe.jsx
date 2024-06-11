@@ -19,6 +19,7 @@ const Equipe = () => {
 
     const [pilha, setPilha] = useState(new Pilha())
     const idEmpresa = sessionStorage.getItem("idEmpresa")
+    const idUser = sessionStorage.getItem("idUser")
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
@@ -33,9 +34,8 @@ const Equipe = () => {
         pilhaSecundaria.setPilha(sessionStorage.pilha ? JSON.parse(sessionStorage.pilha) : [])
         setPilha(pilhaSecundaria)
         buscarFuncionarios()
-    
-    }, [navigate, idEmpresa]);
 
+    }, [navigate, idEmpresa]);
 
     const buscarFuncionarios = () => {
         api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
@@ -48,20 +48,25 @@ const Equipe = () => {
         });
     }
     const desfazer = () => {
-        const id = pilha.pop();
-        const funcionarioStatusDto = {
-            bitStatus: 1
-        };
-        console.log(pilha)
-        api.patch(`/funcionarios/status/${id}`, funcionarioStatusDto)
-            .then(response => {
-                const { data } = response;
-                buscarFuncionarios()
-            })
-            .catch(error => {
-                console.log("Houve um erro ao desfazer a ação");
-                console.log(error);
-            });
+        if (pilha.isEmpty()) {
+            toast.warning("Não há nada para desfazer!")
+            return;
+        } else {
+            const id = pilha.pop();
+            const funcionarioStatusDto = {
+                bitStatus: 1
+            };
+            console.log(pilha)
+            api.patch(`/funcionarios/status/${id}`, funcionarioStatusDto)
+                .then(() => {
+                    buscarFuncionarios()
+                })
+                .catch((error) => {
+                    console.log("Houve um erro ao desfazer a ação");
+                    console.log(error);
+                });
+        }
+
     };
 
 
@@ -74,17 +79,6 @@ const Equipe = () => {
             </span>
         </>
     )
-
-    const buscarProfissional = (id) => {
-        api.get(`/funcionarios/${id}`).then((response) => {
-            const { data } = response;
-            setDados(data);
-            mapear(data);
-        }).catch((error) => {
-            console.error("Houve um erro ao buscar serviços");
-            console.error(error)
-        })
-    }
 
     const [modalAberto, setModalAberto] = useState(false);
 
@@ -127,13 +121,16 @@ const Equipe = () => {
     const mapear = (data) => {
         var dadosMapeados = []
         for (var index = 0; index < data.length; index++) {
-            var dadoAtual = []
-            dadoAtual.push(data[index].id)
-            dadoAtual.push(data[index].nome)
-            dadoAtual.push(data[index].email)
-            dadoAtual.push(data[index].telefone)
-            dadoAtual.push(data[index].bitStatus === 1 ? "Ativo" : "Inativo")
-            dadosMapeados.push(dadoAtual)
+            if (data[index].id !== idUser) {
+                var dadoAtual = []
+                dadoAtual.push(data[index].id)
+                dadoAtual.push(data[index].nome)
+                dadoAtual.push(data[index].email)
+                dadoAtual.push(data[index].telefone)
+                dadoAtual.push(data[index].bitStatus === 1 ? "Ativo" : "Inativo")
+                dadosMapeados.push(dadoAtual)
+            }
+
         }
         setDados(dadosMapeados)
     }
@@ -153,6 +150,7 @@ const Equipe = () => {
                                 <Button
                                     funcaoButton={desfazer}
                                     cor="branco"
+                                    disabled={pilha.isEmpty()}
                                     titulo={"Desfazer"}
                                     icone={<IconlyProvider
                                         stroke="bold"

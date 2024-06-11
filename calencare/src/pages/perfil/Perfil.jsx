@@ -523,6 +523,7 @@ const Perfil = () => {
                                             <Row
                                                 titulo="Data de Cadastro"
                                                 valor={transformarData(dtCriacao)}
+                                                funcao={() => navegar("usuario")}
                                             />
                                         </div>
                                     </div>
