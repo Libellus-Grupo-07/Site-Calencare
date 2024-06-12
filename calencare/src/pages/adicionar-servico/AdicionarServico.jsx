@@ -79,13 +79,14 @@ const AdicionarServico = () => {
     }
 
     const mapear = (campo, data, index, action) => {
-        var optionsMap = campo && isAdicionar === "categoria-servico" ?
+        console.error(campo)
+        var optionsMap = isAdicionar && campo === "categoria-servico" ?
             [{
                 label: "Criar nova categoria",
                 value: "Criar",
             }]
             : []
-        ;
+            ;
         let i = 0;
 
         for (i = 0; i < data.length; i++) {
@@ -98,7 +99,9 @@ const AdicionarServico = () => {
 
         i = index === 0 && action !== "E" ? index : action ? index : i;
 
-        if (campo === "categoria-servico") {
+        if (campo === "categoria-servico")
+        {   
+            console.log(optionsMap)
             setOptions(optionsMap)
             setCategoria(optionsMap[i]);
         } else {
@@ -115,9 +118,7 @@ const AdicionarServico = () => {
 
         buscarCategoriasServico("C");
         buscarServicos("C");
-    }, [navigate]);
 
-    useEffect(() => {
         if (!isAdicionar) {
             api.get(`/servico-preco/${idEmpresa}/${idServico}`).then((response) => {
                 const { data } = response;
@@ -136,7 +137,7 @@ const AdicionarServico = () => {
                 console.error(error)
             })
         }
-    }, [isAdicionar, idEmpresa, idServico]);
+    }, [navigate, isAdicionar, idEmpresa, idServico, optionsStatus]);
 
     const tituloModal = "Adicionar Categoria de Serviço";
     const tituloBotao = "Adicionar";

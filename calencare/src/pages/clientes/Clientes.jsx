@@ -93,8 +93,7 @@ const Clientes = () => {
     }, [navigate]);
 
     const buscarClientes = () => {
-        // api.get(`/clientes/empresa/${idEmpresa}}`).then((response) => {
-        api.get(`/clientes/empresa/${idEmpresa}`).then((response) => {
+        api.get(`/clientes/listar/${idEmpresa}`).then((response) => {
             const { data } = response;
             setDadosResposta(data)
             mapear(data);
@@ -109,7 +108,7 @@ const Clientes = () => {
 
         for (let i = 0; i < data.length; i++) {
             var dataMappAtual = [];
-            dataMappAtual.push(data[i].nome);
+            dataMappAtual.push(data[i].nome + " " + data[i].sobrenome);
             dataMappAtual.push(data[i].email);
             dataMappAtual.push(data[i].telefone);
             dataMappAtual.push(transformarData(data[i].dtCriacao));
@@ -129,6 +128,7 @@ const Clientes = () => {
     const funcaoEditar = (index) => {
         setIdCliente(dadosResposta[index].id);
         setNomeCliente(dadosResposta[index].nome);
+        setSobrenomeCliente(dadosResposta[index].sobrenome);
         setEmailCliente(dadosResposta[index].email);
         setTelefoneCliente(dadosResposta[index].telefone);
         // setDataNascimentoCliente(dadosResposta[index].dtNascimento);
@@ -155,13 +155,13 @@ const Clientes = () => {
         if (validarCamposEditar()) {
             let body = {
                 nome: nomeCliente,
-                nome: sobrenomeCliente,
+                sobrenome: sobrenomeCliente,
                 email: emailCliente,
                 telefone: telefoneCliente,
                 dtNascimento: dataNascimentoCliente
             }
 
-            api.put(`/clientes/${idCliente}`, body).then(() => {
+            api.put(`/clientes/${idEmpresa}/${idCliente}`, body).then(() => {
                 limparCampos()
                 toast.success("Cliente editado com sucesso!");
                 buscarClientes();
@@ -180,10 +180,11 @@ const Clientes = () => {
     }
 
     const excluir = () => {
-        api.delete(`/clientes/${idCliente}`).then(() => {
+        api.delete(`/clientes/${idEmpresa}/${idCliente}`).then(() => {
             toast.success("Cliente excluído com sucesso!");
             abrirModalExcluir();
             limparCampos()
+            buscarClientes()
         }).catch((error) => {
             toast.error("Ocorreu um erro ao tentar excluir o cliente.");
             console.error(error)
@@ -199,12 +200,12 @@ const Clientes = () => {
 
     const cancelar = () => {
         abrirModal()
-       limparCampos()
+        limparCampos()
     }
     
     const cancelarExcluir = () => {
         abrirModalExcluir()
-       limparCampos()
+        limparCampos()
     }
 
     return (

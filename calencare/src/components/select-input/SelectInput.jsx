@@ -13,11 +13,11 @@ const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, 
         }
     }
 
-    useEffect(() => {
-        if (options.length > 0 && options[options.length - 1].label !== "Criar") {
-            alterarValor(options[options.length - 1]);
-        }
-    }, [options]);
+    // useEffect(() => {
+    //     if (options.length > 0 && options[options.length - 1].label !== "Criar") {
+    //         alterarValor(options[options.length - 1]);
+    //     }
+    // }, [options]);
 
     return (
         <>

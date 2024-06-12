@@ -19,7 +19,7 @@ const Equipe = () => {
 
     const [pilha, setPilha] = useState(new Pilha())
     const idEmpresa = sessionStorage.getItem("idEmpresa")
-    const idUser = sessionStorage.getItem("idUser")
+    const idUser = Number(sessionStorage.idUser);
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
@@ -39,10 +39,10 @@ const Equipe = () => {
 
     const buscarFuncionarios = () => {
         api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
-            console.log(data)
             const { data } = response;
             var listaServicosFuncionarios = [];
-            for (let index = 0; index < data.length; index++) {
+
+            for (let index = 1; index < data.length; index++) {
                 var funcionarioAtual = data[index]
                 var id = funcionarioAtual.id
                 api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${id}`).then((response) => {
@@ -53,10 +53,10 @@ const Equipe = () => {
                     console.error(error)
                 })
             }
-            setDados(data);
+
+            setDados(data.filter(p => p.id !== idUser));
             setListaServico(listaServicosFuncionarios);
-            mapear(data);
-            console.log(data)
+            // mapear(data);
         }).catch((error) => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
@@ -103,13 +103,13 @@ const Equipe = () => {
     }
 
     const editar = (index) => {
-        let idprofissional = dados[index][0];
+        let idprofissional = dados[index].id;
         navigate(`/profissional/editar/${idprofissional}`);
     }
 
     const deletar = (index) => {
-        var id = dados[index][0];
-        var nome = dados[index][1];
+        var id = dados[index].id;
+        var nome = dados[index].nome;
         setIdProfissional(id)
         setNome(nome)
         abrirModal(nome);
@@ -134,16 +134,25 @@ const Equipe = () => {
         })
     }
 
-    const mapear = (data, listaServicos) => {
+    /*const mapear = (data, listaServicos) => {
         var dadosMapeados = [];
         for (var index = 0; index < data.length; index++) {
-            if (data[index].id !== idUser) {
+            if (Number(data[index].id) !== Number(idUser)) {
                 var dadoAtual = []
                 dadoAtual.push(data[index].id)
                 dadoAtual.push(data[index].nome)
                 dadoAtual.push(data[index].email)
                 dadoAtual.push(data[index].telefone)
-                dadoAtual.push(data[index].bitStatus === 1 ? "Ativo" : "Inativo")
+                dadoAtual.push(data[index].bitStatus)
+                const servicos = listaServicos[index];
+                const servicosList = (
+                    <ul>
+                        {servicos.map((servico, index) => (
+                            <li key={index}>{servico.nomeServico}</li>
+                        ))}
+                    </ul>
+                );
+                dadoAtual.push(servicosList);
                 dadosMapeados.push(dadoAtual)
             }
             /*var dadoAtual = [];
@@ -152,20 +161,12 @@ const Equipe = () => {
             dadoAtual.push(data[index].email);
             dadoAtual.push(data[index].telefone);
             dadoAtual.push(data[index].bitStatus === 1 ? "Ativo" : "Inativo");
-            const servicos = listaServicos[index];
-            const servicosList = (
-                <ul>
-                    {servicos.map((servico, index) => (
-                        <li key={index}>{servico.nomeServico}</li>
-                    ))}
-                </ul>
-            );
-            dadoAtual.push(servicosList);
+            
 
-            dadosMapeados.push(dadoAtual);*/
+            dadosMapeados.push(dadoAtual);
         }
         setDados(dadosMapeados);
-    };
+    };*/
 
     return (
         <>

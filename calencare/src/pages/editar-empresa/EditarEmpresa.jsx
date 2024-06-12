@@ -108,7 +108,7 @@ const EditarEmpresa = () => {
                                 valor={telefonePrincipal}
                                 alterarValor={setTelefonePrincipal}
                                 titulo={"Telefone Principal"}
-                                mascara={"(00) 0000-0000"}
+                                mascara={telefonePrincipal.length === 14 ? "(00) 0000-00000" : "(00) 00000-0000"}
                             />
                             <Input
                                 tamanho={"lg"}

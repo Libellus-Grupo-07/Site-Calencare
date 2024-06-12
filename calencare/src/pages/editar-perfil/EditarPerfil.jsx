@@ -39,6 +39,8 @@ const EditarPerfil = () => {
             email,
             telefone,
             dtCriacao,
+            perfilAcesso,
+            bitStatus: 1,
             empresa
         }
         api.put(`/funcionarios/${idUser}`, body).then((response) => {

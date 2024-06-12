@@ -29,7 +29,7 @@ const Table = ({ titulos, linhas, showEditIcon, showDeleteIcon, funcaoEditar, fu
                                     {linha.map((dado, index2) => (
                                         <td key={index2} onClick={() => funcaoEditar(index)}>
                                             <div className={styles["td-div"]}>
-                                                {dado}
+                                                {dado} 
                                             </div>
                                         </td>
                                     ))
