@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./SelectInput.module.css";
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
+
 
 const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar, criarOption, exibir }) => {
     const mudarValor = (value) => {
@@ -11,6 +12,12 @@ const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, 
             alterarValor(value)
         }
     }
+
+    useEffect(() => {
+        if (options.length > 0 && options[options.length - 1].label !== "Criar") {
+            alterarValor(options[options.length - 1]);
+        }
+    }, [options]);
 
     return (
         <>
