@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Input from "../../components/input/Input";
-import { inputSomenteTexto, logado, isVazio, isValidEmail } from "../../utils/global";
+import { inputSomenteTexto, logado, isVazio, isValidEmail, transformarHora, transformarData, transformarDataHora } from "../../utils/global";
 import styles from "./AdicionarAgendamento.module.css";
 import Ul from "../../components/ul/Ul";
 import { TickSquare } from "react-iconly";
@@ -20,12 +20,12 @@ const AdicionarAgendamento = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const isEditar = location.pathname === "/agendas";
-    const [dados, setDados] = useState("");
+    const [dadosClientes, setDadosClientes] = useState("");
+    const [dadosProfissionais, setDadosProfissionais] = useState("");
 
     const { idAgenda } = useParams();
     const [nomeUser, setNomeUser] = useState("");
     const idEmpresa = sessionStorage.getItem("idEmpresa");
-    const [clienteId, setClienteId] = useState(localStorage.getItem("clienteId") || "");
     const [cliente, setCliente] = useState();
     const [clientes, setClientes] = useState([]);
     const [nomeCliente, setNomeCliente] = useState("");
@@ -34,56 +34,30 @@ const AdicionarAgendamento = () => {
     const [telefoneCliente, setTelefoneCliente] = useState("");
     const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
     const [modalAberto, setModalAberto] = useState(false);
-    const [nome, setNome] = useState("");
     const [data, setData] = useState("");
     // const [cliente, setCliente] = useState("");
     const [dataAgenda, setDataAgenda] = useState("");
-    const [options, setOptions] = useState([
-        {
-            label: "Selecione",
-            value: null
-        }, {
-            label: "Administrador",
-            value: "Adminstrador"
-        },
-        {
-            label: "Funcionário",
-            value: "Funcionário"
-        }]);
-
-    const [tipoPerfil, setTipoPerfil] = useState(options[0])
+    const [hora, setHora] = useState("");
+    const [dia, setDia] = useState("");
+    const [profissonais, setProfissionais] = useState([]);
+    const [Profissional, setProfissional] = useState("")
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
     const [items, setItems] = useState([]);
 
 
-    useEffect(() => {
-        if (clienteId) {
-            // Buscar os detalhes do cliente usando o ID do cliente armazenado
-            api.get(`/clientes/${clienteId}`)
-                .then(response => {
-                    setCliente(response.data);
-                })
-                .catch(error => {
-                    console.error("Erro ao buscar detalhes do cliente:", error);
-                });
-        }
-    }, [clienteId]);
-
     const validarAgenda = () => {
         if (
             !isVazio(cliente, "Cliente") &&
-            !isVazio(dataAgenda, "Data") &&
-            !isVazio(options, "Tipo de Perfil") &&
-            !isVazio(tipoPerfil, "Tipo de Perfil") &&
+            !isVazio(Profissional, "profissional") &&
             !isVazio(servicosSelecionados, "Serviços que realiza") &&
             !isVazio(data, "Data")
         ) {
             return true;
         }
-    
+
         return false;
     };
-    
+
     const toggleServico = (item) => {
         if (servicosSelecionados.includes(item)) {
             setServicosSelecionados(servicosSelecionados.filter(servico => servico !== item));
@@ -116,7 +90,7 @@ const AdicionarAgendamento = () => {
             />
             <Input
                 id={"emailCliente"}
-                titulo={"Email (Opcional)"}
+                titulo={"Email"}
                 placeholder={"Email"}
                 valor={emailCliente}
                 alterarValor={setEmailCliente}
@@ -166,45 +140,47 @@ const AdicionarAgendamento = () => {
     };
 
     const adicionarCliente = () => {
-    if (validarCadastroCliente()) {
-        let body = {
-            "nome": nomeCliente,
-            "telefone": telefoneCliente,
-            "email": emailCliente,
-        }
+        if (validarCadastroCliente()) {
+            let body = {
+                "nome": nomeCliente,
+                "sobrenome": sobrenomeCliente,
+                "telefone": telefoneCliente,
+                "email": emailCliente,
+                empresaId: idEmpresa
+            }
 
-        api.post("/clientes", body)
-        .then((response) => {
-            setNomeCliente("");
-            setSobrenomeCliente("");
-            setEmailCliente("");
-            setTelefoneCliente("");
-            setDataNascimentoCliente("");
-            toast.success("Cliente adicionado com sucesso!");
-            abrirModal();
-            const novoCliente = {
-                id: response.data.id,
-                label: nomeCliente,
-                value: nomeCliente
-            };
-            atualizarClientes(novoCliente); 
-            setCliente(novoCliente); 
-            //abrirModal(novoCliente);
-            setOptions([...options, novoCliente]);
-        }).catch((error) => {
-            toast.error("Houve um erro ao tentar adicionar cliente");
-            console.error("Houve um erro ao tentar adicionar cliente!");
-            console.error(error)
-        })
+            api.post("/clientes", body)
+                .then((response) => {
+                    setNomeCliente("");
+                    setSobrenomeCliente("");
+                    setEmailCliente("");
+                    setTelefoneCliente("");
+                    setDataNascimentoCliente("");
+                    toast.success("Cliente adicionado com sucesso!");
+                    abrirModal();
+                    const novoCliente = {
+                        id: response.data.id,
+                        label: nomeCliente,
+                        value: nomeCliente
+                    };
+                    atualizarClientes(novoCliente);
+                    setCliente(novoCliente);
+                    //abrirModal(novoCliente);
+                }).catch((error) => {
+                    toast.error("Houve um erro ao tentar adicionar cliente");
+                    console.error("Houve um erro ao tentar adicionar cliente!");
+                    console.error(error)
+                })
+        }
     }
-}
 
 
     const buscarClientes = (index) => {
         api.get(`/clientes/${sessionStorage.getItem("idEmpresa")}`).then((response) => {
             const { data } = response;
             console.log(data);
-            mapear(data, index);
+            mapear(data, index, "cliente");
+            setDadosClientes(data)
 
         }).catch((error) => {
             console.log("Houve um erro ao buscar clientes");
@@ -213,6 +189,10 @@ const AdicionarAgendamento = () => {
     }
 
     useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
         api.get(`/servico-preco/${idEmpresa}`).then((response) => {
             console.log("buscar servicos")
             const { data } = response;
@@ -225,40 +205,37 @@ const AdicionarAgendamento = () => {
         });
         buscarClientes()
 
+        api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
+            console.log("buscar funcionarios")
+            const { data } = response;
+            console.log(response);
+            mapear(data, 0, "profissional")
+            setDadosProfissionais(data)
+
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar um funcionario");
+            console.log(error);
+        });
     }, [idEmpresa]);
 
-    // useEffect(() => {
-    //     if (!logado(sessionStorage.getItem("token"))) {
-    //         navigate("/login");
-    //         return;
-    //     }
 
-    // api.get(`/agendas/${idUser}`).then((response) => {
-    //     const { data } = response;
-    //     console.log(response);
-    //     const { nome } = data;
-    //     setNomeUser(nome);
-    // }).catch((error) => {
-    //     console.log("Houve um erro ao buscar o funcionário");
-    //     console.log(error);
-    // });
+    const mapear = (data, index, nomeVetor) => {
+        var dataMapp = [];
 
-    //     buscarClientes(0)
+        if (nomeVetor === "cliente") {
+            dataMapp.push({
+                //id: data[i].id,
+                label: "Criar",
+                value: "Criar"
+            })
+        }
 
-
-    // }, [idUser]);
-
-    const mapear = (data, index) => {
-        var dataMapp = [{
-            //id: data[i].id,
-            label: "Criar",
-            value: "Criar"
-        }];
         let i = 0;
 
         for (i = 0; i < data.length; i++) {
             dataMapp.push({
                 id: data[i].id,
+                index: i,
                 label: data[i].nome,
                 value: data[i].nome
             })
@@ -266,46 +243,48 @@ const AdicionarAgendamento = () => {
 
         i = index === 0 ? index - 1 : i;
         console.log(i);
-        setClientes(dataMapp);
-        setCliente(dataMapp[i]);
+        if (nomeVetor === "cliente") {
+            setClientes(dataMapp);
+            setCliente(dataMapp[i]);
+        } else {
+            setProfissionais(dataMapp);
+            setProfissional(dataMapp[i]);
+        }
     }
 
     const handleSave = () => {
-        var url = isEditar ? `/agendas/${idAgenda}` : "/agendas"
-        const objetoAdicionado = {
-            cliente,
-            dataAgenda,
-            options,
-            tipoPerfil,
-            servicosSelecionados
-        };
+        console.log(cliente)
+
         if (validarAgenda()) {
-            api.post(url, objetoAdicionado).then((response) => {
-                const { data } = response;
-                const { id } = data;
-
-                for (let index = 0; index < servicosSelecionados.length; index++) {
-                    let servicoAdicionado = {
-                        idAgenda: id,
-                        idServicoPreco: servicosSelecionados[index].id,
-                        dtCriacao: new Date(),
-                        bitStatus: 1
-                    }
-
-                    api.post(`/servicos/${idEmpresa}`, servicoAdicionado).then().catch((error) => {
-                        console.error(error)
-                        toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
-                    })
+            for (let index = 0; index < servicosSelecionados.length; index++) {
+                let dataHora = dataAgenda + "T" + hora;
+                let AgendaAdicionado = {
+                    idServicoPreco: servicosSelecionados[index].id,
+                    //dtHora: transformarDataHora(dataAgenda),
+                    dtHora: dataHora,
+                    dia: transformarData(data),
+                    horario: transformarHora(hora),
+                    bitStatus: 1,
+                    cliente: dadosClientes[cliente.index],
+                    profissional: dadosProfissionais[Profissional.index]
                 }
-                toast.success("Agendamento adicionada com sucesso!");
-                sessionStorage.setItem("editado", JSON.stringify(objetoAdicionado));
-                navigate("/agendas");
-            }).catch((error) => {
-                console.error(error)
-                toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
-            })
-        }
-    };
+
+                api.post(`/agendamentos/${Profissional.id}/${cliente.id}/${servicosSelecionados[index].id}`, AgendaAdicionado).then((response) => {
+                    const { data } = response;
+                    const { id } = data;
+                    toast.success("Agendamento adicionada com sucesso!");
+                    sessionStorage.setItem("editado", JSON.stringify(AgendaAdicionado));
+                    navigate("/agendas");
+
+                    console.log("Json de servico adicionado " + JSON.stringify(AgendaAdicionado));
+
+                }).catch((error) => {
+                    console.error(error)
+                    toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
+                })
+            }
+        };
+    }
 
     return (
         <>
@@ -338,23 +317,42 @@ const AdicionarAgendamento = () => {
                                 nomeCampo={undefined}
                             />
                             <SelectInput
-                                id={"tipoPerfil"}
+                                id={"profissional"}
                                 tamanho={"lg"}
-                                options={options}
-                                valor={tipoPerfil}
-                                alterarValor={setTipoPerfil}
+                                options={profissonais}
+                                valor={Profissional}
+                                alterarValor={setProfissional}
                                 titulo={"Profissional"}
 
 
                             />
-
                             <Input
                                 id="data"
-                                valor={data}
-                                type={"date"}
-                                alterarValor={setData}
-                                titulo={"Data"}
+                                valor={dataAgenda}
+                                type={"datetime-local"}
+                                alterarValor={setDataAgenda}
+                                titulo={"Data e Hora"}
+                                tamanho={"lg"}
                             />
+                            <div className={styles["group-input"]}>
+                                <Input
+                                    id="data"
+                                    valor={dia}
+                                    type={"date"}
+                                    alterarValor={setDia}
+                                    titulo={"Data"}
+                                    tamanho={"lg"}
+
+                                />
+                                <Input
+                                    id="hora"
+                                    valor={hora}
+                                    type={"hora"}
+                                    alterarValor={setHora}
+                                    titulo={"Hora"}
+                                    tamanho={"lg"}
+                                />
+                            </div>
 
                         </div>
 
@@ -401,5 +399,6 @@ const AdicionarAgendamento = () => {
         </>
     );
 };
+
 
 export default AdicionarAgendamento;

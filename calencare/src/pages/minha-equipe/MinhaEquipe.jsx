@@ -22,6 +22,7 @@ const Equipe = () => {
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
+    const [listaServico, setListaServico] = useState("")
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -33,13 +34,28 @@ const Equipe = () => {
         pilhaSecundaria.setPilha(sessionStorage.pilha ? JSON.parse(sessionStorage.pilha) : [])
         setPilha(pilhaSecundaria)
         buscarFuncionarios()
-    
+
     }, [navigate, idEmpresa]);
 
 
     const buscarFuncionarios = () => {
         api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
+            console.log(data)
             const { data } = response;
+            var listaServicosFuncionarios = [];
+            for (let index = 0; index < data.length; index++) {
+                var funcionarioAtual = data[index]
+                var id = funcionarioAtual.id
+                api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${id}`).then((response) => {
+                    const { data } = response;
+                    listaServicosFuncionarios.push(data);
+                }).catch((error) => {
+                    console.error("Houve um erro ao buscar serviços");
+                    console.error(error)
+                })
+            }
+            setDados(data);
+            setListaServico(listaServicosFuncionarios);
             mapear(data);
             console.log(data)
         }).catch((error) => {
@@ -47,6 +63,7 @@ const Equipe = () => {
             console.log(error);
         });
     }
+
     const desfazer = () => {
         const id = pilha.pop();
         const funcionarioStatusDto = {
@@ -124,19 +141,29 @@ const Equipe = () => {
         })
     }
 
-    const mapear = (data) => {
-        var dadosMapeados = []
+    const mapear = (data, listaServicos) => {
+        var dadosMapeados = [];
         for (var index = 0; index < data.length; index++) {
-            var dadoAtual = []
-            dadoAtual.push(data[index].id)
-            dadoAtual.push(data[index].nome)
-            dadoAtual.push(data[index].email)
-            dadoAtual.push(data[index].telefone)
-            dadoAtual.push(data[index].bitStatus === 1 ? "Ativo" : "Inativo")
-            dadosMapeados.push(dadoAtual)
+            var dadoAtual = [];
+            dadoAtual.push(data[index].id);
+            dadoAtual.push(data[index].nome);
+            dadoAtual.push(data[index].email);
+            dadoAtual.push(data[index].telefone);
+            dadoAtual.push(data[index].bitStatus === 1 ? "Ativo" : "Inativo");
+            const servicos = listaServicos[index];
+            const servicosList = (
+                <ul>
+                    {servicos.map((servico, index) => (
+                        <li key={index}>{servico.nomeServico}</li>
+                    ))}
+                </ul>
+            );
+            dadoAtual.push(servicosList);
+
+            dadosMapeados.push(dadoAtual);
         }
-        setDados(dadosMapeados)
-    }
+        setDados(dadosMapeados);
+    };
 
     return (
         <>
@@ -179,18 +206,22 @@ const Equipe = () => {
                             </div>
                         </div>
                         <div className={styles["table-equipe"]}>
-
                             {dados.length === 0 ?
                                 <div className={styles["sem-funcionarios"]}>
                                     Nenhum funcionário cadastrado
                                 </div> : <Table
                                     titulos={titulos}
-                                    linhas={dados}
+                                    linhas={dados.map((linha, index) => {
+                                        const servicos = listaServico[index] ? listaServico[index].map(servico => servico.nomeServico).join(', ') : '';
+                                        const status = linha.bitStatus === 1 ? "Ativo" : "Inativo";
+                                        return [linha.id, linha.nome, linha.email, linha.perfilAcesso, status, servicos];
+                                    })}
                                     showEditIcon={true}
                                     showDeleteIcon={true}
                                     funcaoEditar={editar}
                                     funcaoDeletar={deletar}
                                 />}
+
                         </div>
                     </div>
                 </div>
