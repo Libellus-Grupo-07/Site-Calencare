@@ -23,7 +23,6 @@ const AdicionarAgendamento = () => {
     const [dados, setDados] = useState("");
 
     const { idAgenda } = useParams();
-    const [nomeUser, setNomeUser] = useState("");
     const idEmpresa = sessionStorage.getItem("idEmpresa");
     const [cliente, setCliente] = useState();
     const [clientes, setClientes] = useState([]);
@@ -31,9 +30,8 @@ const AdicionarAgendamento = () => {
     const [sobrenomeCliente, setSobrenomeCliente] = useState("");
     const [emailCliente, setEmailCliente] = useState("");
     const [telefoneCliente, setTelefoneCliente] = useState("");
-    const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
+    // const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
     const [modalAberto, setModalAberto] = useState(false);
-    const [nome, setNome] = useState("");
     const [data, setData] = useState("");
     // const [cliente, setCliente] = useState("");
     const [dataAgenda, setDataAgenda] = useState("");
@@ -113,13 +111,13 @@ const AdicionarAgendamento = () => {
                 alterarValor={setTelefoneCliente}
                 mascara={"(00) 00000-0000"}
             />
-            <Input
+            {/* <Input
                 id={"dataNascimentoCliente"}
                 titulo={"Data de Nascimento"}
                 valor={dataNascimentoCliente}
                 alterarValor={setDataNascimentoCliente}
                 type={"date"}
-            />
+            /> */}
         </>
     )
 
@@ -134,8 +132,8 @@ const AdicionarAgendamento = () => {
             (emailCliente == "" || (
                 !isVazio(emailCliente, "Email do Cliente") && isValidEmail(emailCliente, "Email do Cliente")
             )) &&
-            !isVazio(telefoneCliente, "Telefone do Cliente") &&
-            !isVazio(dataNascimentoCliente, "Data de Nascimento do Cliente")
+            !isVazio(telefoneCliente, "Telefone do Cliente")
+            // && !isVazio(dataNascimentoCliente, "Data de Nascimento do Cliente")
         ) {
             return true;
         }
@@ -146,10 +144,11 @@ const AdicionarAgendamento = () => {
     const adicionarCliente = () => {
         if (validarCadastroCliente()) {
             let body = {
-                "nome": nomeCliente,
-                // "sobrenome": sobrenomeCliente,
-                "telefone": telefoneCliente,
-                "email": emailCliente,
+                nome: nomeCliente,
+                sobrenome: sobrenomeCliente,
+                telefone: telefoneCliente,
+                email: emailCliente,
+                empresaId: idEmpresa,
                 // "dtNascimento": dataNascimentoCliente
             }
 
@@ -158,7 +157,7 @@ const AdicionarAgendamento = () => {
                 setSobrenomeCliente("");
                 setEmailCliente("");
                 setTelefoneCliente("");
-                setDataNascimentoCliente("");
+                // setDataNascimentoCliente("");
                 toast.success("Cliente adicionado com sucesso!");
                 abrirModal();
                 buscarClientes()
@@ -171,7 +170,7 @@ const AdicionarAgendamento = () => {
     }
 
     const buscarClientes = (index) => {
-        api.get(`/clientes/${sessionStorage.getItem("idEmpresa")}`).then((response) => {
+        api.get(`/clientes/empresa/${sessionStorage.getItem("idEmpresa")}`).then((response) => {
             const { data } = response;
             console.log(data);
             mapear(data, index);
@@ -281,7 +280,7 @@ const AdicionarAgendamento = () => {
         <>
             <section className={styles["section-adicionar-agenda"]}>
                 <div>
-                    <Header nomeUser={nomeUser} />
+                    <Header />
                 </div>
                 <div className={styles["container-adicionar-agenda"]}>
                     <div className={styles["content-adicionar-agenda"]}>

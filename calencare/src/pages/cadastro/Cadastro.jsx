@@ -272,33 +272,33 @@ const Cadastro = () => {
 
             const dias = [
                 {
-                    diaSemana: "Segunda-Feira",
+                    diaSemana: "Segunda-feira",
                     inicio: horario1Segunda,
                     fim: horario2Segunda,
                     status: diaSegundaAberto ? 1 : 0
                 },
                 {
-                    diaSemana: "Terça-Feira",
+                    diaSemana: "Terça-feira",
                     inicio: horario1Terca,
                     fim: horario2Terca,
                     status: diaTercaAberto ? 1 : 0
                     ,
                 },
                 {
-                    diaSemana: "Quarta-Feira",
+                    diaSemana: "Quarta-feira",
                     inicio: horario1Quarta,
                     fim: horario2Quarta,
                     status: diaQuartaAberto ? 1 : 0
                 },
                 {
-                    diaSemana: "Quinta-Feira",
+                    diaSemana: "Quinta-feira",
                     inicio: horario1Quinta,
                     fim: horario2Quinta,
                     status: diaQuintaAberto ? 1 : 0
                 },
                 {
 
-                    diaSemana: "Sexta-Feira",
+                    diaSemana: "Sexta-feira",
                     inicio: horario1Sexta,
                     fim: horario2Sexta,
                     status: diaSextaAberto ? 1 : 0

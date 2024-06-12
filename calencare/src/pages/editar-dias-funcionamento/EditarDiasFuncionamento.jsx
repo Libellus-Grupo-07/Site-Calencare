@@ -19,6 +19,7 @@ const EditarDiasFuncionamento = () => {
     const [cnpj, setCnpj] = useState("")
     const [telefonePrincipal, setTelefonePrincipal] = useState("")
     const [emailPrincipal, setEmailPrincipal] = useState("")
+    const [intervaloAtendimento, setIntervaloAtendimento] = useState("")
 
     const [diaSegundaAberto, setDiaSegundaAberto] = useState(true);
     const [horario1Segunda, setHorario1Segunda] = useState(hora)
@@ -72,7 +73,6 @@ const EditarDiasFuncionamento = () => {
             setCnpj(cnpj);
             setEmailPrincipal(emailPrincipal);
             setTelefonePrincipal(telefonePrincipal);
-
         
             const ordemDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
             const vetorDias = [];
@@ -96,7 +96,7 @@ const EditarDiasFuncionamento = () => {
                     }
                 }
 
-                console.log(posicaoTroca);
+
                 let proximoDia = vetorDias[i];
                 vetorDias[i] = vetorDias[posicaoTroca];
                 vetorDias[posicaoTroca] = proximoDia;
@@ -105,7 +105,6 @@ const EditarDiasFuncionamento = () => {
             vetorToSetters(vetorDias);
             setDias(vetorDias);
 
-            console.log(vetorDias)
         }).catch((error) => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
@@ -119,7 +118,7 @@ const EditarDiasFuncionamento = () => {
     }
 
     const editar = () => {
-        const dias = [
+        const vetorDias = [
             {
                 diaSemana: "Segunda-Feira",
                 inicio: horario1Segunda,
@@ -167,27 +166,37 @@ const EditarDiasFuncionamento = () => {
             }
         ];
 
-        for (let i = 0; i < dias.length; i++) {
+        var deuRuim = false;
+
+        for (let i = 0; i < vetorDias.length; i++) {
             let bodyDias = {
-                diaSemana: dias[i].diaSemana,
-                inicio: dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].inicio),
-                fim: dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].fim),
-                status: dias[i].status,
+                diaSemana: vetorDias[i].diaSemana,
+                inicio: vetorDias[i].status === 0 ? "00:00:00" : transformarHora(vetorDias[i].inicio),
+                fim: vetorDias[i].status === 0 ? "00:00:00" : transformarHora(vetorDias[i].fim),
+                status: vetorDias[i].status,
                 empresa: {
                     idEmpresa,
                     razaoSocial,
                     cnpj,
                     telefonePrincipal,
                     emailPrincipal,
-                    // intervaloAtendimento
+                    intervaloAtendimento
                 }
             };
 
-            api.post("/horarios-funcionamento", bodyDias).then().catch((error) => {
+            api.put(`/horarios-funcionamento/${dias[i].id}`, bodyDias).then(() => {
+            }).catch((error) => {
                 console.log("houve um erro ao tentar cadastrar o horario de funcionamento");
-                toast.error("Houve um erro ao tentar cadastrar o horario de funcionamento dia:" + bodyDias.diaSemana);
                 console.log(error);
+                deuRuim = true;
             })
+        }
+
+        if (deuRuim) {
+            toast.error("Ocorreu um erro ao atualizar os dias de funcionamento");
+        } else {
+            toast.success("Dias de Funcionamento editados com sucesso!");
+            navigate(-1)
         }
     }
 

@@ -30,8 +30,10 @@
 .section-inicio .container-inicio .content-inicio .group-kpis {
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  height: fit-content;
+  align-items: stretch;
+  justify-content: stretch;
+  column-gap: 2%;
   flex-wrap: wrap;
 }
 

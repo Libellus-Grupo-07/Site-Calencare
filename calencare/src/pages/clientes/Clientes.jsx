@@ -18,6 +18,7 @@ const Clientes = () => {
     const [dadosResposta, setDadosResposta] = useState([]);
     const [idCliente, setIdCliente] = useState(0);
     const [nomeCliente, setNomeCliente] = useState("");
+    const [sobrenomeCliente, setSobrenomeCliente] = useState("");
     const [emailCliente, setEmailCliente] = useState("");
     const [telefoneCliente, setTelefoneCliente] = useState("");
     const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
@@ -29,6 +30,12 @@ const Clientes = () => {
                 titulo={"Nome"}
                 valor={nomeCliente}
                 alterarValor={setNomeCliente}
+            />
+            <Input
+                id={"sobrenomeCliente"}
+                titulo={"Sobrenome"}
+                valor={sobrenomeCliente}
+                alterarValor={setSobrenomeCliente}
             />
             <Input
                 id={"emailCliente"}
@@ -44,13 +51,13 @@ const Clientes = () => {
                 alterarValor={setTelefoneCliente}
                 mascara={"(00) 00000-0000"}
             />
-            <Input
+            {/* <Input
                 id={"dataNascimentoCliente"}
                 titulo={"Data de Nascimento"}
                 valor={dataNascimentoCliente}
                 alterarValor={setDataNascimentoCliente}
                 type={"date"}
-            />
+            /> */}
         </>
     )
 
@@ -87,7 +94,7 @@ const Clientes = () => {
 
     const buscarClientes = () => {
         // api.get(`/clientes/empresa/${idEmpresa}}`).then((response) => {
-        api.get(`/clientes`).then((response) => {
+        api.get(`/clientes/empresa/${idEmpresa}`).then((response) => {
             const { data } = response;
             setDadosResposta(data)
             mapear(data);
@@ -124,18 +131,19 @@ const Clientes = () => {
         setNomeCliente(dadosResposta[index].nome);
         setEmailCliente(dadosResposta[index].email);
         setTelefoneCliente(dadosResposta[index].telefone);
-        setDataNascimentoCliente(dadosResposta[index].dtNascimento);
+        // setDataNascimentoCliente(dadosResposta[index].dtNascimento);
         abrirModal()
     }
 
     const validarCamposEditar = () => {
         if (!isVazio(nomeCliente, "Nome do Cliente") &&
+            !isVazio(sobrenomeCliente, "Sobrenome do Cliente") &&
             (emailCliente === "" || (
                 !isVazio(emailCliente, "Email do Cliente") && isValidEmail(emailCliente, "Email do Cliente")
             )) &&
-            !isVazio(telefoneCliente, "Telefone do Cliente") &&
-            !isVazio(dataNascimentoCliente, "Data de Nascimento do Cliente")
-        ) {
+            !isVazio(telefoneCliente, "Telefone do Cliente"))
+            // !isVazio(dataNascimentoCliente, "Data de Nascimento do Cliente")
+         {
             return true;
         }
 
@@ -147,6 +155,7 @@ const Clientes = () => {
         if (validarCamposEditar()) {
             let body = {
                 nome: nomeCliente,
+                nome: sobrenomeCliente,
                 email: emailCliente,
                 telefone: telefoneCliente,
                 dtNascimento: dataNascimentoCliente
