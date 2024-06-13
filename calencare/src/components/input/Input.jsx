@@ -50,6 +50,7 @@ const Input = ({
                         type={type}
                         maxLength={maxlength}
                         minLength={minlength}
+                        readOnly={readonly}
                     /> :
                     <input
                         id={id}

@@ -87,7 +87,9 @@ const Header = () => {
                             <Chart
                             />
                         </IconlyProvider>
-                        <span className={styles["text-link"]}>
+                        <span className={styles["text-link"]}
+                            onClick={() => navigate("/dashboard")}
+                        >
                             Dashboard
                         </span>
                     </li>

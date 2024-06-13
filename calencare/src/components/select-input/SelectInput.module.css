@@ -1,4 +1,5 @@
 option {
+  width: fit-content;
   height: fit-content;
   /* z-index: 999999; */
 }

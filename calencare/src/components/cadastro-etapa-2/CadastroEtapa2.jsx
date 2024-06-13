@@ -54,7 +54,7 @@ const CadastroEtapa2 = ({
                 />
                 <div className={styles["container-adrress"]}>
                     <Input
-                        id="numero"
+                        id="numeroLogradouro"
                         valor={Numero}
                         alterarValor={setNumero}
                         titulo={"Número"}

@@ -12,7 +12,7 @@ const DiaDaSemanaComponente = (
     setHorario2,
     aberto,
     setAberto,
-    funcaoClickSwitch
+    funcaoClickSwitch,
   }) => {
 
   const handleButtonClick = () => {
@@ -26,35 +26,37 @@ const DiaDaSemanaComponente = (
   return (
     <Box
       width="100%"
-      height="5.5vh"
+      height="10vh"
+      maxHeight="44px"
       display="flex"
       justifyContent="space-between"
       alignItems="center"
       className={styles["container-cadastro"]}
     >
       <div style={{
-        width: "240px",
+        width: "18rem",
         display: "flex",
+        flexWrap: "wrap",
         marginRight: '16px',
       }}>
         <Typography
           style={{
-            width: "7.5vw",
+            width: "40%",
             fontSize: "1.1rem",
             fontFamily: "Poppins",
             fontWeight: "bold",
             textAlign: "left",
-            letterSpacing: "-0.05rem"
+            letterSpacing: "-0.05rem",
           }}
           variant="h6" >
           {diaSemana}
         </Typography>
         <div style={{
           fontFamily: "Poppins",
-          width: "134px",
+          width: "55%",
           display: 'flex',
           alignItems: 'center',
-          columnGap: "8px"
+          columnGap: "8px",
         }}>
           <Switch
             onClick={handleButtonClick}
@@ -68,10 +70,11 @@ const DiaDaSemanaComponente = (
           >
           </Switch>
           <span style={{
-            width: "134px",
+            width: "100%",
             fontFamily: "Poppins",
             color: aberto ? '#9f35f0' : "#585858",
-            fontWeight: 600
+            fontWeight: 600,
+            letterSpacing: "-0.03rem"
           }}>
             {aberto ? "Aberto" : "Fechado"}
           </span>

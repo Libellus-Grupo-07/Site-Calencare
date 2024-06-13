@@ -93,3 +93,9 @@
     color: var(--texto-cinza);
   }
   
+  .group-button {
+    width: 100%;
+    display: flex;
+    column-gap: 8px;
+    justify-content: flex-end;
+  }

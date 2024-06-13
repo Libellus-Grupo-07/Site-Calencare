@@ -5,7 +5,7 @@ import api from "../../api";
 import Titulo from '../../components/titulo/Titulo';
 import Button from "../../components/button/Button";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { inputSomenteNumero, inputSomenteTexto, inputValorMontario, inputValorPorcentagem, isSelected, isVazio, logado } from "../../utils/global";
+import { inputSomenteNumero, inputSomenteTexto, inputValorMonetario, inputValorPorcentagem, isSelected, isVazio, logado } from "../../utils/global";
 import Input from "../../components/input/Input";
 import Textarea from "../../components/textarea/Textarea";
 import { FaCheck } from "react-icons/fa6";
@@ -79,7 +79,14 @@ const AdicionarServico = () => {
     }
 
     const mapear = (campo, data, index, action) => {
-        var optionsMap = [];
+        console.error(campo)
+        var optionsMap = isAdicionar && campo === "categoria-servico" ?
+            [{
+                label: "Criar nova categoria",
+                value: "Criar",
+            }]
+            : []
+            ;
         let i = 0;
 
         for (i = 0; i < data.length; i++) {
@@ -92,7 +99,9 @@ const AdicionarServico = () => {
 
         i = index === 0 && action !== "E" ? index : action ? index : i;
 
-        if (campo === "categoria-servico") {
+        if (campo === "categoria-servico")
+        {   
+            console.log(optionsMap)
             setOptions(optionsMap)
             setCategoria(optionsMap[i]);
         } else {
@@ -109,18 +118,18 @@ const AdicionarServico = () => {
 
         buscarCategoriasServico("C");
         buscarServicos("C");
-    }, [navigate]);
 
-    useEffect(() => {
         if (!isAdicionar) {
             api.get(`/servico-preco/${idEmpresa}/${idServico}`).then((response) => {
                 const { data } = response;
-                const { nome, descricao, categoria, preco, comissao, duracao, /*descricaoStatus*/ } = data;
+                const { nome, descricao, categoria, preco, comissao, duracao, descricaoStatus } = data;
                 setDescricao(descricao);
                 setPreco("R$ " + preco.toFixed(2).replace(".", ","));
                 setComissao(comissao.toFixed(2).replace(".", ",") + "%");
                 setDuracao(duracao);
                 setNomeCategoria(categoria)
+                setStatus(optionsStatus.filter(s => s.label === descricaoStatus));
+                
                 buscarServicos("E", undefined, nome);
                 buscarCategoriasServico("E", undefined, categoria);
 
@@ -128,7 +137,7 @@ const AdicionarServico = () => {
                 console.error(error)
             })
         }
-    }, [isAdicionar, idEmpresa, idServico]);
+    }, [navigate, isAdicionar, idEmpresa, idServico, optionsStatus]);
 
     const tituloModal = "Adicionar Categoria de Serviço";
     const tituloBotao = "Adicionar";
@@ -154,7 +163,14 @@ const AdicionarServico = () => {
 
     const abrirModal = (value) => {
         setModalAberto(!modalAberto);
-        setNomeCategoria(value)
+        setCategoria("")
+        setNomeCategoria("")
+        setDescricaoCategoria("")
+
+        if (!modalAberto) {
+            setNomeCategoria(value)
+            setDescricaoCategoria("")
+        }
     }
 
     const isAdicionarCategoriaValid = () => {
@@ -248,7 +264,6 @@ const AdicionarServico = () => {
     }
 
     const editar = () => {
-        console.log("EDITAR")
         if (isSelected(categoria, "Categoria do Serviço") &&
             isSelected(servico, "Nome do Serviço") &&
             !isVazio(descricao, "Descrição do Serviço") &&
@@ -358,7 +373,7 @@ const AdicionarServico = () => {
                                     titulo={"Preço"}
                                     valor={preco}
                                     alterarValor={setPreco}
-                                    validarEntrada={inputValorMontario}
+                                    validarEntrada={inputValorMonetario}
                                     maxlength={20}
                                     minlength={2}
                                 />
@@ -431,6 +446,7 @@ const AdicionarServico = () => {
                     titulo={tituloModal}
                     tituloBotaoConfirmar={tituloBotao}
                     funcaoBotaoConfirmar={adicionarCategoria}
+                    funcaoBotaoCancelar={abrirModal}
                 />
             </section>
 
