@@ -101,7 +101,7 @@ export const inputSomenteNumero = (e) => {
   e.target.value = e.target.value.replace(/[^\d+(,\d{1,2})?$]/g, "");
 };
 
-export const inputValorMontario = (e) =>{
+export const inputValorMonetario = (e) =>{
   var valorAlterado = e.target.value;
   valorAlterado = valorAlterado.replace(/\D/g, ""); // Remove todos os não dígitos
   valorAlterado = valorAlterado.replace(/(\d+)(\d{2})$/, "$1,$2"); // Adiciona a parte de centavos

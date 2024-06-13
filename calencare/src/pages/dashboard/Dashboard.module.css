@@ -1,4 +1,4 @@
-.section-inicio {
+.section-dashboard {
   width: 100%;
   display: flex;
   align-items: flex-start;
@@ -6,12 +6,12 @@
   column-gap: 20vw;
 }
 
-.section-inicio .container-inicio {
+.section-dashboard .container-dashboard {
   width: 100%;
   padding: 32px 0;
 }
 
-.section-inicio .container-inicio .content-inicio {
+.section-dashboard .container-dashboard .content-dashboard {
   width: 70vw;
   margin: 0 auto;
   display: flex;
@@ -20,14 +20,21 @@
   justify-content: flex-start;
 }
 
-.section-inicio .container-inicio .content-inicio .titulo-inicio {
+.section-dashboard .container-dashboard .content-dashboard .titulo-dashboard {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.section-inicio .container-inicio .content-inicio .group-kpis {
+.section-dashboard .container-dashboard .content-dashboard .titulo-dashboard .group-button{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 8px;
+}
+
+.section-dashboard .container-dashboard .content-dashboard .group-kpis {
   width: 100%;
   display: flex;
   height: fit-content;
@@ -37,21 +44,21 @@
   flex-wrap: wrap;
 }
 
-.section-inicio .container-inicio .content-inicio .group-kpis .card-kpi {
+.section-dashboard .container-dashboard .content-dashboard .group-kpis .card-kpi {
   width: 32%;
   background-color: aliceblue;
 }
 
-.section-inicio .container-inicio .content-inicio .container-agendamentos {
+.section-dashboard .container-dashboard .content-dashboard .container-agendamentos {
   width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 }
 
-.section-inicio
-  .container-inicio
-  .content-inicio
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
   .container-agendamentos
   .proximos-agendamentos {
   width: 60%;
@@ -64,15 +71,15 @@
   row-gap: 16px;
 }
 
-.section-inicio
-  .container-inicio
-  .content-inicio
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
   .container-agendamentos
   .proximos-agendamentos
   .titulo,
-.section-inicio
-  .container-inicio
-  .content-inicio
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
   .container-agendamentos
   .proximos-agendamentos
   .group-proximos-agendamentos {
@@ -83,9 +90,9 @@
   row-gap: 24px;
 }
 
-.section-inicio
-  .container-inicio
-  .content-inicio
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
   .container-agendamentos
   .proximos-agendamentos
   .text-sem-agendamentos {
@@ -100,9 +107,9 @@
   justify-content: center;
 }
 
-.section-inicio
-  .container-inicio
-  .content-inicio
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
   .container-agendamentos
   .agendamentos-em-andamento {
   background-color: var(--preto);
@@ -120,18 +127,18 @@
   max-width: 26vw;
 }
 
-.section-inicio
-  .container-inicio
-  .content-inicio
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
   .container-agendamentos
   .agendamentos-em-andamento
   .container-card {
   width: 100%;
 }
 
-.section-inicio
-  .container-inicio
-  .content-inicio
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
   .container-agendamentos
   .agendamentos-em-andamento
   .text-sem-agendamentos {
@@ -146,9 +153,9 @@
   justify-content: center;
 }
 
-.section-inicio
-  .container-inicio
-  .content-inicio
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
   .container-agendamentos
   .agendamentos-em-andamento
   .group-agendamentos-em-andamento {

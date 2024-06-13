@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Textarea.module.css";
 
-const Textarea = ({ id, valor, titulo, type, alterarValor, validarEntrada, funcao, readonly, mascara }) => {
+const Textarea = ({ id, valor, titulo, type, alterarValor, validarEntrada, funcao, readonly, maxLength }) => {
     const mudarValor = (e) => {
         alterarValor(e.target.value);
     }
@@ -16,6 +16,7 @@ const Textarea = ({ id, valor, titulo, type, alterarValor, validarEntrada, funca
                 </label>
                 <textarea
                     id={id}
+                    className={styles["textarea"]}
                     type={type}
                     value={valor}
                     placeholder={titulo}
@@ -23,6 +24,7 @@ const Textarea = ({ id, valor, titulo, type, alterarValor, validarEntrada, funca
                     onInput={validarEntrada ? (e) => validarEntrada(e) : null}
                     onKeyUp={funcao}
                     required
+                    maxLength={maxLength}
                     readOnly={readonly || false}
                 />
 

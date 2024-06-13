@@ -8,7 +8,6 @@ import Input from "../../components/input/Input";
 import { inputSomenteTexto, logado, isVazio, isValidEmail, transformarHora, transformarData, transformarDataHora } from "../../utils/global";
 import styles from "./AdicionarAgendamento.module.css";
 import Ul from "../../components/ul/Ul";
-import { TickSquare } from "react-iconly";
 import SelectInput from "../../components/select-input/SelectInput";
 import { FaCheck } from "react-icons/fa6";
 import { TiCancel } from "react-icons/ti";
@@ -20,11 +19,10 @@ const AdicionarAgendamento = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const isEditar = location.pathname === "/agendas";
-    const [dadosClientes, setDadosClientes] = useState("");
-    const [dadosProfissionais, setDadosProfissionais] = useState("");
+    const [dadosClientes, setDadosClientes] = useState([]);
+    const [dadosProfissionais, setDadosProfissionais] = useState([]);
 
     const { idAgenda } = useParams();
-    const [nomeUser, setNomeUser] = useState("");
     const idEmpresa = sessionStorage.getItem("idEmpresa");
     const [cliente, setCliente] = useState();
     const [clientes, setClientes] = useState([]);
@@ -32,7 +30,7 @@ const AdicionarAgendamento = () => {
     const [sobrenomeCliente, setSobrenomeCliente] = useState("");
     const [emailCliente, setEmailCliente] = useState("");
     const [telefoneCliente, setTelefoneCliente] = useState("");
-    const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
+    // const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
     const [modalAberto, setModalAberto] = useState(false);
     const [data, setData] = useState("");
     // const [cliente, setCliente] = useState("");
@@ -44,6 +42,35 @@ const AdicionarAgendamento = () => {
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
     const [items, setItems] = useState([]);
 
+    useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
+        api.get(`/servico-preco/${idEmpresa}`).then((response) => {
+            const { data } = response;
+            console.log(response);
+            setItems(data.length === 0 ? [] : data)
+
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar o serviço");
+            console.log(error);
+        });
+
+        api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
+            const { data } = response;
+            console.log(response);
+            mapear(data, 0, "profissional")
+            setDadosProfissionais(data)
+
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar um funcionario");
+            console.log(error);
+        });
+
+        buscarClientes(0)
+
+    }, [navigate, idEmpresa]);
 
     const validarAgenda = () => {
         if (
@@ -104,13 +131,13 @@ const AdicionarAgendamento = () => {
                 alterarValor={setTelefoneCliente}
                 mascara={"(00) 00000-0000"}
             />
-            <Input
+            {/* <Input
                 id={"dataNascimentoCliente"}
                 titulo={"Data de Nascimento"}
                 valor={dataNascimentoCliente}
                 alterarValor={setDataNascimentoCliente}
                 type={"date"}
-            />
+            /> */}
         </>
     )
 
@@ -122,11 +149,11 @@ const AdicionarAgendamento = () => {
     const validarCadastroCliente = () => {
         if (!isVazio(nomeCliente, "Nome do Cliente") &&
             !isVazio(sobrenomeCliente, "Sobrenome do Cliente") &&
-            (emailCliente == "" || (
+            (emailCliente === "" || (
                 !isVazio(emailCliente, "Email do Cliente") && isValidEmail(emailCliente, "Email do Cliente")
             )) &&
-            !isVazio(telefoneCliente, "Telefone do Cliente") &&
-            !isVazio(dataNascimentoCliente, "Data de Nascimento do Cliente")
+            !isVazio(telefoneCliente, "Telefone do Cliente")
+            // && !isVazio(dataNascimentoCliente, "Data de Nascimento do Cliente")
         ) {
             return true;
         }
@@ -135,21 +162,37 @@ const AdicionarAgendamento = () => {
     }
 
     const atualizarClientes = (novoCliente) => {
-        setClientes([...clientes, novoCliente]); // Adicione o novo cliente à lista de clientes
-        setCliente(novoCliente); // Defina o novo cliente como o cliente selecionado
+         setClientes([...clientes, novoCliente]); // Adicione o novo cliente à lista de clientes
+         setCliente(novoCliente); // Defina o novo cliente como o cliente selecionado
     };
 
     const adicionarCliente = () => {
         if (validarCadastroCliente()) {
             let body = {
-                "nome": nomeCliente,
-                "sobrenome": sobrenomeCliente,
-                "telefone": telefoneCliente,
-                "email": emailCliente,
-                empresaId: idEmpresa
+                nome: nomeCliente,
+                sobrenome: sobrenomeCliente,
+                telefone: telefoneCliente,
+                email: emailCliente,
+                empresaId: idEmpresa,
+                // "dtNascimento": dataNascimentoCliente
             }
 
-            api.post("/clientes", body)
+            api.post("/clientes", body).then(() => {
+                setNomeCliente("");
+                setSobrenomeCliente("");
+                setEmailCliente("");
+                setTelefoneCliente("");
+                // setDataNascimentoCliente("");
+                toast.success("Cliente adicionado com sucesso!");
+                abrirModal();
+                buscarClientes(dadosClientes.length)
+            }).catch((error) => {
+                toast.error("Houve um erro ao tentar adicionar cliente");
+                console.error("Houve um erro ao tentar adicionar cliente!");
+                console.error(error)
+            })
+          
+            /*api.post("/clientes", body)
                 .then((response) => {
                     setNomeCliente("");
                     setSobrenomeCliente("");
@@ -170,54 +213,22 @@ const AdicionarAgendamento = () => {
                     toast.error("Houve um erro ao tentar adicionar cliente");
                     console.error("Houve um erro ao tentar adicionar cliente!");
                     console.error(error)
-                })
+                }) */
         }
     }
 
 
     const buscarClientes = (index) => {
-        api.get(`/clientes/${sessionStorage.getItem("idEmpresa")}`).then((response) => {
+        api.get(`/clientes/listar/${idEmpresa}`).then((response) => {
             const { data } = response;
             console.log(data);
             mapear(data, index, "cliente");
             setDadosClientes(data)
-
         }).catch((error) => {
             console.log("Houve um erro ao buscar clientes");
             console.log(error);
         });
     }
-
-    useEffect(() => {
-        if (!logado(sessionStorage.getItem("token"))) {
-            navigate("/login");
-            return;
-        }
-        api.get(`/servico-preco/${idEmpresa}`).then((response) => {
-            console.log("buscar servicos")
-            const { data } = response;
-            console.log(response);
-            setItems(data.length === 0 ? [] : data)
-
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar o serviço");
-            console.log(error);
-        });
-        buscarClientes()
-
-        api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
-            console.log("buscar funcionarios")
-            const { data } = response;
-            console.log(response);
-            mapear(data, 0, "profissional")
-            setDadosProfissionais(data)
-
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar um funcionario");
-            console.log(error);
-        });
-    }, [idEmpresa]);
-
 
     const mapear = (data, index, nomeVetor) => {
         var dataMapp = [];
@@ -236,13 +247,13 @@ const AdicionarAgendamento = () => {
             dataMapp.push({
                 id: data[i].id,
                 index: i,
-                label: data[i].nome,
-                value: data[i].nome
+                label: data[i].nome + " " + data[i].sobrenome,
+                value: data[i].nome + " " + data[i].sobrenome,
             })
         }
 
         i = index === 0 ? index - 1 : i;
-        console.log(i);
+
         if (nomeVetor === "cliente") {
             setClientes(dataMapp);
             setCliente(dataMapp[i]);
@@ -290,7 +301,7 @@ const AdicionarAgendamento = () => {
         <>
             <section className={styles["section-adicionar-agenda"]}>
                 <div>
-                    <Header nomeUser={nomeUser} />
+                    <Header />
                 </div>
                 <div className={styles["container-adicionar-agenda"]}>
                     <div className={styles["content-adicionar-agenda"]}>
@@ -301,7 +312,7 @@ const AdicionarAgendamento = () => {
 
                             <SelectInput
                                 id="cliente"
-                                // valor={cliente}
+                                valor={cliente}
                                 alterarValor={setCliente}
                                 titulo={"Cliente"}
                                 options={clientes}

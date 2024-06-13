@@ -11,14 +11,14 @@
 }
 
 .servicos-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-  /* display: grid; */
-  /* grid-template-columns: repeat(3, 1fr); */
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+  /* justify-content: flex-start; */
+  /* align-items: center; */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  /* margin-left: 20px; */
+  margin-left: 20px;
 }
 
 .servico-item {

@@ -19,6 +19,7 @@ const Equipe = () => {
 
     const [pilha, setPilha] = useState(new Pilha())
     const idEmpresa = sessionStorage.getItem("idEmpresa")
+    const idUser = sessionStorage.getItem("idUser")
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
@@ -34,7 +35,6 @@ const Equipe = () => {
         pilhaSecundaria.setPilha(sessionStorage.pilha ? JSON.parse(sessionStorage.pilha) : [])
         setPilha(pilhaSecundaria)
         buscarFuncionarios()
-
     }, [navigate, idEmpresa]);
 
     const buscarFuncionarios = () => {
@@ -78,20 +78,25 @@ const Equipe = () => {
     };
 
     const desfazer = () => {
-        const id = pilha.pop();
-        const funcionarioStatusDto = {
-            bitStatus: 1
-        };
-        console.log(pilha)
-        api.patch(`/funcionarios/status/${id}`, funcionarioStatusDto)
-            .then(response => {
-                const { data } = response;
-                buscarFuncionarios()
-            })
-            .catch(error => {
-                console.log("Houve um erro ao desfazer a ação");
-                console.log(error);
-            });
+        if (pilha.isEmpty()) {
+            toast.warning("Não há nada para desfazer!")
+            return;
+        } else {
+            const id = pilha.pop();
+            const funcionarioStatusDto = {
+                bitStatus: 1
+            };
+            console.log(pilha)
+            api.patch(`/funcionarios/status/${id}`, funcionarioStatusDto)
+                .then(() => {
+                    buscarFuncionarios()
+                })
+                .catch((error) => {
+                    console.log("Houve um erro ao desfazer a ação");
+                    console.log(error);
+                });
+        }
+
     };
 
 
@@ -104,16 +109,6 @@ const Equipe = () => {
             </span>
         </>
     )
-
-    const buscarProfissional = (id) => {
-        api.get(`/funcionarios/${id}`).then((response) => {
-            const { data } = response;
-            setDados(data);
-        }).catch((error) => {
-            console.error("Houve um erro ao buscar serviços");
-            console.error(error)
-        })
-    }
 
     const [modalAberto, setModalAberto] = useState(false);
 
@@ -153,7 +148,6 @@ const Equipe = () => {
         })
     }
 
-
     return (
         <>
             <section className={styles["section-equipe"]}>
@@ -169,6 +163,7 @@ const Equipe = () => {
                                 <Button
                                     funcaoButton={desfazer}
                                     cor="branco"
+                                    disabled={pilha.isEmpty()}
                                     titulo={"Desfazer"}
                                     icone={<IconlyProvider
                                         stroke="bold"
