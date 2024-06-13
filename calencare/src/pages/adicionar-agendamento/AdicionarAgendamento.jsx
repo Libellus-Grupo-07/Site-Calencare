@@ -34,7 +34,7 @@ const AdicionarAgendamento = () => {
     const [modalAberto, setModalAberto] = useState(false);
     const [data, setData] = useState("");
     // const [cliente, setCliente] = useState("");
-    const [dataAgenda, setDataAgenda] = useState("");
+    //const [dataAgenda, setDataAgenda] = useState("");
     const [hora, setHora] = useState("");
     const [dia, setDia] = useState("");
     const [profissonais, setProfissionais] = useState([]);
@@ -268,11 +268,11 @@ const AdicionarAgendamento = () => {
 
         if (validarAgenda()) {
             for (let index = 0; index < servicosSelecionados.length; index++) {
-                let dataHora = dataAgenda + "T" + hora;
+                //let dataHora = dataAgenda + "T" + hora;
                 let AgendaAdicionado = {
                     idServicoPreco: servicosSelecionados[index].id,
                     //dtHora: transformarDataHora(dataAgenda),
-                    dtHora: dataHora,
+                    //dtHora: dataHora,
                     dia: transformarData(data),
                     horario: transformarHora(hora),
                     bitStatus: 1,
@@ -336,14 +336,6 @@ const AdicionarAgendamento = () => {
                                 titulo={"Profissional"}
 
 
-                            />
-                            <Input
-                                id="data"
-                                valor={dataAgenda}
-                                type={"datetime-local"}
-                                alterarValor={setDataAgenda}
-                                titulo={"Data e Hora"}
-                                tamanho={"lg"}
                             />
                             <div className={styles["group-input"]}>
                                 <Input

@@ -23,7 +23,7 @@ const Equipe = () => {
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
-    const [listaServico, setListaServico] = useState("")
+    const [listaServico, setListaServico] = useState([])
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -38,30 +38,44 @@ const Equipe = () => {
     }, [navigate, idEmpresa]);
 
     const buscarFuncionarios = () => {
-        api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
-            console.log(data)
-            const { data } = response;
-            var listaServicosFuncionarios = [];
-            for (let index = 0; index < data.length; index++) {
-                var funcionarioAtual = data[index]
-                var id = funcionarioAtual.id
-                api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${id}`).then((response) => {
-                    const { data } = response;
-                    listaServicosFuncionarios.push(data);
-                }).catch((error) => {
-                    console.error("Houve um erro ao buscar serviços");
-                    console.error(error)
-                })
-            }
-            setDados(data);
-            setListaServico(listaServicosFuncionarios);
-            mapear(data);
-            console.log(data)
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
-        });
-    }
+        api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`)
+            .then((response) => {
+                const { data } = response;
+                const promessasServicos = data.map((funcionario) =>
+                    api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${funcionario.id}`)
+                );
+                Promise.all(promessasServicos)
+                    .then((respostas) => {
+                        const dadosAtualizados = data.map((funcionario, index) => {
+                            const servicosFuncionario = respostas[index].data.length === 0 ? "" :
+                                (
+                                    <ul style={{
+                                        listStyle: "revert",
+                                        textAlign: "left",
+                                        rowGap: "0.5rem",
+                                        display: "grid",
+                                    }}>
+
+                                        {respostas[index].data.map((servico) => (
+                                            <li key={index}>{servico.nomeServico}</li>
+                                        ))}
+                                    </ul>
+                                )
+                            return {
+                                ...funcionario,
+                                servicos: servicosFuncionario
+                            };
+                        });
+                        setDados(dadosAtualizados);
+                    })
+                    .catch((error) => {
+                        console.error("Houve um erro ao buscar serviços", error);
+                    });
+            })
+            .catch((error) => {
+                console.error("Houve um erro ao buscar o funcionário", error);
+            });
+    };
 
     const desfazer = () => {
         if (pilha.isEmpty()) {
@@ -103,13 +117,13 @@ const Equipe = () => {
     }
 
     const editar = (index) => {
-        let idprofissional = dados[index][0];
+        let idprofissional = dados[index].id;
         navigate(`/profissional/editar/${idprofissional}`);
     }
 
     const deletar = (index) => {
-        var id = dados[index][0];
-        var nome = dados[index][1];
+        var id = dados[index].id;
+        var nome = dados[index].nome;
         setIdProfissional(id)
         setNome(nome)
         abrirModal(nome);
@@ -133,39 +147,6 @@ const Equipe = () => {
             console.error(error);
         })
     }
-
-    const mapear = (data, listaServicos) => {
-        var dadosMapeados = [];
-        for (var index = 0; index < data.length; index++) {
-            if (data[index].id !== idUser) {
-                var dadoAtual = []
-                dadoAtual.push(data[index].id)
-                dadoAtual.push(data[index].nome)
-                dadoAtual.push(data[index].email)
-                dadoAtual.push(data[index].telefone)
-                dadoAtual.push(data[index].bitStatus === 1 ? "Ativo" : "Inativo")
-                dadosMapeados.push(dadoAtual)
-            }
-            /*var dadoAtual = [];
-            dadoAtual.push(data[index].id);
-            dadoAtual.push(data[index].nome);
-            dadoAtual.push(data[index].email);
-            dadoAtual.push(data[index].telefone);
-            dadoAtual.push(data[index].bitStatus === 1 ? "Ativo" : "Inativo");
-            const servicos = listaServicos[index];
-            const servicosList = (
-                <ul>
-                    {servicos.map((servico, index) => (
-                        <li key={index}>{servico.nomeServico}</li>
-                    ))}
-                </ul>
-            );
-            dadoAtual.push(servicosList);
-
-            dadosMapeados.push(dadoAtual);*/
-        }
-        setDados(dadosMapeados);
-    };
 
     return (
         <>
@@ -215,9 +196,9 @@ const Equipe = () => {
                                 </div> : <Table
                                     titulos={titulos}
                                     linhas={dados.map((linha, index) => {
-                                        const servicos = listaServico[index] ? listaServico[index].map(servico => servico.nomeServico).join(', ') : '';
+
                                         const status = linha.bitStatus === 1 ? "Ativo" : "Inativo";
-                                        return [linha.id, linha.nome, linha.email, linha.perfilAcesso, status, servicos];
+                                        return [linha.id, linha.nome, linha.email, linha.perfilAcesso, status, linha.servicos];
                                     })}
                                     showEditIcon={true}
                                     showDeleteIcon={true}
