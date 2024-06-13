@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Input from "../../components/input/Input";
-import { inputSomenteTexto, logado, isVazio, isValidEmail, transformarHora, transformarData, transformarDataHora } from "../../utils/global";
+import { inputSomenteTexto, logado, isVazio, isValidEmail, transformarHora, transformarData, transformarDataHora, transformarDataHoraBd, transformarDataBd } from "../../utils/global";
 import styles from "./AdicionarAgendamento.module.css";
 import Ul from "../../components/ul/Ul";
 import SelectInput from "../../components/select-input/SelectInput";
@@ -30,13 +30,9 @@ const AdicionarAgendamento = () => {
     const [sobrenomeCliente, setSobrenomeCliente] = useState("");
     const [emailCliente, setEmailCliente] = useState("");
     const [telefoneCliente, setTelefoneCliente] = useState("");
-    // const [dataNascimentoCliente, setDataNascimentoCliente] = useState("");
     const [modalAberto, setModalAberto] = useState(false);
     const [data, setData] = useState("");
-    // const [cliente, setCliente] = useState("");
-    //const [dataAgenda, setDataAgenda] = useState("");
     const [hora, setHora] = useState("");
-    const [dia, setDia] = useState("");
     const [profissonais, setProfissionais] = useState([]);
     const [Profissional, setProfissional] = useState("")
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
@@ -77,7 +73,8 @@ const AdicionarAgendamento = () => {
             !isVazio(cliente, "Cliente") &&
             !isVazio(Profissional, "profissional") &&
             !isVazio(servicosSelecionados, "Serviços que realiza") &&
-            !isVazio(data, "Data")
+            !isVazio(data, "Data Agendamento"),
+            !isVazio(hora, "Data Agendamento")
         ) {
             return true;
         }
@@ -270,25 +267,19 @@ const AdicionarAgendamento = () => {
             for (let index = 0; index < servicosSelecionados.length; index++) {
                 //let dataHora = dataAgenda + "T" + hora;
                 let AgendaAdicionado = {
-                    idServicoPreco: servicosSelecionados[index].id,
-                    //dtHora: transformarDataHora(dataAgenda),
-                    //dtHora: dataHora,
-                    dia: transformarData(data),
+                    dtHora: transformarDataHoraBd(data, hora),
+                    dia: transformarDataBd(data),
                     horario: transformarHora(hora),
                     bitStatus: 1,
                     cliente: dadosClientes[cliente.index],
-                    profissional: dadosProfissionais[Profissional.index]
+                    funcionario: dadosProfissionais[Profissional.index],
+                    servicoPreco: servicosSelecionados[index]
                 }
 
                 api.post(`/agendamentos/${Profissional.id}/${cliente.id}/${servicosSelecionados[index].id}`, AgendaAdicionado).then((response) => {
                     const { data } = response;
-                    const { id } = data;
                     toast.success("Agendamento adicionada com sucesso!");
-                    sessionStorage.setItem("editado", JSON.stringify(AgendaAdicionado));
-                    navigate("/agendas");
-
-                    console.log("Json de servico adicionado " + JSON.stringify(AgendaAdicionado));
-
+                    navigate("/agenda");
                 }).catch((error) => {
                     console.error(error)
                     toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
@@ -340,9 +331,9 @@ const AdicionarAgendamento = () => {
                             <div className={styles["group-input"]}>
                                 <Input
                                     id="data"
-                                    valor={dia}
+                                    valor={data}
                                     type={"date"}
-                                    alterarValor={setDia}
+                                    alterarValor={setData}
                                     titulo={"Data"}
                                     tamanho={"lg"}
 

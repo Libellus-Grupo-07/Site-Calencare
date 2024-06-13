@@ -114,7 +114,7 @@ const EditarDiasFuncionamento = () => {
 
 
     const voltar = () => {
-        navigate(-1);
+        navigate("/perfil");
     }
 
     const editar = () => {
@@ -181,14 +181,9 @@ const EditarDiasFuncionamento = () => {
                 inicio: vetorDias[i].status === 0 ? "00:00:00" : transformarHora(vetorDias[i].inicio),
                 fim: vetorDias[i].status === 0 ? "00:00:00" : transformarHora(vetorDias[i].fim),
                 status: vetorDias[i].status,
-                empresa: {
-                    idEmpresa,
-                    razaoSocial,
-                    cnpj,
-                    telefonePrincipal,
-                    emailPrincipal,
-                    intervaloAtendimento
-                }
+                empresaId: 
+                    idEmpresa
+                      
             };
 
             api.put(`/horarios-funcionamento/${dias[i].id}`, bodyDias).then(() => {

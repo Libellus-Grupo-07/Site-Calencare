@@ -71,6 +71,7 @@ export function transformarDataHora(dataString) {
   return `${dia}/${mes}/${ano} ${hora}:${minutos}`;
 }
 
+
 export function transformarDataBd(dataString) {
   const data = new Date(dataString);
   const dia = data.getDate().toString().padStart(2, "0");
@@ -92,6 +93,10 @@ export function transformarHora(horaString) {
   const segundos = data.getSeconds().toString().padStart(2, "0");
   return `${hora}:${minutos}:${segundos}`;
 }
+
+export function transformarDataHoraBd(dataString, horaString){
+  return transformarDataBd(dataString) + "T" + transformarHora(horaString)
+  }
 
 export const inputSomenteTexto = (e) => {
   e.target.value = e.target.value.replace(/[^A-Za-zÀ-ú\s]/g, "");
