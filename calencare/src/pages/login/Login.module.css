@@ -12,7 +12,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  row-gap: 16px;
+  row-gap: 24px;
 }
 
 .background,
@@ -39,7 +39,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  row-gap: 8px;
+  row-gap: 16px;
 }
 
 .form {
@@ -86,22 +86,28 @@
 }
 
 .logo-login {
-  width: 90%;
+  width: 100%;
+  height: auto;
   margin: 0 auto;
   margin-top: 32px;
   padding-left: 48px;
 }
 
 .container-imagem-login {
-  width: 50vw;
+  width: 50%;
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--lilas-fundo); 
 }
 
 .imagem-login {
-  max-height: 500px;
+  position: relative;
+  max-height: 75vh;
+  max-width: 40vw;
   width: auto;
   height: auto;
   margin: 0 auto;
+  top: 5%;
+  bottom: 15%;
 }

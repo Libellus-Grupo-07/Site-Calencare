@@ -22,7 +22,7 @@ footer .container .content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  row-gap: 32px;
+  row-gap: 2rem;
 }
 
 footer .container .content .img-logo {
@@ -30,15 +30,18 @@ footer .container .content .img-logo {
 }
 
 footer .container .content .title {
-  font-size: 32px;
+  font-size: 2rem;
   color: var(--texto-branco);
   font-weight: 600;
   letter-spacing: -0.05rem;
+  line-height: 42px;
 }
 
 footer .container .image .img-footer {
-  height: 300px;
+  max-width: 30vw;
+  min-height: 200px;
   width: 100%;
+  height: 100%;
   border-radius: 1rem;
   filter: drop-shadow(16px 16px 0px #C1C1C1);
   z-index: 1;

@@ -13,11 +13,11 @@
 .header .logo-header {
   display: flex;
   align-items: center;
-  column-gap: 8px;
+  column-gap: 0.5rem;
 }
 
 .header .logo-header .icon-menu{
-  font-size: 24px;
+  font-size: 1.3rem;
   color: var(--roxo-principal);
   cursor: pointer;
 }
@@ -25,19 +25,19 @@
 .header .nav-list {
   list-style: none;
   display: grid;
-  row-gap: 32px;
+  row-gap: 2rem;
 }
 
 .header .nav-list li {
   display: flex;
   align-items: center;
-  column-gap: 24px;
+  column-gap: 1.5rem;
   cursor: pointer;
   transition: 0.3s all linear;
 }
 
 .header .nav-list li .text-link {
-  font-size: 15px;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: -0.05rem;
 }
@@ -68,7 +68,7 @@
 }
 
 .header .user-profile .icon-profile{
-  height: 42px;
+  height: 2.3rem;
 }
 
 .header .user-profile .icon-profile .img-profile {

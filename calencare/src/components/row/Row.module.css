@@ -5,7 +5,8 @@
   padding: 16px 48px;
 }
 
-.row:hover .text-title .value, .row:hover .icon-arrow {
+.row:hover .text-title .value,
+.row:hover .icon-arrow {
   color: var(--roxo-principal);
 }
 
@@ -24,9 +25,11 @@
 }
 
 .row .text-title .value {
+  width: 70%;
   font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.05rem;
+  line-height: 24px;
   color: var(--texto-preto);
   transition: 0.3s all linear;
   cursor: pointer;

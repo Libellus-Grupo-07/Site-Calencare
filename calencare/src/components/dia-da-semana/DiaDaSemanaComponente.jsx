@@ -1,14 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from "./DiaDaSemanaComponente.module.css";
 import { Switch } from 'antd';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Box, Typography } from '@mui/material';
-import dayjs, { Dayjs } from 'dayjs';
-import { StyledEngineProvider } from '@mui/material/styles';
-import Button from '../button/Button';
+import { IMaskInput } from 'react-imask';
 
 const DiaDaSemanaComponente = (
   { diaSemana,
@@ -18,49 +12,51 @@ const DiaDaSemanaComponente = (
     setHorario2,
     aberto,
     setAberto,
-    onChange }) => {
-  const [isSelected, setIsSelected] = useState(false);
+    funcaoClickSwitch,
+  }) => {
 
   const handleButtonClick = () => {
-    setAberto(!aberto);
+    if (funcaoClickSwitch !== undefined) {
+      funcaoClickSwitch();
+    } else {
+      setAberto(!aberto);
+    }
   };
-
-  const mudarValor = (e, alterarValor) => {
-    alterarValor(e.target.value);
-  }
 
   return (
     <Box
       width="100%"
-      height="40px"
+      height="10vh"
+      maxHeight="44px"
       display="flex"
       justifyContent="space-between"
       alignItems="center"
       className={styles["container-cadastro"]}
     >
       <div style={{
-        width: "240px",
+        width: "18rem",
         display: "flex",
+        flexWrap: "wrap",
         marginRight: '16px',
       }}>
         <Typography
           style={{
-            width: "8vw",
-            fontSize: "17px",
+            width: "40%",
+            fontSize: "1.1rem",
             fontFamily: "Poppins",
             fontWeight: "bold",
             textAlign: "left",
-            letterSpacing: "-0.05rem"
+            letterSpacing: "-0.05rem",
           }}
           variant="h6" >
           {diaSemana}
         </Typography>
         <div style={{
           fontFamily: "Poppins",
-          width: "134px",
+          width: "55%",
           display: 'flex',
           alignItems: 'center',
-          columnGap: "8px"
+          columnGap: "8px",
         }}>
           <Switch
             onClick={handleButtonClick}
@@ -74,9 +70,11 @@ const DiaDaSemanaComponente = (
           >
           </Switch>
           <span style={{
+            width: "100%",
             fontFamily: "Poppins",
             color: aberto ? '#9f35f0' : "#585858",
-            fontWeight: 600
+            fontWeight: 600,
+            letterSpacing: "-0.03rem"
           }}>
             {aberto ? "Aberto" : "Fechado"}
           </span>
@@ -86,10 +84,10 @@ const DiaDaSemanaComponente = (
         <div
           style={{
             display: "flex",
-            width: "100%",
+            width: "75%",
             height: "100%",
             alignItems: "center",
-            columnGap: "8px"
+            columnGap: "0.5rem"
           }}
         >
           <input
@@ -103,7 +101,7 @@ const DiaDaSemanaComponente = (
           }}>
             às
           </span>
-          <input
+          <IMaskInput
             type='time'
             className={styles["input-time"]}
             value={horario2}
@@ -116,38 +114,7 @@ const DiaDaSemanaComponente = (
           Fechado
         </span>
       }
-      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={['TimePicker', 'TimePicker']}>
-          <TimePicker
-            //value={horario1}
-            label="Início"
-            defaultValue={dayjs('2022-04-17T15:30')}
-            onChange={(e) => mudarValor(e, setHorario1)}
-          />
-          <TimePicker
-            //value={horario2}
-            label="Fim"
-            defaultValue={dayjs('2022-04-17T15:30')}
-            onChange={(e) => mudarValor(e, setHorario2)}
-          //value={value}
-          //onChange={(newValue) => setValue(newValue)}
-
-          //           <TimePicker
-          //   label="Uncontrolled picker"
-          //   defaultValue={dayjs('2022-04-17T15:30')}
-          // />
-          // <TimePicker
-          //   label="Controlled picker"
-          //   value={value}
-          //   onChange={(newValue) => setValue(newValue)}
-          // />
-          />
-        </DemoContainer>
-      </LocalizationProvider> */}
     </Box>
-
-
-
   );
 };
 

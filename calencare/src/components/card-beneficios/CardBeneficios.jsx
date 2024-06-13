@@ -5,6 +5,7 @@ const CardBeneficios = ({ imagem, titulo, texto }) => {
     return (
         <>
             <div className={styles["card-beneficios"]}>
+            <div className={styles["container-beneficios"]}>
                 <div className={styles["card-icon"]}>
                     <img src={imagem} alt="Ícone de Agendamento" className={styles["img-card"]} />
                 </div>
@@ -12,6 +13,7 @@ const CardBeneficios = ({ imagem, titulo, texto }) => {
                 <span className={styles["card-text"]}>
                     {texto}
                 </span>
+            </div>
             </div>
         </>
     );

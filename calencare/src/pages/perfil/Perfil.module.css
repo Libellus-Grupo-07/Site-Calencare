@@ -1,44 +1,3 @@
-.title{
-  font-size: 24px;
-  color: var(--texto-preto);
-  letter-spacing: -0.05rem;
-  font-weight: 700;
-}
-
-.text{
-  text-align: left;
-  color: var(--texto-cinza);
-  font-family: "Work Sans";
-  font-size: 18px;
-}
-
-.btn-roxo{
-    background-color: var(--roxo-principal);
-    color: white;
-    border-color: var(--roxo-principal);
-    border: none;
-    margin-left: 8px;
-    font-size: 16px;
-}
-
-.btn-roxo:hover{
-    background-color: transparent;
-    color: var(--roxo-principal);
-    border: 1.5px solid var(--roxo-principal);
-}
-
-.btn-branco{
-    background-color: transparent;
-    border: 1.5px solid;
-    color: var(--texto-cinza);
-}
-
-.btn-branco:hover{
-    border: 1.5px solid var(--texto-preto);
-    background-color: var(--texto-preto);
-    color: var(--branco);
-}
-
 .section-perfil {
   width: 100%;
   display: flex;
@@ -114,7 +73,8 @@
   height: 44px;
   font-weight: 600;
   letter-spacing: -0.03rem;
-  transition: 0.3 all linear;
+  cursor: pointer;
+  transition: 0.3s all ease-in-out;
 }
 
 .section-perfil
@@ -137,4 +97,75 @@
   background-color: transparent;
   border: none;
   color: var(--texto-cinza);
+}
+
+.section-perfil
+  .container-perfil
+  .content-perfil
+  .informations-perfil
+  .info-empresa {
+  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.section-perfil
+  .container-perfil
+  .content-perfil
+  .informations-perfil
+  .info-empresa
+  .dias-funcionamento {
+  width: 95%;
+  padding: 16px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 2rem;
+  margin: 0 auto;
+}
+
+.section-perfil
+  .container-perfil
+  .content-perfil
+  .informations-perfil
+  .info-empresa
+  .dias-funcionamento
+  .card-horarios {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--branco);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 1.5rem;
+  padding: 32px;
+  opacity: 1;
+}
+
+.section-perfil
+  .container-perfil
+  .content-perfil
+  .informations-perfil
+  .info-empresa
+  .dias-funcionamento
+  .card-horarios
+  .card-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+
+.group-inputs {
+    display: flex;
+    width: 100%;
+    column-gap: 15px;
+    padding: 0;
+    margin: 0;
+}
+
+.uf{
+  width: 25%;
 }

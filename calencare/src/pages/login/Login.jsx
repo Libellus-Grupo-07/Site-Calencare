@@ -37,9 +37,21 @@ const Login = () => {
             api.post("/funcionarios/login", body).then((response) => {
                 console.log(response)
                 const { data } = response
+                sessionStorage.setItem("nomeUser", data.nome)
                 sessionStorage.setItem("idUser", data.userId)
-                navigate("/inicio");
-                toast.success("Login realizado com sucesso");
+                sessionStorage.setItem("token", data.token)
+
+                api.get(`/funcionarios/${data.userId}`).then((response) => {
+                    const { data } = response;
+                    const { empresa } = data;
+                    const { id } = empresa;
+                    sessionStorage.setItem("idEmpresa", Number(id));
+                    navigate("/inicio");
+                }).catch((error) => {
+                    console.error(error)
+                })
+
+
             }).catch(function (error) {
                 console.error(error);
                 const { code } = error;
@@ -67,16 +79,21 @@ const Login = () => {
                     <div className={styles["form"]}>
                         <div className={styles["container-login"]}>
                             <Input
+                                id={"email"}
                                 titulo={"Email"}
                                 type="email"
                                 valor={email}
                                 alterarValor={setEmail}
+                                className={styles["email"]}
+                                sobrepor={true}
                             />
                             <Input
+                                id={"senha"}
                                 titulo={"Senha"}
                                 type={"password"}
                                 valor={senha}
                                 alterarValor={setSenha}
+                                sobrepor={true}
                             />
                         </div>
                         <div className={styles["container-buttons"]}>

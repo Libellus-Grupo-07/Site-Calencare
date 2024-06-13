@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import Button from "../../components/button/Button";
 import styles from "./Cadastro.module.css"
@@ -9,22 +9,21 @@ import CadastroEtapa1 from "../../components/cadastro-etapa-1/CadastroEtapa1";
 import CadastroEtapa2 from "../../components/cadastro-etapa-2/CadastroEtapa2";
 import CadastroEtapa3 from "../../components/cadastro-etapa-3/CadastroEtapa3";
 import CadastroEtapa4 from "../../components/cadastro-etapa-4/CadastroEtapa4";
-import { isVazio, aberturaMaiorFechamento, transformarHora } from "../../utils/global";
+import { isVazio, aberturaMaiorFechamento, transformarHora, isValidEmail, isLengthValid } from "../../utils/global";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../../api";
-import dayjs from "dayjs";
 import { useForm } from "../../hooks/useForm";
 import { useNavigate } from "react-router-dom";
+import Titulo from './../../components/titulo/Titulo';
 
 const Cadastro = () => {
     const hora = new Date();
-    const [id, setId] = useState(0);
-    const [dtCriacao, setDtCriacao] = useState(new Date());
     const [razaoSocial, setRazaoSocial] = useState("")
     const [cnpj, setCNPJ] = useState("")
     const [telefonePrincipal, setTelefonePrincipal] = useState("")
     const [emailPrincipal, setEmailPrincipal] = useState("")
+    const [intervaloAtendimento, setIntervaloAtendimento] = useState("")
 
     const [cep, setCep] = useState("")
     const [logradouro, setLogradouro] = useState("")
@@ -67,8 +66,6 @@ const Cadastro = () => {
     const [horario1Domingo, setHorario1Domingo] = useState(hora)
     const [horario2Domingo, setHorario2Domingo] = useState(hora)
 
-    const [empresa, setEmpresa] = useState({});
-
     const formComponents = [<CadastroEtapa1
         RazaoSocial={razaoSocial}
         setRazaoSocial={setRazaoSocial}
@@ -81,6 +78,9 @@ const Cadastro = () => {
 
         EmailDaEmpresa={emailPrincipal}
         setEmailDaEmpresa={setEmailPrincipal}
+
+        IntervaloAtendimento={intervaloAtendimento}
+        setIntervaloAtendimento = { setIntervaloAtendimento }
     />, <CadastroEtapa2
         Cep={cep}
         setCep={setCep}
@@ -167,16 +167,21 @@ const Cadastro = () => {
         setSenha={setSenha}
     />]
 
+
     const { currentStep, currentComponent, changeStep, isLastStep } = useForm(formComponents)
 
     const navigate = useNavigate()
 
     const validarCadastro1 = () => {
+        // validarCnpj();
         if (
             !isVazio(razaoSocial, "Razão Social") &&
             !isVazio(cnpj, "CNPJ") &&
             !isVazio(telefonePrincipal, "Telefone da Empresa") &&
-            !isVazio(emailPrincipal, "Email da Empresa")) {
+            !isVazio(emailPrincipal, "Email da Empresa") &&
+            !isVazio(intervaloAtendimento, "Intervalo entre Atendimentos") && 
+            isValidEmail(emailPrincipal, "Email da Empresa")
+        ) {
             return true
         }
 
@@ -228,181 +233,163 @@ const Cadastro = () => {
         return false;
     }
 
-    const validarCadastro4 = () => {
+    const validarCadastro4 = (e) => {
         if (!isVazio(nome, "Nome")
             && !isVazio(telefone, "Telefone")
             && !isVazio(email, "Email")
-            && !isVazio(senha, "Senha")) {
+            && !isVazio(senha, "Senha") &&
+            isValidEmail(email, "Email") &&
+            isLengthValid(e, "Senha") 
+
+        ) {
             return true;
         }
 
         return false;
     }
 
-    const cadastrarEmpresa1 = () => {
+    const cadastrar = () => {
+
         let body = {
             razaoSocial,
             cnpj,
             telefonePrincipal,
-            emailPrincipal
+            emailPrincipal,
+            intervaloAtendimento
         }
-        var deuRuim = false;
 
         api.post("/empresas", body).then((response) => {
             const { data } = response;
-            const { id, dtCriacao } = data;
-            setId(id);
-            setDtCriacao(dtCriacao)
+            const { id } = data;
+            const bodyEndereco = {
+                cep,
+                numero,
+                complemento
+            }
+            api.post(`/enderecos/${id}`, bodyEndereco).then().catch((error) => {
+                toast.error("Houve um erro ao tentar cadastrar o endereço")
+            });
 
-        }).catch((error) => {
-            console.log(error)
-            const { response } = error;
-            const { status } = response;
+            const dias = [
+                {
+                    codDiaSemana: 1,
+                    diaSemana: "Segunda-feira",
+                    inicio: horario1Segunda,
+                    fim: horario2Segunda,
+                    status: diaSegundaAberto ? 1 : 0
+                },
+                {
+                    codDiaSemana: 2,
+                    diaSemana: "Terça-feira",
+                    inicio: horario1Terca,
+                    fim: horario2Terca,
+                    status: diaTercaAberto ? 1 : 0
+                    ,
+                },
+                {
+                    codDiaSemana: 3,
+                    diaSemana: "Quarta-feira",
+                    inicio: horario1Quarta,
+                    fim: horario2Quarta,
+                    status: diaQuartaAberto ? 1 : 0
+                },
+                {
+                    codDiaSemana: 4,
+                    diaSemana: "Quinta-feira",
+                    inicio: horario1Quinta,
+                    fim: horario2Quinta,
+                    status: diaQuintaAberto ? 1 : 0
+                },
+                {
+                    codDiaSemana: 5,
+                    diaSemana: "Sexta-feira",
+                    inicio: horario1Sexta,
+                    fim: horario2Sexta,
+                    status: diaSextaAberto ? 1 : 0
+                    ,
+                },
+                {
+                    codDiaSemana: 6,
+                    diaSemana: "Sábado",
+                    inicio: horario1Sabado,
+                    fim: horario2Sabado,
+                    status: diaSabadoAberto ? 1 : 0
+                },
+                {
+                    codDiaSemana: 7,
+                    diaSemana: "Domingo",
+                    inicio: horario1Domingo,
+                    fim: horario2Domingo,
+                    status: diaDomingoAberto ? 1 : 0
+                }
+            ];
 
-            if (status === 409) {
-                toast.error("O CNPJ informado, já foi cadastrado!")
+            for (let i = 0; i < dias.length; i++) {
+                let bodyDias = {
+                    diaSemana: dias[i].diaSemana,
+                    codDiaSemana: dias[i].codDiaSemana,
+                    inicio: dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].inicio),
+                    fim: dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].fim),
+                    status: dias[i].status,
+                    empresaId: id
+                };
+
+                api.post("/horarios-funcionamento", bodyDias).then().catch((error) => {
+                    console.log("houve um erro ao tentar cadastrar o horario de funcionamento");
+                    toast.error("Houve um erro ao tentar cadastrar o horario de funcionamento dia:" + bodyDias.diaSemana);
+                    console.log(error);
+                })
             }
 
-            deuRuim = true;
-        });
-
-        return deuRuim;
-    }
-
-    const cadastrarEmpresa2 = () => {
-        var deuRuim = false;
-        api.post(`/enderecos/${id}/${cep}/${numero}`).then((response) => {
-            console.log(response);
-        }).catch((error) => {
-            toast.error("Houve um erro ao tentar cadastrar o endereço")
-            console.log(error)
-            deuRuim = true;
-
-        });
-
-        return deuRuim
-    }
-
-    const cadastrarEmpresa3 = () => {
-        const dias = [
-            {
-                diaSemana: "Segunda-Feira",
-                inicio: horario1Segunda,
-                fim: horario2Segunda,
-                status: diaSegundaAberto ? 1 : 0
-            },
-            {
-                diaSemana: "Terça-Feira",
-                inicio: horario1Terca,
-                fim: horario2Terca,
-                status: diaTercaAberto ? 1 : 0
-                ,
-            },
-            {
-                diaSemana: "Quarta-Feira",
-                inicio: horario1Quarta,
-                fim: horario2Quarta,
-                status: diaQuartaAberto ? 1 : 0
-            },
-            {
-                diaSemana: "Quinta-Feira",
-                inicio: horario1Quinta,
-                fim: horario2Quinta,
-                status: diaQuintaAberto ? 1 : 0
-            },
-            {
-
-                diaSemana: "Sexta-Feira",
-                inicio: horario1Sexta,
-                fim: horario2Sexta,
-                status: diaSextaAberto ? 1 : 0
-                ,
-            },
-            {
-                diaSemana: "Sábado",
-                inicio: horario1Sabado,
-                fim: horario2Sabado,
-                status: diaSabadoAberto ? 1 : 0
-            },
-            {
-                diaSemana: "Domingo",
-                inicio: horario1Domingo,
-                fim: horario2Domingo,
-                status: diaDomingoAberto ? 1 : 0
-            }
-        ];
-        var deuRuim = false;
-
-        for (let i = 0; i < dias.length; i++) {
-            let body = {
-                "diaSemana": dias[i].diaSemana,
-                "inicio": dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].inicio),
-                "fim": dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].fim),
-                "status": dias[i].status,
+            let bodyFuncionario = {
+                nome,
+                telefone,
+                email,
+                senha,
+                perfilAcesso: "Administrador",
                 "empresa": {
                     id,
                     razaoSocial,
                     cnpj,
                     telefonePrincipal,
-                    emailPrincipal
+                    emailPrincipal,
+                    intervaloAtendimento
                 }
-            };
-
-            api.post("/horarios-funcionamento", body).then((response) => {
-                console.log("deu certo o cadastro dos horários de funcionamento")
-                console.log(response);
-            }).catch((error) => {
-                console.log("houve um erro ao tentar cadastrar o horario de funcionamento");
-                toast.error("houve um erro ao tentar cadastrar o horario de funcionamento dia:" + body.diaSemana);
-                console.log(error);
-                deuRuim = true;
-            })
-        }
-
-        return deuRuim;
-    }
-
-    const cadastrarEmpresa4 = () => {
-        var deuRuim = false;
-        let body = {
-            nome,
-            telefone,
-            email,
-            senha,
-            "empresa": {
-                id,
-                razaoSocial,
-                cnpj,
-                telefonePrincipal,
-                emailPrincipal
             }
-        }
 
-        api.post("/funcionarios", body).then((response) => {
-            console.log("cadastro de funcionario com sucesso")
-            console.log(response);
-            toast.success("Cadastro realizado com sucesso!");
-            navigate("/login");
+            api.post("/funcionarios", bodyFuncionario).then((response) => {
+                toast.success("Cadastro realizado com sucesso!");
+                navigate("/login");
+                sessionStorage.removeItem("currentStep");
+            }).catch((error) => {
+                toast.error("Houve um erro ao tentar cadatrar funcionario")
+                console.error(error)
+            });
+
         }).catch((error) => {
-            console.log("houve um erro ao tentar cadatrar funcionario")
             console.log(error);
-            deuRuim = true;
+            const { code } = error;
+
+            if (code === "ERR_NETWORK") {
+                toast.error("Houve um erro ao tentar realizar cadastro. Tente novamente mais tarde!");
+            } else {
+                const { response } = error;
+                const { status } = response;
+
+                if (status === 409) {
+                    toast.error("O CNPJ informado, já foi cadastrado!")
+                }
+            }
 
         });
 
-        return deuRuim
     }
-
-    const funcoes = [cadastrarEmpresa1, cadastrarEmpresa2, cadastrarEmpresa3, cadastrarEmpresa4]
 
     const validacoes = [validarCadastro1, validarCadastro2, validarCadastro3, validarCadastro4];
 
     const avancar = (e) => {
         if (validacoes[currentStep]()) {
-            var deuRuim = funcoes[currentStep]();
-            if (!deuRuim) {
-                changeStep(currentStep + 1, e)
-            }
+            changeStep(Number(currentStep) + 1, e)
         }
     }
 
@@ -410,15 +397,14 @@ const Cadastro = () => {
         <>
             <div className={styles["tela-cadastro"]}>
                 <div className={styles["container-imagem-cadastro"]}>
-                    {/* <div><Navbar/></div> */}
                     <div className={styles["logo-cadastro"]}><Logo /></div>
                     <img className={styles["imagem-cadastro"]} src={Imagem} alt="imagem cadastro" />
                 </div>
                 <div className={styles["formulario-cadastro"]}>
                     <div className={styles["engloba-formulario"]}>
-                        <div className="texto">
-                            <h1> Cadastro </h1>
-                            <p>Informe {currentStep == 2 ? "os dias" : currentStep == 1 ? "a localidade" : "os dados"} da <b>{currentStep < 2 ? "empresa" : currentStep == 2 ? "funcionamento" : "usuário"}</b> para começar a realizar os agendamentos.</p>
+                        <div className={styles["texto"]}>
+                            <Titulo titulo={"Cadastro"} tamanho={"md"}/>
+                            <p className={styles["text"]}>Informe {currentStep === 2 ? "os dias" : currentStep === 1 ? "a localidade" : "os dados"} da <b>{currentStep < 2 ? "empresa" : currentStep === 2 ? "funcionamento" : "usuário"}</b> para começar a realizar os agendamentos.</p>
                         </div>
                         <div className={styles["inputs-container"]}>
                             <div className={styles["form"]}>
@@ -433,7 +419,7 @@ const Cadastro = () => {
                                         cor={"roxo"}
                                     /> :
                                     <Button
-                                        funcaoButton={(e) => avancar(e)}
+                                        funcaoButton={() => cadastrar()}
                                         titulo="Cadastrar"
                                         cor={"roxo"}
                                     />}

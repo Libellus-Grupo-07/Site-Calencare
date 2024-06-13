@@ -17,7 +17,7 @@
   display: flex;
   width: 100%;
   min-height: 100vh;
-  }
+}
 
 .container-imagem-cadastro {
   width: 50vw;
@@ -46,17 +46,27 @@
 }
 
 .logo-cadastro {
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
   margin-top: 32px;
   padding-left: 48px;
 }
 
 .imagem-cadastro {
-  max-height: 500px;
+  position: relative;
+  max-height: 75vh;
+  max-width: 40vw;
   width: auto;
   height: auto;
   margin: 0 auto;
+  top: 5%;
+  bottom: 15%;
+}
+
+.texto {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
 }
 
 .engloba-formulario {
@@ -65,7 +75,7 @@
   justify-content: space-between;
   margin: 0 auto;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: 24px;
 }
 
 .text-entrar {
@@ -80,5 +90,6 @@
 }
 
 p {
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 20px;
 }

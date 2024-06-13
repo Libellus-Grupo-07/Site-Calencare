@@ -4,13 +4,19 @@ import Home from "./pages/home/Home";
 import Cadastro from "./pages/cadastro/Cadastro";
 import Login from "./pages/login/Login";
 import NotFound from "./pages/notfound/NotFound";
-import CadastroEtapa1 from "./components/cadastro-etapa-1/CadastroEtapa1";
-import CadastroEtapa2 from "./components/cadastro-etapa-2/CadastroEtapa2";
-import CadastroEtapa3 from "./components/cadastro-etapa-3/CadastroEtapa3";
-import CadastroEtapa4 from "./components/cadastro-etapa-4/CadastroEtapa4";
 import Inicio from "./pages/inicio/Inicio";
 import Perfil from "./pages/perfil/Perfil";
 import EditarPerfil from "./pages/editar-perfil/EditarPerfil";
+import Servicos from "./pages/servicos/Servicos";
+import Clientes from "./pages/clientes/Clientes";
+import AdicionarServico from './pages/adicionar-servico/AdicionarServico';
+import Equipe from "./pages/minha-equipe/MinhaEquipe";
+import AdicionarFuncionario from "./pages/adicionar-funcionarios/AdicionarFuncionario";
+import AdicionarAgendamento from "./pages/adicionar-agendamento/AdicionarAgendamento";
+import Agenda from "./pages/agenda/Agenda";
+import EditarEmpresa from "./pages/editar-empresa/EditarEmpresa";
+import EditarDiasFuncionamento from "./pages/editar-dias-funcionamento/EditarDiasFuncionamento";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 function Rotas() {
   return (
@@ -22,8 +28,21 @@ function Rotas() {
           <Route path="cadastro" element={<Cadastro />} />
           <Route path="login" element={<Login />} />
           <Route path="inicio" element={<Inicio />} />
-          <Route path="perfil/:idUser" element={<Perfil />} />
-          <Route path="editar-perfil/:idUser" element={<EditarPerfil />} />
+          <Route path="servicos" element={<Servicos />} />
+          <Route path="servicos/adicionar" element={<AdicionarServico />} />
+          <Route path="servicos/editar/:idServico" element={<AdicionarServico />} />
+          <Route path="clientes" element={<Clientes />} />
+          <Route path="perfil" element={<Perfil />} />
+          <Route path="usuario/editar/:idUser" element={<EditarPerfil />} />
+          <Route path="empresa/editar/:idEmpresa" element={<EditarEmpresa />} />
+          <Route path="dias-funcionamento/editar/:idEmpresa" element={<EditarDiasFuncionamento />} />
+          <Route path="equipe" element={<Equipe/>}/>
+          <Route path="dashboard" element={<Dashboard/>}/>
+          <Route path="profissional/adicionar" element={<AdicionarFuncionario/>}/>
+          <Route path="profissional/editar/:idProfissional" element={<AdicionarFuncionario/>}/>
+          <Route path="agenda" element={<Agenda/>} />
+          <Route path="agenda/adicionar" element={<AdicionarAgendamento/>}/>
+
         </Routes>
       </BrowserRouter>
     </>

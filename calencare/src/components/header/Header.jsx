@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import Logo from "../logo/Logo";
 import styles from "./Header.module.css"
 import { useLocation, useNavigate } from "react-router-dom";
@@ -6,15 +5,11 @@ import { FaAngleRight } from "react-icons/fa6";
 import { IconlyProvider, Home, Calendar, Work, Chart, TwoUsers, AddUser, Graph } from "react-iconly";
 import iconProfile from "./../../utils/assets/perfil_padrao.svg"
 import { LuMenu } from "react-icons/lu";
-import api from "../../api";
 
-const Header = ({ nomeUser }) => {
+const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location.pathname)
-    const idUser = sessionStorage.getItem("idUser");
-
-
+    const nomeUser = sessionStorage.getItem("nomeUser");
 
     return (
         <>
@@ -33,7 +28,7 @@ const Header = ({ nomeUser }) => {
                         onClick={() => navigate("/inicio")}
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <Home />
@@ -48,9 +43,10 @@ const Header = ({ nomeUser }) => {
                             location.pathname === "/agenda" ? "roxo" : "cinza"
                             ]
                         }
+                        onClick={() => navigate("/agenda")}
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <Calendar />
@@ -65,9 +61,10 @@ const Header = ({ nomeUser }) => {
                             location.pathname === "/servicos" ? "roxo" : "cinza"
                             ]
                         }
+                        onClick={() => navigate("/servicos")}
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <Work />
@@ -79,30 +76,33 @@ const Header = ({ nomeUser }) => {
                     <li
                         className={
                             styles[
-                            location.pathname === "/dashboard" ? "roxo" : "cinza"
+                                location.pathname === "/dashboard" ? "roxo" : "cinza"
                             ]
                         }
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <Chart
                             />
                         </IconlyProvider>
-                        <span className={styles["text-link"]}>
+                        <span className={styles["text-link"]}
+                            onClick={() => navigate("/dashboard")}
+                        >
                             Dashboard
                         </span>
                     </li>
                     <li
                         className={
                             styles[
-                            location.pathname === "/minha-equipe" ? "roxo" : "cinza"
+                            location.pathname === "/equipe" ? "roxo" : "cinza"
                             ]
                         }
+                        onClick={() => navigate("/equipe")}
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <TwoUsers />
@@ -117,9 +117,10 @@ const Header = ({ nomeUser }) => {
                             location.pathname === "/clientes" ? "roxo" : "cinza"
                             ]
                         }
+                        onClick={() => navigate("/clientes")}
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <AddUser />
@@ -128,7 +129,7 @@ const Header = ({ nomeUser }) => {
                             Clientes
                         </span>
                     </li>
-                    <li
+                    {/* <li
                         className={
                             styles[
                             location.pathname === "/financas" ? "roxo" : "cinza"
@@ -136,7 +137,7 @@ const Header = ({ nomeUser }) => {
                         }
                     >
                         <IconlyProvider
-                            className={styles["abc"]}
+                            className={styles["icon-link"]}
                             stroke="bold"
                         >
                             <Graph />
@@ -144,13 +145,13 @@ const Header = ({ nomeUser }) => {
                         <span className={styles["text-link"]}>
                             Finanças
                         </span>
-                    </li>
+                    </li> */}
                 </ul>
                 <div
                     className={styles["user-profile"]}
-                    onClick={() => navigate(`/perfil/${idUser}`)} id={
+                    onClick={() => navigate(`/perfil`)} id={
                         styles[
-                        location.pathname === "/perfil" ? "roxo" : "cinza"
+                        location.pathname === `/perfil` ? "roxo" : "cinza"
                         ]
                     }
                 >
