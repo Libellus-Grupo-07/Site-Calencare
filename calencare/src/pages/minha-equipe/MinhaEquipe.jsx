@@ -47,7 +47,8 @@ const Equipe = () => {
                 Promise.all(promessasServicos)
                     .then((respostas) => {
                         const dadosAtualizados = data.map((funcionario, index) => {
-                            const servicosFuncionario = respostas[index].data.length === 0 ? "" :
+                            var respostaAtual = respostas[index].data
+                            const servicosFuncionario = respostaAtual.length === 0 ? "" :
                                 (
                                     <ul style={{
                                         listStyle: "revert",
@@ -56,7 +57,7 @@ const Equipe = () => {
                                         display: "grid",
                                     }}>
 
-                                        {respostas[index].data.map((servico) => (
+                                        {respostaAtual.filter(s => s.bitStatus === 1).map((servico) => (
                                             <li key={index}>{servico.nomeServico}</li>
                                         ))}
                                     </ul>

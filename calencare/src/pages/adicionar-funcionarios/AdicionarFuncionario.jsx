@@ -159,8 +159,6 @@ const AdicionarFuncionario = () => {
             if (isEditar) {
                 api.put(url, objetoAdicionado).then((response) => {
                     const { data } = response;
-                    console.log(data)
-                    console.log(response)
 
                     for (let index = 0; index < servicosPorFuncionario.length; index++) {
                         // Serviço por Funcionário atual
@@ -172,15 +170,12 @@ const AdicionarFuncionario = () => {
 
                         // Se o status do serviço vindo do BD estiver diferente do status atual, então atualiza no BD
                         if (servicoFuncionario.bitStatus !== isSelecionado) {
-                            api.patch(`/servico-por-funcionario/${idEmpresa}/${idProfissional}/${servicoFuncionario.id}`).then((response) => {
-                                console.warn("opa patch")
-                                console.error(response)
-                            }).catch((error) => {
+                            api.patch(`/servico-por-funcionario/${idEmpresa}/${idProfissional}/${servicoFuncionario.id}`).then().catch((error) => {
                                 console.error(error)
                             })
                         }
                     }
-                    
+
                     toast.success("Funcionario atualizado com sucesso!");
                     navigate("/equipe");
                 }).catch((error) => {
@@ -193,8 +188,6 @@ const AdicionarFuncionario = () => {
                 api.post(url, objetoAdicionado).then((response) => {
                     const { data } = response;
                     const { id } = data;
-                    console.log(data)
-                    console.log(response)
 
                     for (let index = 0; index < items.length; index++) {
                         let servicoAdicionado = {
