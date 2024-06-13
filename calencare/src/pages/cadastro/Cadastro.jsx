@@ -272,12 +272,14 @@ const Cadastro = () => {
 
             const dias = [
                 {
+                    codDiaSemana: 1,
                     diaSemana: "Segunda-feira",
                     inicio: horario1Segunda,
                     fim: horario2Segunda,
                     status: diaSegundaAberto ? 1 : 0
                 },
                 {
+                    codDiaSemana: 2,
                     diaSemana: "Terça-feira",
                     inicio: horario1Terca,
                     fim: horario2Terca,
@@ -285,19 +287,21 @@ const Cadastro = () => {
                     ,
                 },
                 {
+                    codDiaSemana: 3,
                     diaSemana: "Quarta-feira",
                     inicio: horario1Quarta,
                     fim: horario2Quarta,
                     status: diaQuartaAberto ? 1 : 0
                 },
                 {
+                    codDiaSemana: 4,
                     diaSemana: "Quinta-feira",
                     inicio: horario1Quinta,
                     fim: horario2Quinta,
                     status: diaQuintaAberto ? 1 : 0
                 },
                 {
-
+                    codDiaSemana: 5,
                     diaSemana: "Sexta-feira",
                     inicio: horario1Sexta,
                     fim: horario2Sexta,
@@ -305,12 +309,14 @@ const Cadastro = () => {
                     ,
                 },
                 {
+                    codDiaSemana: 6,
                     diaSemana: "Sábado",
                     inicio: horario1Sabado,
                     fim: horario2Sabado,
                     status: diaSabadoAberto ? 1 : 0
                 },
                 {
+                    codDiaSemana: 7,
                     diaSemana: "Domingo",
                     inicio: horario1Domingo,
                     fim: horario2Domingo,
@@ -320,18 +326,12 @@ const Cadastro = () => {
 
             for (let i = 0; i < dias.length; i++) {
                 let bodyDias = {
-                    "diaSemana": dias[i].diaSemana,
-                    "inicio": dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].inicio),
-                    "fim": dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].fim),
-                    "status": dias[i].status,
-                    "empresa": {
-                        id,
-                        razaoSocial,
-                        cnpj,
-                        telefonePrincipal,
-                        emailPrincipal,
-                        intervaloAtendimento
-                    }
+                    diaSemana: dias[i].diaSemana,
+                    codDiaSemana: dias[i].codDiaSemana,
+                    inicio: dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].inicio),
+                    fim: dias[i].status === 0 ? "00:00:00" : transformarHora(dias[i].fim),
+                    status: dias[i].status,
+                    empresaId: id
                 };
 
                 api.post("/horarios-funcionamento", bodyDias).then().catch((error) => {

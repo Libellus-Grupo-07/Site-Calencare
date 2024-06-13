@@ -80,7 +80,7 @@ const EditarDiasFuncionamento = () => {
             horariosFuncionamentos.forEach((h) => {
                 vetorDias.push({
                     id: h.id,
-                    diaSemana: h.diaSemana.replace("-Feira", ""),
+                    diaSemana: h.diaSemana.replace("-feira", "").replace("-Feira", ""),
                     fim: h.fim,
                     inicio: h.inicio,
                     aberto: h.status === 0 ? false : true
@@ -120,45 +120,51 @@ const EditarDiasFuncionamento = () => {
     const editar = () => {
         const vetorDias = [
             {
-                diaSemana: "Segunda-Feira",
+                codDiaSemana: 1,
+                diaSemana: "Segunda-feira",
                 inicio: horario1Segunda,
                 fim: horario2Segunda,
                 status: diaSegundaAberto ? 1 : 0
             },
             {
-                diaSemana: "Terça-Feira",
+                codDiaSemana: 2,
+                diaSemana: "Terça-feira",
                 inicio: horario1Terca,
                 fim: horario2Terca,
                 status: diaTercaAberto ? 1 : 0
                 ,
             },
             {
-                diaSemana: "Quarta-Feira",
+                codDiaSemana: 3,
+                diaSemana: "Quarta-feira",
                 inicio: horario1Quarta,
                 fim: horario2Quarta,
                 status: diaQuartaAberto ? 1 : 0
             },
             {
-                diaSemana: "Quinta-Feira",
+                codDiaSemana: 4,
+                diaSemana: "Quinta-feira",
                 inicio: horario1Quinta,
                 fim: horario2Quinta,
                 status: diaQuintaAberto ? 1 : 0
             },
             {
-
-                diaSemana: "Sexta-Feira",
+                codDiaSemana: 5,
+                diaSemana: "Sexta-feira",
                 inicio: horario1Sexta,
                 fim: horario2Sexta,
                 status: diaSextaAberto ? 1 : 0
                 ,
             },
             {
+                codDiaSemana: 6,
                 diaSemana: "Sábado",
                 inicio: horario1Sabado,
                 fim: horario2Sabado,
                 status: diaSabadoAberto ? 1 : 0
             },
             {
+                codDiaSemana: 7,
                 diaSemana: "Domingo",
                 inicio: horario1Domingo,
                 fim: horario2Domingo,
@@ -171,6 +177,7 @@ const EditarDiasFuncionamento = () => {
         for (let i = 0; i < vetorDias.length; i++) {
             let bodyDias = {
                 diaSemana: vetorDias[i].diaSemana,
+                codDiaSemana: vetorDias[i].codDiaSemana,
                 inicio: vetorDias[i].status === 0 ? "00:00:00" : transformarHora(vetorDias[i].inicio),
                 fim: vetorDias[i].status === 0 ? "00:00:00" : transformarHora(vetorDias[i].fim),
                 status: vetorDias[i].status,

@@ -5,7 +5,6 @@ const Button = ({ funcaoButton, tamanho, titulo, cor, icone, disabled }) => {
     return (
         <>
             <div className={styles["btn"]}>
-
                 <button
                     onClick={funcaoButton}
                     id={disabled ? styles["desabilitado"] : ""}

@@ -1,0 +1,167 @@
+.section-dashboard {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  column-gap: 20vw;
+}
+
+.section-dashboard .container-dashboard {
+  width: 100%;
+  padding: 32px 0;
+}
+
+.section-dashboard .container-dashboard .content-dashboard {
+  width: 70vw;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+  justify-content: flex-start;
+}
+
+.section-dashboard .container-dashboard .content-dashboard .titulo-dashboard {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-dashboard .container-dashboard .content-dashboard .titulo-dashboard .group-button{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 8px;
+}
+
+.section-dashboard .container-dashboard .content-dashboard .group-kpis {
+  width: 100%;
+  display: flex;
+  height: fit-content;
+  align-items: stretch;
+  justify-content: stretch;
+  column-gap: 2%;
+  flex-wrap: wrap;
+}
+
+.section-dashboard .container-dashboard .content-dashboard .group-kpis .card-kpi {
+  width: 32%;
+  background-color: aliceblue;
+}
+
+.section-dashboard .container-dashboard .content-dashboard .container-agendamentos {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .container-agendamentos
+  .proximos-agendamentos {
+  width: 60%;
+  height: 55vh;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  row-gap: 16px;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .container-agendamentos
+  .proximos-agendamentos
+  .titulo,
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .container-agendamentos
+  .proximos-agendamentos
+  .group-proximos-agendamentos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 24px;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .container-agendamentos
+  .proximos-agendamentos
+  .text-sem-agendamentos {
+  font-size: 16px;
+  letter-spacing: -0.05rem;
+  font-weight: 500;
+  color: var(--texto-cinza);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .container-agendamentos
+  .agendamentos-em-andamento {
+  background-color: var(--preto);
+  width: 40%;
+  height: 55vh;
+  padding: 24px;
+  min-height: 5vh;
+  border: none;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  row-gap: 16px;
+  max-width: 26vw;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .container-agendamentos
+  .agendamentos-em-andamento
+  .container-card {
+  width: 100%;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .container-agendamentos
+  .agendamentos-em-andamento
+  .text-sem-agendamentos {
+  width: 100%;
+  height: 100%;
+  color: var(--cinza-claro);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .container-agendamentos
+  .agendamentos-em-andamento
+  .group-agendamentos-em-andamento {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 12px;
+  align-items: center;
+  justify-content: center;
+}

@@ -116,7 +116,7 @@ const Perfil = () => {
             horariosFuncionamentos.forEach((h) => {
                 vetorDias.push({
                     id: h.id,
-                    diaSemana: h.diaSemana.replace("-Feira", ""),
+                    diaSemana: h.diaSemana.replace("-Feira", "").replace("-feira", ""),
                     fim: h.fim,
                     inicio: h.inicio,
                     aberto: h.status === 0 ? false : true
@@ -468,6 +468,7 @@ const Perfil = () => {
                                             <Row
                                                 titulo="Telefone Principal"
                                                 valor={telefonePrincipal}
+                                                funcao={() => navegar("empresa")}
                                             />
                                             <Row
                                                 titulo="Endereço"
