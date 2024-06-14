@@ -1,18 +1,28 @@
-.input {
+.input, .input-date {
   padding: 0px 1.5rem;
   height: 2.5rem;
+  border: 1px solid;
   border-radius: 100px;
   font-size: 14.5px;
-  border: 1.5px solid var(--texto-cinza);
   letter-spacing: -0.03rem;
   color: var(--texto-preto);
   font-weight: 500;
 }
 
-.input:focus {
+.input {
+  border: 1.5px solid var(--texto-cinza);
+}
+
+.input:focus, .input-date:focus {
   outline: none;
   border-width: 2px;
   box-shadow: 0px 7px 4px var(--texto-cinza-opacidade-15);
+}
+
+.input-date{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .componet-input {
@@ -29,4 +39,8 @@
   letter-spacing: -0.03rem;
 
   font-size: 16px;
+}
+
+.abc{
+  width: 100%;   
 }

@@ -198,7 +198,7 @@ const EditarDiasFuncionamento = () => {
             toast.error("Ocorreu um erro ao atualizar os dias de funcionamento");
         } else {
             toast.success("Dias de Funcionamento editados com sucesso!");
-            navigate(-1)
+            navigate("/perfil")
         }
     }
 

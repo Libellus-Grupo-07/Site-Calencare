@@ -9,7 +9,6 @@ import { Icon } from '@iconify-icon/react';
 import CardKpi from "../../components/card-kpi/CardKpi";
 import CardAgendamento from './../../components/card-agendamento/CardAgendamento';
 import { logado, transformarDataBd, transformarDouble } from "../../utils/global";
-import Swal from "sweetalert2";
 
 const Inicio = () => {
     const navigate = useNavigate();
@@ -22,44 +21,44 @@ const Inicio = () => {
     const [agendamentosEmAndamento, setAgendamentosEmAndamento] = useState([]);
 
     const cancelar = (idAgendamento) => {
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: "btn-roxo",
-                cancelButton: "btn-branco",
-                title: "title-modal",
-                text: "text-modal",
-            },
-            buttonsStyling: false
-        });
-        swalWithBootstrapButtons.fire({
-            title: "Cancelamento de Agendamento",
-            text: `Você realmente deseja cancelar o agendamento?`,
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sim",
-            cancelButtonText: "Não",
-            showCloseButton: true,
-            reverseButtons: true,
-            width: "35vw",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // api.delete(`/funcionarios/${idUser}`).then((response) => {
-                //     swalWithBootstrapButtons.fire({
-                //         title: "Exclusão de Conta",
-                //         text: "Agendamento cancelado com sucesso.",
-                //         icon: "success"
-                //     });
-                // }).catch((error) => {
-                //     swalWithBootstrapButtons.fire({
-                //         title: "Exclusão de Conta",
-                //         text: "Não foi possível cancelar o agendamento.",
-                //         icon: "error"
-                //     });
-                //     console.error("Houve um erro ao tentar excluir a conta")
-                //     console.log(error)
-                // })
-            }
-        });
+        // const swalWithBootstrapButtons = Swal.mixin({
+        //     customClass: {
+        //         confirmButton: "btn-roxo",
+        //         cancelButton: "btn-branco",
+        //         title: "title-modal",
+        //         text: "text-modal",
+        //     },
+        //     buttonsStyling: false
+        // });
+        // swalWithBootstrapButtons.fire({
+        //     title: "Cancelamento de Agendamento",
+        //     text: `Você realmente deseja cancelar o agendamento?`,
+        //     icon: "warning",
+        //     showCancelButton: true,
+        //     confirmButtonText: "Sim",
+        //     cancelButtonText: "Não",
+        //     showCloseButton: true,
+        //     reverseButtons: true,
+        //     width: "35vw",
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         // api.delete(`/funcionarios/${idUser}`).then((response) => {
+        //         //     swalWithBootstrapButtons.fire({
+        //         //         title: "Exclusão de Conta",
+        //         //         text: "Agendamento cancelado com sucesso.",
+        //         //         icon: "success"
+        //         //     });
+        //         // }).catch((error) => {
+        //         //     swalWithBootstrapButtons.fire({
+        //         //         title: "Exclusão de Conta",
+        //         //         text: "Não foi possível cancelar o agendamento.",
+        //         //         icon: "error"
+        //         //     });
+        //         //     console.error("Houve um erro ao tentar excluir a conta")
+        //         //     console.log(error)
+        //         // })
+        //     }
+        // });
     }
 
     useEffect(() => {
