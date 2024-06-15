@@ -1,4 +1,10 @@
-.input, .input-date {
+#roxo{
+  background-color: var(--roxo-principal);
+  border-color: transparent;
+  color: var(--texto-branco);
+}
+
+.input, .component-date {
   padding: 0px 1.5rem;
   height: 2.5rem;
   border: 1px solid;
@@ -13,13 +19,13 @@
   border: 1.5px solid var(--texto-cinza);
 }
 
-.input:focus, .input-date:focus {
+.input:focus, .component-date:focus {
   outline: none;
   border-width: 2px;
   box-shadow: 0px 7px 4px var(--texto-cinza-opacidade-15);
 }
 
-.input-date{
+.component-date{
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -41,6 +47,6 @@
   font-size: 16px;
 }
 
-.abc{
+.input-date{
   width: 100%;   
 }

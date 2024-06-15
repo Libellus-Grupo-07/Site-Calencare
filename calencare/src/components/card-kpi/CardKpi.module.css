@@ -40,6 +40,6 @@
 .card-kpi .text-kpi .value-kpi {
   font-size: 1.3rem;
   color: var(--texto-preto);
-  font-weight: 900;
-  letter-spacing: -0.03rem;
+  font-weight: 800;
+  letter-spacing: -0.05rem;
 }

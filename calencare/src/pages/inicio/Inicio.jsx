@@ -95,12 +95,12 @@ const Inicio = () => {
             console.log(error);
         });
 
-        api.get(`/agendamentos/em-andamento?empresaId=${idEmpresa}`).then((response) => {
-            const { data } = response;
-            setAgendamentosEmAndamento(data);
-        }).catch((error) => {
-            console.log(error);
-        });
+        // api.get(`/agendamentos/em-andamento?empresaId=${idEmpresa}`).then((response) => {
+        //     const { data } = response;
+        //     setAgendamentosEmAndamento(data);
+        // }).catch((error) => {
+        //     console.log(error);
+        // });
 
 
         api.get(`/agendamentos/servico-mais-procurado/empresa?empresaId=${idEmpresa}`).then((response) => {

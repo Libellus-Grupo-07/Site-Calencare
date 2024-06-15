@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./CardAgendamento.module.css";
 import imgPerfilGradiente from "./../../utils/assets/perfil_gradiente.svg";
-import imgPerfilRoxo from "./../../utils/assets/perfil_roxo.svg";
+// import imgPerfilRoxo from "./../../utils/assets/perfil_roxo.svg";
 import { transformarDataHora, transformarDouble, transformarHora } from "../../utils/global";
 import Button from './../button/Button';
 import { TiCancel } from "react-icons/ti";
@@ -18,13 +18,13 @@ const CardAgendamento = ({
     precoServico,
     funcaoCancelar
 }) => {
-    const imgPerfil = cor === "branco" ? imgPerfilGradiente : imgPerfilRoxo;
+    // const imgPerfil = cor === "branco" ? imgPerfilGradiente : imgPerfilRoxo;
 
     return (
         <>
                 <div
                     className={styles[`card-agendamento`]}
-                    id={styles[cor]}
+                    id={styles[cor || "branco"]}
                     style={
                         {
 
@@ -32,20 +32,20 @@ const CardAgendamento = ({
                     }
                 >
                     <div className={styles["informations-agendamento"]}>
-                        {/* <div className={styles["photo-funcionario"]}>
+                        <div className={styles["photo-funcionario"]}>
                             <img
                                 className={styles["img-funcionario"]}
                                 src={
-                                    imgFuncionario || imgPerfil
+                                    imgFuncionario || imgPerfilGradiente
                                 }
                                 alt="Foto de perfil do funcionário"
                                 style={{
-                                    width: tamanho ? "48px" : "48px",
-                                    height: tamanho ? "48px" : "48px",
+                                    width: tamanho ? "2rem" : "3.3rem",
+                                    height: tamanho ? "2rem" : "3.3rem",
                                     borderRadius: tamanho ? "0.3rem" : ""
                                 }}
                             />
-                        </div> */}
+                        </div>
                         <div
                             className={styles["text-agendamento"]}
                             style={{
@@ -58,7 +58,7 @@ const CardAgendamento = ({
                                 <span
                                     className={styles["text-funcionario"]}
                                     style={{
-                                        fontSize: tamanho ? "16px" : ""
+                                        fontSize: tamanho ? "1rem" : ""
                                     }}
                                 >
                                     {nomeFuncionario}
@@ -66,7 +66,7 @@ const CardAgendamento = ({
                                 <span
                                     className={styles["text-horario"]}
                                     style={{
-                                        padding: tamanho ? "8px 0" : "",
+                                        padding: tamanho ? "0.5rem 0" : "",
                                         backgroundColor: tamanho ? "transparent" : ""
                                     }}
                                 >
@@ -87,7 +87,7 @@ const CardAgendamento = ({
                                 <span
                                     className={styles["text-servico"]}
                                     style={{
-                                        fontSize: tamanho ? "14px" : "",
+                                        fontSize: tamanho ? "0.9rem" : "",
                                         letterSpacing: tamanho ? "-0.02rem" : ""
                                     }}>
                                     {nomeServico} / R${transformarDouble(precoServico)}
@@ -98,7 +98,7 @@ const CardAgendamento = ({
                     <div
                         className={styles["group-buttons"]}
                         style={{
-                            padding: tamanho ? "12px 0 0 0" : ""
+                            padding: tamanho ? "0.8rem 0 0 0" : ""
                         }}
                     >
                         <Button
@@ -109,7 +109,7 @@ const CardAgendamento = ({
                             icone=
                             {tamanho ? "" :
                                 <div style={{
-                                    fontSize: "18px",
+                                    fontSize: "1.1rem",
                                     display: "flex",
                                     alignItens: "center",
                                     justifyContent: "center"

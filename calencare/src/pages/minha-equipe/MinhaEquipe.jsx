@@ -16,14 +16,11 @@ import Pilha from "../../PilhaDesfazerDados";
 const Equipe = () => {
     const navigate = useNavigate();
     const titulos = ["", "Nome", "Email", "Perfil", "Status", "Serviços", ""]
-
     const [pilha, setPilha] = useState(new Pilha())
     const idEmpresa = sessionStorage.getItem("idEmpresa")
-    const idUser = sessionStorage.getItem("idUser")
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
-    const [listaServico, setListaServico] = useState([])
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -47,7 +44,8 @@ const Equipe = () => {
                 Promise.all(promessasServicos)
                     .then((respostas) => {
                         const dadosAtualizados = data.map((funcionario, index) => {
-                            var respostaAtual = respostas[index].data
+                            var respostaAtual = respostas[index].data.length === 0 ? [] : respostas[index].data
+                            let servicos = respostaAtual.filter(s => s.bitStatus === 1);
                             const servicosFuncionario = respostaAtual.length === 0 ? "" :
                                 (
                                     <ul style={{
@@ -57,7 +55,7 @@ const Equipe = () => {
                                         display: "grid",
                                     }}>
 
-                                        {respostaAtual.filter(s => s.bitStatus === 1).map((servico) => (
+                                        {servicos.map((servico) => (
                                             <li key={index}>{servico.nomeServico}</li>
                                         ))}
                                     </ul>
@@ -87,7 +85,6 @@ const Equipe = () => {
             const funcionarioStatusDto = {
                 bitStatus: 1
             };
-            console.log(pilha)
             api.patch(`/funcionarios/status/${id}`, funcionarioStatusDto)
                 .then(() => {
                     buscarFuncionarios()
@@ -196,10 +193,10 @@ const Equipe = () => {
                                     Nenhum funcionário cadastrado
                                 </div> : <Table
                                     titulos={titulos}
-                                    linhas={dados.map((linha, index) => {
+                                    matriz={dados.map((linha) => {
 
                                         const status = linha.bitStatus === 1 ? "Ativo" : "Inativo";
-                                        return [linha.id, linha.nome, linha.email, linha.perfilAcesso, status, linha.servicos];
+                                        return [linha.id, linha.nome, linha.email, linha.perfilAcesso, status, linha.servicos]
                                     })}
                                     showEditIcon={true}
                                     showDeleteIcon={true}

@@ -20,7 +20,8 @@ const Input = ({
     regex,
     maxlength,
     minlength,
-    sobrepor
+    sobrepor,
+    cor
 }) => {
     const mudarValor = (e) => {
         alterarValor(e.target.value);
@@ -29,14 +30,18 @@ const Input = ({
     return (
         <>
             <div className={styles["componet-input"]}>
-                <label for={id}>
-                    <span
-                        className={styles["titulo-input"]}
-                    >{titulo}</span>
-                </label>
+                {(titulo) &&
+                    <label for={id}>
+                        <span
+                            className={styles["titulo-input"]}
+                        >
+                            {titulo}
+                        </span>
+                    </label>
+                }
                 {mascara ?
                     <IMaskInput
-                        id={id}
+                        id={id || styles[cor]}
                         value={valor}
                         className={styles["input"]}
                         placeholder={placeholder || titulo}
@@ -54,7 +59,7 @@ const Input = ({
                         minLength={minlength}
                         readOnly={readonly}
                     /> : type === "date" ?
-                        <div className={styles["input-date"]}
+                        <div id={id || styles[cor]} className={styles["component-date"]}
                             style={{
                                 height: tamanho ? "1rem" : "",
                                 fontSize: tamanho ? "14px" : "",
@@ -65,8 +70,12 @@ const Input = ({
                             <DatePicker
                                 value={valor || new Date()}
                                 onChange={(e) => alterarValor(e)}
-                                className={styles["abc"]}
-                                calendarIcon={<Calendar />}
+                                className={styles["input-date"]}
+                                calendarIcon={
+                                    <Calendar
+                                        primaryColor={cor === "roxo" ? "var(--texto-branco)" : ""}
+                                    />
+                                }
                                 clearIcon={null}
                                 format={"dd/MM/yyyy"}
                                 locale="br-BR"
@@ -76,7 +85,7 @@ const Input = ({
                             />
                         </div>
                         : <input
-                            id={id}
+                            id={id || styles[cor]}
                             type={type}
                             value={valor}
                             className={styles["input"]}

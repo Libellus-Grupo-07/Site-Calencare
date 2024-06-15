@@ -13,8 +13,6 @@ import { FaCheck } from "react-icons/fa6";
 import { TiCancel } from "react-icons/ti";
 import ModalTemplate from "../../components/modal-template/ModalTemplate";
 import { toast } from "react-toastify";
-import Pilha from './../../PilhaDesfazerDados';
-
 
 const AdicionarAgendamento = () => {
     const navigate = useNavigate();
@@ -25,7 +23,6 @@ const AdicionarAgendamento = () => {
 
     const { idAgenda } = useParams();
     const idEmpresa = sessionStorage.getItem("idEmpresa");
-    const pilha = new Pilha();
     const [cliente, setCliente] = useState();
     const [clientes, setClientes] = useState([]);
     const [nomeCliente, setNomeCliente] = useState("");
@@ -33,7 +30,7 @@ const AdicionarAgendamento = () => {
     const [emailCliente, setEmailCliente] = useState("");
     const [telefoneCliente, setTelefoneCliente] = useState("");
     const [modalAberto, setModalAberto] = useState(false);
-    const [data, setData] = useState("");
+    const [data, setData] = useState(new Date());
     const [hora, setHora] = useState("");
     const [profissonais, setProfissionais] = useState([]);
     const [Profissional, setProfissional] = useState("")
@@ -160,17 +157,12 @@ const AdicionarAgendamento = () => {
         return false
     }
 
-    const atualizarClientes = (novoCliente) => {
-        setClientes([...clientes, novoCliente]); // Adicione o novo cliente à lista de clientes
-        setCliente(novoCliente); // Defina o novo cliente como o cliente selecionado
-    };
-
     const adicionarCliente = () => {
         if (validarCadastroCliente()) {
             let body = {
                 nome: nomeCliente,
                 sobrenome: sobrenomeCliente,
-                telefone: telefoneCliente,
+                telefone: telefoneCliente.replace("(", "").replace(")", "").replace(" ", "").replace("-", ""),
                 email: emailCliente,
                 empresaId: idEmpresa,
                 // "dtNascimento": dataNascimentoCliente
@@ -191,28 +183,6 @@ const AdicionarAgendamento = () => {
                 console.error(error)
             })
 
-            /*api.post("/clientes", body)
-                .then((response) => {
-                    setNomeCliente("");
-                    setSobrenomeCliente("");
-                    setEmailCliente("");
-                    setTelefoneCliente("");
-                    setDataNascimentoCliente("");
-                    toast.success("Cliente adicionado com sucesso!");
-                    abrirModal();
-                    const novoCliente = {
-                        id: response.data.id,
-                        label: nomeCliente,
-                        value: nomeCliente
-                    };
-                    atualizarClientes(novoCliente);
-                    setCliente(novoCliente);
-                    //abrirModal(novoCliente);
-                }).catch((error) => {
-                    toast.error("Houve um erro ao tentar adicionar cliente");
-                    console.error("Houve um erro ao tentar adicionar cliente!");
-                    console.error(error)
-                }) */
         }
     }
 
@@ -234,7 +204,6 @@ const AdicionarAgendamento = () => {
 
         if (nomeVetor === "cliente") {
             dataMapp.push({
-                //id: data[i].id,
                 label: "Criar",
                 value: "Criar"
             })
@@ -252,7 +221,7 @@ const AdicionarAgendamento = () => {
             })
         }
 
-        i = index === 0 ? index - 1 : i;
+        i = index === 0 ? index - 1 : index;
 
         if (nomeVetor === "cliente") {
             setClientes(dataMapp);
@@ -276,8 +245,9 @@ const AdicionarAgendamento = () => {
                 servicoPreco: servicosSelecionados[0]
             }
 
-            api.post(`/agendamentos/${Profissional.id}/${cliente.id}/${servicosSelecionados[0].id}`, AgendaAdicionado).then(() => {
-                toast.success("Agendamento adicionada com sucesso!");
+            api.post(`/agendamentos/${Profissional.id}/${cliente.id}/${servicosSelecionados[0].id}`, AgendaAdicionado).then((response) => {
+                console.log(response)
+                toast.success("Agendamento adicionado com sucesso!");
                 navigate("/agenda");
             }).catch((error) => {
                 console.error(error)
@@ -300,7 +270,7 @@ const AdicionarAgendamento = () => {
                             <Titulo tamanho={"md"} titulo={isEditar ? "Editar Agendamento" : "Adicionar Agendamento"} />
                         </div>
                         <div className={styles["informations-adicionar-agenda"]}>
-
+                            
                             <SelectInput
                                 id="cliente"
                                 valor={cliente}
@@ -368,7 +338,7 @@ const AdicionarAgendamento = () => {
                                     </div>
                                 } />
                             <Button
-                                funcaoButton={handleSave}
+                                funcaoButton={() => handleSave()}
                                 titulo={isEditar ? "Editar" : "Adicionar"}
                                 icone={<FaCheck />}
                                 cor={"roxo"}
@@ -395,6 +365,5 @@ const AdicionarAgendamento = () => {
         </>
     );
 };
-
 
 export default AdicionarAgendamento;

@@ -1,35 +1,35 @@
 .card-agendamento {
   /* width: 100%; */
   /* min-width: 320px; */
-  width: 28rem;
-  padding: 16px 0;
-  border-radius: 1rem;
+  width: 28.5rem;
+  padding: 1.5rem 0;
+  border-radius: 1.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  row-gap: 16px;
+  row-gap: 1rem;
 }
 
 .card-agendamento .informations-agendamento {
   width: 85%;
   display: flex;
-  column-gap: 24px;
+  column-gap: 1.2rem;
 }
 
 .card-agendamento
   .informations-agendamento
   .photo-funcionario
   .img-funcionario {
-  min-width: 36px;
-  min-height: 36px;
-  border-radius: 1rem;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  border-radius: 0.5rem;
 }
 
 .card-agendamento .informations-agendamento .text-agendamento {
   width: 100%;
   display: grid;
-  row-gap: 8px;
+  row-gap: 0.5rem;
 }
 
 .card-agendamento
@@ -40,7 +40,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid;
 }
 
 .card-agendamento
@@ -48,7 +47,7 @@
   .text-agendamento
   .info-agendamento
   .text-funcionario {
-  font-size: 18px;
+  font-size: 1.1rem;
   color: var(--roxo-principal);
   font-weight: 700;
   letter-spacing: -0.05rem;
@@ -60,10 +59,10 @@
   .info-agendamento
   .text-horario {
   font-family: "Work Sans";
-  font-size: 14px;
+  font-size: 0.9rem;
   color: var(--roxo-principal);
   background-color: rgba(149, 49, 224, 0.15);
-  padding: 8px 16px;
+  padding: 0.7rem 1rem;
   border-radius: 5rem;
   font-weight: 600;
   letter-spacing: -0.05rem;
@@ -75,6 +74,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  row-gap: 0.7rem;
 }
 
 .card-agendamento
@@ -82,7 +82,7 @@
   .text-agendamento
   .info-servico
   .text-cliente {
-  font-size: 16px;
+  font-size: 1rem;
   color: var(--texto-preto);
   font-weight: 600;
   letter-spacing: -0.05rem;
@@ -93,7 +93,7 @@
   .text-agendamento
   .info-servico
   .text-servico {
-  font-size: 16px;
+  font-size: 1rem;
   color: var(--texto-cinza);
   font-weight: 400;
   letter-spacing: -0.05rem;
@@ -104,7 +104,6 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  border: 1px solid;
   padding-top: 12px;
   border-top: 1.5px solid rgba(0, 0, 0, 0.25);
   column-gap: 8px;

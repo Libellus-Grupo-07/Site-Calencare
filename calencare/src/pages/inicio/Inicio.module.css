@@ -39,7 +39,6 @@
 
 .section-inicio .container-inicio .content-inicio .group-kpis .card-kpi {
   width: 32%;
-  background-color: aliceblue;
 }
 
 .section-inicio .container-inicio .content-inicio .container-agendamentos {
@@ -61,7 +60,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  row-gap: 16px;
+  row-gap: 1.3rem;
 }
 
 .section-inicio
