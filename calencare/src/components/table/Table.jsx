@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Table.module.css";
 import { Delete, Edit, IconlyProvider } from "react-iconly";
 
-const Table = ({ titulos, linhas, showEditIcon, showDeleteIcon, funcaoEditar, funcaoDeletar }) => {
+const Table = ({ titulos, matriz, showEditIcon, showDeleteIcon, funcaoEditar, funcaoDeletar }) => {
     return (
         <>
             <div className={styles["container-table"]}>
@@ -11,7 +11,7 @@ const Table = ({ titulos, linhas, showEditIcon, showDeleteIcon, funcaoEditar, fu
                         <tr>
                             {
                                 titulos.map((titulo, index) => (
-                                    <th scope="row" key={index}>
+                                    <th scope="col" key={index}>
                                         <span>
                                             {titulo}
                                         </span>
@@ -22,12 +22,12 @@ const Table = ({ titulos, linhas, showEditIcon, showDeleteIcon, funcaoEditar, fu
                     </thead>
                     <tbody className={styles["body-table"]}>
                         {
-                            linhas.map((linha, index) => (
-                                <tr className={styles[index % 2 === 0 ? "branco" : "roxo"]} key={index}
+                            matriz.map((coluna, indiceLinha) => (
+                                <tr className={styles[indiceLinha % 2 === 0 ? "branco" : "roxo"]} key={indiceLinha}
 
                                 >
-                                    {linha.map((dado, index2) => (
-                                        <td key={index2} onClick={() => funcaoEditar(index)}>
+                                    {coluna.map((dado, indiceColuna) => (
+                                        <td key={indiceLinha + indiceColuna + 1} onClick={() => funcaoEditar(indiceColuna)}>
                                             <div className={styles["td-div"]}>
                                                 {dado}
                                             </div>
@@ -35,10 +35,10 @@ const Table = ({ titulos, linhas, showEditIcon, showDeleteIcon, funcaoEditar, fu
                                     ))
                                     }
                                     {showEditIcon || showDeleteIcon ?
-                                        <td key={index}>
+                                        <td>
                                             <div className={styles["group-icon"]}>
                                                 {showEditIcon ?
-                                                    <div className={styles["td-div-icon"]} onClick={() => funcaoEditar(index)}>
+                                                    <div className={styles["td-div-icon"]} onClick={() => funcaoEditar(indiceLinha)}>
                                                         <IconlyProvider>
                                                             <Edit />
                                                         </IconlyProvider>
@@ -47,7 +47,7 @@ const Table = ({ titulos, linhas, showEditIcon, showDeleteIcon, funcaoEditar, fu
                                                 }
 
                                                 {showDeleteIcon ?
-                                                    <div className={styles["td-div-icon"]} onClick={() => funcaoDeletar(index)}>
+                                                    <div className={styles["td-div-icon"]} onClick={() => funcaoDeletar(indiceLinha)}>
                                                         <IconlyProvider>
                                                             <Delete />
                                                         </IconlyProvider>

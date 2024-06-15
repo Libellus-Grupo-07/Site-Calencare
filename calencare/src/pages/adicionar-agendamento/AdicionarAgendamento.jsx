@@ -14,7 +14,6 @@ import { TiCancel } from "react-icons/ti";
 import ModalTemplate from "../../components/modal-template/ModalTemplate";
 import { toast } from "react-toastify";
 
-
 const AdicionarAgendamento = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -31,7 +30,7 @@ const AdicionarAgendamento = () => {
     const [emailCliente, setEmailCliente] = useState("");
     const [telefoneCliente, setTelefoneCliente] = useState("");
     const [modalAberto, setModalAberto] = useState(false);
-    const [data, setData] = useState("");
+    const [data, setData] = useState(new Date());
     const [hora, setHora] = useState("");
     const [profissonais, setProfissionais] = useState([]);
     const [Profissional, setProfissional] = useState("")
@@ -86,7 +85,7 @@ const AdicionarAgendamento = () => {
         if (servicosSelecionados.includes(item)) {
             setServicosSelecionados(servicosSelecionados.filter(servico => servico !== item));
         } else {
-            setServicosSelecionados([...servicosSelecionados, item]);
+            setServicosSelecionados([item]);
         }
     };
 
@@ -158,17 +157,12 @@ const AdicionarAgendamento = () => {
         return false
     }
 
-    const atualizarClientes = (novoCliente) => {
-         setClientes([...clientes, novoCliente]); // Adicione o novo cliente à lista de clientes
-         setCliente(novoCliente); // Defina o novo cliente como o cliente selecionado
-    };
-
     const adicionarCliente = () => {
         if (validarCadastroCliente()) {
             let body = {
                 nome: nomeCliente,
                 sobrenome: sobrenomeCliente,
-                telefone: telefoneCliente,
+                telefone: telefoneCliente.replace("(", "").replace(")", "").replace(" ", "").replace("-", ""),
                 email: emailCliente,
                 empresaId: idEmpresa,
                 // "dtNascimento": dataNascimentoCliente
@@ -188,29 +182,7 @@ const AdicionarAgendamento = () => {
                 console.error("Houve um erro ao tentar adicionar cliente!");
                 console.error(error)
             })
-          
-            /*api.post("/clientes", body)
-                .then((response) => {
-                    setNomeCliente("");
-                    setSobrenomeCliente("");
-                    setEmailCliente("");
-                    setTelefoneCliente("");
-                    setDataNascimentoCliente("");
-                    toast.success("Cliente adicionado com sucesso!");
-                    abrirModal();
-                    const novoCliente = {
-                        id: response.data.id,
-                        label: nomeCliente,
-                        value: nomeCliente
-                    };
-                    atualizarClientes(novoCliente);
-                    setCliente(novoCliente);
-                    //abrirModal(novoCliente);
-                }).catch((error) => {
-                    toast.error("Houve um erro ao tentar adicionar cliente");
-                    console.error("Houve um erro ao tentar adicionar cliente!");
-                    console.error(error)
-                }) */
+
         }
     }
 
@@ -232,7 +204,6 @@ const AdicionarAgendamento = () => {
 
         if (nomeVetor === "cliente") {
             dataMapp.push({
-                //id: data[i].id,
                 label: "Criar",
                 value: "Criar"
             })
@@ -241,15 +212,16 @@ const AdicionarAgendamento = () => {
         let i = 0;
 
         for (i = 0; i < data.length; i++) {
+            let nomeCompleto = `${data[i].nome}${data[i].sobrenome ? " " + data[i].sobrenome : ""}`;
             dataMapp.push({
                 id: data[i].id,
                 index: i,
-                label: data[i].nome + " " + data[i].sobrenome,
-                value: data[i].nome + " " + data[i].sobrenome,
+                label: nomeCompleto,
+                value: nomeCompleto,
             })
         }
 
-        i = index === 0 ? index - 1 : i;
+        i = index === 0 ? index - 1 : index;
 
         if (nomeVetor === "cliente") {
             setClientes(dataMapp);
@@ -261,32 +233,30 @@ const AdicionarAgendamento = () => {
     }
 
     const handleSave = () => {
-        console.log(cliente)
-
         if (validarAgenda()) {
-            for (let index = 0; index < servicosSelecionados.length; index++) {
-                //let dataHora = dataAgenda + "T" + hora;
-                let AgendaAdicionado = {
-                    dtHora: transformarDataHoraBd(data, hora),
-                    dia: transformarDataBd(data),
-                    horario: transformarHora(hora),
-                    bitStatus: 1,
-                    cliente: dadosClientes[cliente.index],
-                    funcionario: dadosProfissionais[Profissional.index],
-                    servicoPreco: servicosSelecionados[index]
-                }
-
-                api.post(`/agendamentos/${Profissional.id}/${cliente.id}/${servicosSelecionados[index].id}`, AgendaAdicionado).then((response) => {
-                    const { data } = response;
-                    toast.success("Agendamento adicionada com sucesso!");
-                    navigate("/agenda");
-                }).catch((error) => {
-                    console.error(error)
-                    toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
-                })
+            //let dataHora = dataAgenda + "T" + hora;
+            let AgendaAdicionado = {
+                dtHora: transformarDataHoraBd(data, hora),
+                dia: transformarDataBd(data),
+                horario: transformarHora(hora),
+                bitStatus: 1,
+                cliente: dadosClientes[cliente.index],
+                funcionario: dadosProfissionais[Profissional.index],
+                servicoPreco: servicosSelecionados[0]
             }
-        };
-    }
+
+            api.post(`/agendamentos/${Profissional.id}/${cliente.id}/${servicosSelecionados[0].id}`, AgendaAdicionado).then((response) => {
+                console.log(response)
+                toast.success("Agendamento adicionado com sucesso!");
+                navigate("/agenda");
+            }).catch((error) => {
+                console.error(error)
+                toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
+            })
+
+        }
+    };
+
 
     return (
         <>
@@ -300,7 +270,7 @@ const AdicionarAgendamento = () => {
                             <Titulo tamanho={"md"} titulo={isEditar ? "Editar Agendamento" : "Adicionar Agendamento"} />
                         </div>
                         <div className={styles["informations-adicionar-agenda"]}>
-
+                            
                             <SelectInput
                                 id="cliente"
                                 valor={cliente}
@@ -341,13 +311,15 @@ const AdicionarAgendamento = () => {
                                 <Input
                                     id="hora"
                                     valor={hora}
-                                    type={"hora"}
+                                    type={"time"}
                                     alterarValor={setHora}
                                     titulo={"Hora"}
                                     tamanho={"lg"}
                                 />
                             </div>
-
+                            <div className={styles["valor-total"]}>
+                                Valor Total:  <span>R$ {servicosSelecionados.length === 0 ? "0,00" : servicosSelecionados[0].preco.toFixed(2).replace(".", ",")}</span>
+                            </div>
                         </div>
 
                         <div className={styles["group-button"]}>
@@ -366,7 +338,7 @@ const AdicionarAgendamento = () => {
                                     </div>
                                 } />
                             <Button
-                                funcaoButton={handleSave}
+                                funcaoButton={() => handleSave()}
                                 titulo={isEditar ? "Editar" : "Adicionar"}
                                 icone={<FaCheck />}
                                 cor={"roxo"}
@@ -393,6 +365,5 @@ const AdicionarAgendamento = () => {
         </>
     );
 };
-
 
 export default AdicionarAgendamento;

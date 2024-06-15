@@ -4,8 +4,9 @@ import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 
 
-const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar, criarOption, exibir }) => {
+const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, valor, funcaoAdicionar, criarOption, exibir, pesquisavel }) => {
     const mudarValor = (value) => {
+        console.log(value)
         if (value.value === "Criar") {
             funcaoAdicionar()
         } else {
@@ -64,12 +65,11 @@ const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, 
                             // formatCreateLabel={(value) => `Criar "${value}"`}
                             placeholder={placeholder || "Selecione"}
                             defaultValue={valor}
-                            onChange={(e) => mudarValor(e.value)}
-                            isSearchable={true}
+                            onChange={(e) => mudarValor(e)}
+                            isSearchable={pesquisavel}
                             value={valor}
                             options={options}
                             noOptionsMessage={() => "Nenhum resultado encontrado"}
-                            // onCreateOption={funcaoAdicionar}
                             styles={{
                                 control: (state) => ({
                                     padding: tamanho ? "0.9rem 1.8rem" : "0px 1.2rem",
