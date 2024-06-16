@@ -17,12 +17,17 @@ import { toast } from "react-toastify";
 const AdicionarAgendamento = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const isEditar = location.pathname === "/agendas";
+    const { idAgenda } = useParams();
+    const isEditar = location.pathname === `/agenda/editar/${idAgenda}`;
     const [dadosClientes, setDadosClientes] = useState([]);
     const [dadosProfissionais, setDadosProfissionais] = useState([]);
 
-    const { idAgenda } = useParams();
     const idEmpresa = sessionStorage.getItem("idEmpresa");
+    const [idCliente, setIdCliente] = useState(0);
+    const [idProfissional, setIdProfissional] = useState(0);
+    const [idServicoPreco, setIdServicoPreco] = useState(0);
+    const [bitStatus, setBitStatus] = useState(0);
+    const [nomeServico, setNomeServico] = useState("");
     const [cliente, setCliente] = useState();
     const [clientes, setClientes] = useState([]);
     const [nomeCliente, setNomeCliente] = useState("");
@@ -35,37 +40,64 @@ const AdicionarAgendamento = () => {
     const [profissonais, setProfissionais] = useState([]);
     const [Profissional, setProfissional] = useState("")
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
-    const [items, setItems] = useState([]);
+    const [servicos, setServicos] = useState([]);
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
             navigate("/login");
             return;
         }
+
+        if (isEditar) {
+            buscarAgendamento();
+        }
+        buscarClientes(0);
+        buscarProfissionais(0);
+        buscarServicos();
+
+    }, [navigate, idEmpresa, isEditar, idAgenda]);
+
+    const buscarServicos = () => {
         api.get(`/servico-preco/${idEmpresa}`).then((response) => {
             const { data } = response;
             console.log(response);
-            setItems(data.length === 0 ? [] : data)
-
+            setServicos(data.length === 0 ? [] : data)
         }).catch((error) => {
             console.log("Houve um erro ao buscar o serviço");
             console.log(error);
         });
 
+    }
+
+    const buscarProfissionais = (index) => {
         api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
             const { data } = response;
             console.log(response);
-            mapear(data, 0, "profissional")
+            mapear(data, index || 0, "profissional")
             setDadosProfissionais(data)
-
         }).catch((error) => {
             console.log("Houve um erro ao buscar um funcionario");
             console.log(error);
         });
+    }
 
-        buscarClientes(0)
+    const buscarAgendamento = () => {
+        api.get(`/agendamentos/${idAgenda}`).then((response) => {
+            const { data } = response;
+            const { dtHora, horario, funcionarioId, clienteId, servicoId, nomeServico, status } = data;
+            setNomeServico(nomeServico);
+            setData(dtHora);
+            setHora(horario);
+            setIdCliente(clienteId);
+            setIdProfissional(funcionarioId);
+            setIdServicoPreco(servicoId);
+            setBitStatus(status);
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar um agendamento");
+            console.log(error);
+        });
 
-    }, [navigate, idEmpresa]);
+    }
 
     const validarAgenda = () => {
         if (
@@ -186,7 +218,6 @@ const AdicionarAgendamento = () => {
         }
     }
 
-
     const buscarClientes = (index) => {
         api.get(`/clientes/listar/${idEmpresa}`).then((response) => {
             const { data } = response;
@@ -234,26 +265,45 @@ const AdicionarAgendamento = () => {
 
     const handleSave = () => {
         if (validarAgenda()) {
-            //let dataHora = dataAgenda + "T" + hora;
-            let AgendaAdicionado = {
-                dtHora: transformarDataHoraBd(data, hora),
-                dia: transformarDataBd(data),
-                horario: transformarHora(hora),
-                bitStatus: 1,
-                cliente: dadosClientes[cliente.index],
-                funcionario: dadosProfissionais[Profissional.index],
-                servicoPreco: servicosSelecionados[0]
+            if (isEditar) { 
+                let AgendaAdicionado = {
+                    dtHora: transformarDataHoraBd(data, hora),
+                    dia: transformarDataBd(data),
+                    horario: transformarHora(hora),
+                    bitStatus: bitStatus,
+                    fkCliente: dadosClientes.find(c => c.id === idCliente).id,
+                    fkFuncionario: dadosProfissionais.find(p => p.id === idProfissional).id,
+                    fkServicoPreco: servicos.find(s => s.nome === nomeServico).id
+                }
+
+                api.post(`/agendamentos/${dadosProfissionais.find(p => p.id === idProfissional).id}/${dadosClientes.find(c => c.id === idCliente).id}/${servicos.find(s => s.nome === nomeServico).id}`, AgendaAdicionado).then(() => {
+                    toast.success("Agendamento atualizado com sucesso!");
+                    navigate("/agenda");
+                }).catch((error) => {
+                    console.error(error)
+                    toast.error("Ocorreu um erro ao atualizar os dados, por favor, tente novamente.");
+                })
+            } else {
+                //let dataHora = dataAgenda + "T" + hora;
+                let AgendaAdicionado = {
+                    dtHora: transformarDataHoraBd(data, hora),
+                    dia: transformarDataBd(data),
+                    horario: transformarHora(hora),
+                    bitStatus: 1,
+                    cliente: dadosClientes[cliente.index],
+                    funcionario: dadosProfissionais[Profissional.index],
+                    servicoPreco: servicosSelecionados[0]
+                }
+
+                api.post(`/agendamentos/${Profissional.id}/${cliente.id}/${servicosSelecionados[0].id}`, AgendaAdicionado).then((response) => {
+                    console.log(response)
+                    toast.success("Agendamento adicionado com sucesso!");
+                    navigate("/agenda");
+                }).catch((error) => {
+                    console.error(error)
+                    toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
+                })
             }
-
-            api.post(`/agendamentos/${Profissional.id}/${cliente.id}/${servicosSelecionados[0].id}`, AgendaAdicionado).then((response) => {
-                console.log(response)
-                toast.success("Agendamento adicionado com sucesso!");
-                navigate("/agenda");
-            }).catch((error) => {
-                console.error(error)
-                toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
-            })
-
         }
     };
 
@@ -270,10 +320,10 @@ const AdicionarAgendamento = () => {
                             <Titulo tamanho={"md"} titulo={isEditar ? "Editar Agendamento" : "Adicionar Agendamento"} />
                         </div>
                         <div className={styles["informations-adicionar-agenda"]}>
-                            
+
                             <SelectInput
                                 id="cliente"
-                                valor={cliente}
+                                valor={cliente || clientes.find(c => c.id === idCliente)}
                                 alterarValor={setCliente}
                                 titulo={"Cliente"}
                                 options={clientes}
@@ -283,8 +333,8 @@ const AdicionarAgendamento = () => {
 
                             <Ul className={styles["servicos-grid"]}
                                 titulo={"Serviços"}
-                                items={items}
-                                servicosSelecionados={servicosSelecionados}
+                                items={servicos}
+                                servicosSelecionados={servicosSelecionados.length === 0 && isEditar ? servicos.filter(s => s.nome === nomeServico) : servicosSelecionados}
                                 toggleServico={toggleServico}
                                 nomeCampo={undefined}
                             />
@@ -292,7 +342,7 @@ const AdicionarAgendamento = () => {
                                 id={"profissional"}
                                 tamanho={"lg"}
                                 options={profissonais}
-                                valor={Profissional}
+                                valor={Profissional || profissonais.find(p => p.id === idProfissional)}
                                 alterarValor={setProfissional}
                                 titulo={"Profissional"}
 
@@ -318,7 +368,16 @@ const AdicionarAgendamento = () => {
                                 />
                             </div>
                             <div className={styles["valor-total"]}>
-                                Valor Total:  <span>R$ {servicosSelecionados.length === 0 ? "0,00" : servicosSelecionados[0].preco.toFixed(2).replace(".", ",")}</span>
+                                Valor Total:
+                                <span>
+                                    R$
+                                    {
+                                        servicosSelecionados.length === 0 && !nomeServico ?
+                                            "0,00"
+                                            : nomeServico ? servicos.find(s => s.nome === nomeServico).preco.toFixed(2).replace(".", ",")
+                                                : servicosSelecionados[0].preco.toFixed(2).replace(".", ",")}
+
+                                </span>
                             </div>
                         </div>
 
