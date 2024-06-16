@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "./SelectInput.module.css";
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';

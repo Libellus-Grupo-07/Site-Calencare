@@ -3,8 +3,8 @@
   border: 1.5px solid rgba(0, 0, 0, 0.15);
   border-radius: 1rem;
   display: flex;
-  flex-wrap: wrap;
-  padding: 20px 16px;
+  /* flex-wrap: wrap; */
+  padding: 1rem 1rem;
   align-items: center;
   row-gap: 1rem;
   column-gap: 1rem;
@@ -42,4 +42,10 @@
   color: var(--texto-preto);
   font-weight: 800;
   letter-spacing: -0.05rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 14vw;
+  /* border: 1px solid; */
+  min-height: 1.6rem;
 }

@@ -16,6 +16,7 @@
 }
 
 .input {
+  width: auto;
   border: 1.5px solid var(--texto-cinza);
 }
 

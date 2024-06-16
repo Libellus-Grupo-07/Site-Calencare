@@ -216,7 +216,17 @@ const AdicionarFuncionario = () => {
                     navigate("/equipe");
                 }).catch((error) => {
                     console.error(error)
-                    toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
+                    const { code } = error;
+                    if (code === "ERR_NETWORK") {
+                        toast.error("Ocorreu um erro ao tentar realizar cadastro. Tente novamente mais tarde!");
+                    } else {
+                        const { response } = error;
+                        const { status } = response;
+
+                        if (status === 400) {
+                            toast.error("O email informado já foi cadastrado!")
+                        }
+                    }
                 })
             }
         }

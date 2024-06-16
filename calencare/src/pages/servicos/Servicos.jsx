@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import api from "../../api";
 import styles from "./Servicos.module.css";
@@ -16,20 +16,13 @@ const Servicos = () => {
     const idEmpresa = sessionStorage.getItem("idEmpresa");
     const [idServico, setIdServico] = useState(0);
     const [nomeServico, setNomeServico] = useState("");
-    const titulos = ["Nome", /*"Descrição"*/, "Categoria", "Preço", "Comissão em %", "Duração (minutos)", "Status", ""]
+    // const titulos = ["Nome",*"Descrição", "Categoria", "Preço", "Comissão em %", "Duração (minutos)", "Status", ""]
+    const titulos = ["Nome", "Categoria", "Preço", "Comissão em %", "Duração (minutos)", "Status", ""]
     const [dados, setDados] = useState([]);
     const [dadosResposta, setDadosResposta] = useState([]);
 
-    useEffect(() => {
-        if (!logado(sessionStorage.getItem("token"))) {
-            navigate("/login");
-            return;
-        }
-
-        buscarServicos(idEmpresa);
-    }, [idEmpresa]);
-
-    const buscarServicos = (id) => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const buscarServicos = useCallback((id) => {
         api.get(`/servico-preco/${id}`).then((response) => {
             const { data } = response;
             setDadosResposta(data);
@@ -38,7 +31,17 @@ const Servicos = () => {
             console.error("Houve um erro ao buscar serviços");
             console.error(error)
         })
-    }
+    })
+
+    useEffect(() => {
+        if (!logado(sessionStorage.getItem("token"))) {
+            navigate("/login");
+            return;
+        }
+
+        buscarServicos(idEmpresa);
+    // eslint-disable-next-line no-use-before-define
+    }, [buscarServicos, idEmpresa, navigate]);
 
     const mapear = (data) => {
         var dataMapp = [];

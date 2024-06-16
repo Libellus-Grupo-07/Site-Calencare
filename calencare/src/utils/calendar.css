@@ -103,6 +103,7 @@
   font: inherit;
   font-size: 0.833em;
   transition: 0.25s all linear;
+  color: var(--texto-cinza);
 }
 
 .react-calendar__tile:disabled {

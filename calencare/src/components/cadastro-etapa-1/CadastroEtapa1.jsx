@@ -37,7 +37,7 @@ const CadastroEtapa1 = ({
                         valor={TelefoneDaEmpresa}
                         alterarValor={setTelefoneDaEmpresa}
                         titulo={"Telefone da Empresa"}
-                        mascara={TelefoneDaEmpresa.length === 14 ? "(00) 0000-00000" : "(00) 00000-0000"}
+                        mascara={TelefoneDaEmpresa.length <= 14 ? "(00) 0000-00000" : "(00) 00000-0000"}
                         minlength={15}
                         maxlength={15}
 
