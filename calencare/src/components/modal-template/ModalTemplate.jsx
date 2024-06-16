@@ -1,6 +1,5 @@
 import styles from './ModalTemplate.module.css'
 import { IoClose } from "react-icons/io5";
-import Input from './../input/Input';
 import Button from './../button/Button';
 import { FaCheck } from 'react-icons/fa6';
 import { TiCancel } from 'react-icons/ti';

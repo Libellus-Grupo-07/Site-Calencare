@@ -13,9 +13,9 @@ const Button = ({ funcaoButton, tamanho, titulo, cor, icone, disabled }) => {
                         fontSize: tamanho ? "13px" : "15px",
                         padding: tamanho ? "8px 20px" : ""
                     }}
-                    // disabled={disabled || false}
+                    disabled={disabled || false}
                 >
-                    {icone ? icone : ""} {titulo}
+                    {icone ? icone : ""} {titulo} {disabled}
                 </button>
             </div>
         </>

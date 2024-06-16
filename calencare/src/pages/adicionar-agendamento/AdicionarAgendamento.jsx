@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Input from "../../components/input/Input";
-import { inputSomenteTexto, logado, isVazio, isValidEmail, transformarHora, transformarData, transformarDataHora, transformarDataHoraBd, transformarDataBd } from "../../utils/global";
+import { inputSomenteTexto, logado, isVazio, isValidEmail, transformarHora, transformarData, transformarDataHora, transformarDataHoraBd, transformarDataBd, isSelected } from "../../utils/global";
 import styles from "./AdicionarAgendamento.module.css";
 import Ul from "../../components/ul/Ul";
 import SelectInput from "../../components/select-input/SelectInput";
@@ -69,8 +69,8 @@ const AdicionarAgendamento = () => {
 
     const validarAgenda = () => {
         if (
-            !isVazio(cliente, "Cliente") &&
-            !isVazio(Profissional, "profissional") &&
+            !isSelected(cliente, "Cliente") &&
+            !isSelected(Profissional, "profissional") &&
             !isVazio(servicosSelecionados, "Serviços que realiza") &&
             !isVazio(data, "Data Agendamento"),
             !isVazio(hora, "Data Agendamento")

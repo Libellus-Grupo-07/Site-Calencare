@@ -1,7 +1,5 @@
 import React from "react";
 import styles from "./CardPrecos.module.css"
-import { FaCircleCheck } from "react-icons/fa6";
-
 
 const CardPrecos = ({ classe, nome, texto, preco, periodo, vantagem1, vantagem2, vantagem3, vantagem4 }) => {
     return (

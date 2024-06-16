@@ -11,6 +11,7 @@ import Table from "../../components/table/Table";
 import ModalTemplate from "../../components/modal-template/ModalTemplate";
 import { toast } from "react-toastify";
 import Pilha from "../../PilhaDesfazerDados";
+import { FaUndo } from "react-icons/fa";
 
 
 const Equipe = () => {
@@ -18,6 +19,7 @@ const Equipe = () => {
     const titulos = ["", "Nome", "Email", "Perfil", "Status", "Serviços", ""]
     const [pilha, setPilha] = useState(new Pilha())
     const idEmpresa = sessionStorage.getItem("idEmpresa")
+    const idUser = sessionStorage.getItem("idUser")
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
@@ -41,6 +43,7 @@ const Equipe = () => {
                 const promessasServicos = data.map((funcionario) =>
                     api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${funcionario.id}`)
                 );
+
                 Promise.all(promessasServicos)
                     .then((respostas) => {
                         const dadosAtualizados = data.map((funcionario, index) => {
@@ -65,7 +68,7 @@ const Equipe = () => {
                                 servicos: servicosFuncionario
                             };
                         });
-                        setDados(dadosAtualizados);
+                        setDados(dadosAtualizados.filter(f => f.id !== Number(idUser)));
                     })
                     .catch((error) => {
                         console.error("Houve um erro ao buscar serviços", error);
@@ -162,14 +165,8 @@ const Equipe = () => {
                                     funcaoButton={desfazer}
                                     cor="branco"
                                     disabled={pilha.isEmpty()}
-                                    titulo={"Desfazer"}
-                                    icone={<IconlyProvider
-                                        stroke="bold"
-                                        size="small"
-                                    >
-                                        <AddUser />
-                                    </IconlyProvider>
-                                    }
+                                    titulo={"Desfazer Exclusão"}
+                                    icone={<FaUndo className={styles["icon-desfazer"]}/>}
                                 />
 
                                 <Button
@@ -194,7 +191,6 @@ const Equipe = () => {
                                 </div> : <Table
                                     titulos={titulos}
                                     matriz={dados.map((linha) => {
-
                                         const status = linha.bitStatus === 1 ? "Ativo" : "Inativo";
                                         return [linha.id, linha.nome, linha.email, linha.perfilAcesso, status, linha.servicos]
                                     })}

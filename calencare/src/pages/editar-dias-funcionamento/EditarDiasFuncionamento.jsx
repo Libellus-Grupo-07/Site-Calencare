@@ -15,11 +15,6 @@ const EditarDiasFuncionamento = () => {
     const navigate = useNavigate();
     const hora = new Date();
     const { idEmpresa } = useParams();
-    const [razaoSocial, setRazaoSocial] = useState("")
-    const [cnpj, setCnpj] = useState("")
-    const [telefonePrincipal, setTelefonePrincipal] = useState("")
-    const [emailPrincipal, setEmailPrincipal] = useState("")
-    const [intervaloAtendimento, setIntervaloAtendimento] = useState("")
 
     const [diaSegundaAberto, setDiaSegundaAberto] = useState(true);
     const [horario1Segunda, setHorario1Segunda] = useState(hora)
@@ -68,11 +63,7 @@ const EditarDiasFuncionamento = () => {
 
         api.get(`/empresas/${idEmpresa}`).then((response) => {
             const { data } = response
-            const { razaoSocial, cnpj, emailPrincipal, telefonePrincipal, horariosFuncionamentos } = data;
-            setRazaoSocial(razaoSocial);
-            setCnpj(cnpj);
-            setEmailPrincipal(emailPrincipal);
-            setTelefonePrincipal(telefonePrincipal);
+            const { horariosFuncionamentos } = data;
         
             const ordemDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
             const vetorDias = [];
@@ -187,6 +178,7 @@ const EditarDiasFuncionamento = () => {
             };
 
             api.put(`/horarios-funcionamento/${dias[i].id}`, bodyDias).then(() => {
+            // eslint-disable-next-line no-loop-func
             }).catch((error) => {
                 console.log("houve um erro ao tentar cadastrar o horario de funcionamento");
                 console.log(error);

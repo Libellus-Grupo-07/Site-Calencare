@@ -8,12 +8,13 @@ import CardKpi from './../../components/card-kpi/CardKpi';
 import { CiMoneyBill } from "react-icons/ci";
 import Input from "../../components/input/Input";
 import api from "../../api";
-import { logado } from "../../utils/global";
+import { logado, transformarDataBd } from "../../utils/global";
 import { useNavigate } from "react-router-dom";
 import CardTop3 from '../../components/card-top-3/CardTop3';
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js/auto";
-import { Bar } from "react-chartjs-2"
+import { Bar, Doughnut } from "react-chartjs-2";
+import { Tooltip } from 'react-tooltip';;
 
 Chart.register(CategoryScale);
 
@@ -21,17 +22,19 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const idEmpresa = sessionStorage.idEmpresa;
     const [agendamentosTotalDoDia, setAgendamentosTotalDoDia] = useState(0);
+    const [agendamentosPendentes, setagendamentosPendentes] = useState(0);
+    const [agendamentosFinalizados, setAgendamentosFinalizados] = useState(0);
+    const [agendamentosCancelados, setAgendamentosCancelados] = useState(0);
     const [lucroTotalDoDia, setLucroTotalDoDia] = useState(0);
     const [servicoMaisAgendado, setServicoMaisAgendado] = useState("");
     const [dataSelecionada, setDataSelecionada] = useState(new Date());
     const [top3Servicos, setTop3Servicos] = useState([]);
     const [top3Profissionais, setTop3Profissionais] = useState([]);
     const [top3Clientes, setTop3Clientes] = useState([]);
-    const [calendarioAberto, setCalendarioAberto] = useState(false);
-    const [dadosAgendamentosPorProfissional, setDadosAgendamentosPorProfissional] = useState(false);
-    const [dadosGraficoBarra, setDadosGraficoBarra] = useState([])
+    // const [dadosAgendamentosPorProfissional, setDadosAgendamentosPorProfissional] = useState(false);
+    const [dadosAgendamentosPorCategoria, setDadosAgendamentosPorCategoria] = useState([])
 
-    const [chartData, setChartData] = useState({
+    const [graficoBarras, setGraficoBarras] = useState({
         labels: ["Nome"],
         datasets: [
             {
@@ -56,16 +59,82 @@ const Dashboard = () => {
         ]
     });
 
-    // const abrirCalendario = () => {
-    //     setCalendarioAberto(!calendarioAberto);
-    // }
+    const [graficoDonut, setGraficoDonut] = useState({
+        labels: ["Categoria"],
+        datasets: [
+            {
+                label: "Agendamentos no Dia",
+                data: [0],
+                backgroundColor: [
+                    "#9F35F0",
+                    "#3545F0",
+                    "#6134EF",
+                    "#C085EF",
+                    "#8758EA",
+                    "#F036A5",
+                    "#DB35EF",
+                    "#51BDE9",
+                    "#5EA4EA",
+                    "#35F0E9",
+                    "#F1AA36"
+                ],
+                borderColor: "transparent",
+                borderWidth: 2,
+            }
+        ]
+    });
+    const cores = [[
+        "rgba(159, 53, 240, 0.7)",
+        "rgba(53, 69, 240, 0.7)",
+        "rgba(97, 52, 239, 0.7)",
+        "rgba(192, 133, 239, 0.7)",
+        "rgba(135, 88, 234, 0.7)",
+        "rgba(240, 54, 165, 0.7)",
+        "rgba(219, 53, 239, 0.7)",
+        "rgba(81, 189, 233, 0.7)",
+        "rgba(94, 164, 234, 0.7)",
+        "rgba(53, 240, 233, 0.7)",
+        "rgba(241, 170, 54, 0.7)"
+    ], [
+        "#9F35F0",
+        "#3545F0",
+        "#6134EF",
+        "#C085EF",
+        "#8758EA",
+        "#F036A5",
+        "#DB35EF",
+        "#51BDE9",
+        "#5EA4EA",
+        "#35F0E9",
+        "#F1AA36"
+    ]]
 
     useEffect(() => {
         if (!logado(sessionStorage.token)) {
             navigate("/login")
         }
 
-        api.get(`/dashboard/agendamentos-por-profissional/${idEmpresa}`).then((response) => {
+        buscarDadosDashboard(dataSelecionada);
+
+    }, [idEmpresa, navigate]);
+
+    const buscarDadosDashboard = (dataSelecionada) => {
+        setDataSelecionada(dataSelecionada)
+        let dataFormatada = transformarDataBd(dataSelecionada);
+
+        api.get(`/dashboard/stats/${idEmpresa}/${dataFormatada}`).then((response) => {
+            const { data } = response;
+            const { Pendentes, Cancelados, Finalizados, TotalAgendamentos } = data;
+            setAgendamentosTotalDoDia(TotalAgendamentos)
+            setagendamentosPendentes(Pendentes)
+            setAgendamentosFinalizados(Finalizados)
+            setAgendamentosCancelados(Cancelados)
+        }).catch((error) => {
+            console.error(error);
+        })
+
+
+        api.get(`/dashboard/profissional/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
             console.log(data)
             // setDadosGraficoBarra(data)
@@ -74,49 +143,56 @@ const Dashboard = () => {
             console.error(error);
         })
 
-        api.get(`/dashboard/lucro-total/${idEmpresa}`).then((response) => {
+        api.get(`/dashboard/categoria/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
-            const { AgendamentosConfirmados, LucroTotalDoDia } = data;
-            setAgendamentosTotalDoDia(AgendamentosConfirmados);
+            console.log(data)
+            setDadosAgendamentosPorCategoria(data);
+            gerarGraficoDonut(data);
+        }).catch((error) => {
+            console.error(error);
+        })
+
+        api.get(`/dashboard/lucro/${idEmpresa}/${dataFormatada}`).then((response) => {
+            const { data } = response;
+            const { LucroTotalDoDia } = data;
             setLucroTotalDoDia(LucroTotalDoDia || 0)
         }).catch((error) => {
             console.error(error);
         })
 
-        api.get(`/dashboard/servico-mais-procurado-rentabilidade/${idEmpresa}`).then((response) => {
+        api.get(`/dashboard/rentabilidade/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
-            const { servico } = data[0]
+            let servico = data.length > 0 ? data[0].servico : undefined;
             setServicoMaisAgendado(servico);
         }).catch((error) => {
             console.error(error);
         })
 
-        api.get(`/dashboard/top3-servicos/${idEmpresa}`).then((response) => {
+        api.get(`/dashboard/top3-servicos/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
             setTop3Servicos(data || [])
-            console.log(data)
         }).catch((error) => {
             console.error(error);
         })
 
-        api.get(`/dashboard/top3-profissionais/${idEmpresa}`).then((response) => {
+        api.get(`/dashboard/top3-profissionais/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
             setTop3Profissionais(data || []);
         }).catch((error) => {
             console.error(error);
         })
 
-        api.get(`/dashboard/top3-clientes/${idEmpresa}`).then((response) => {
+        api.get(`/dashboard/top3-clientes/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
             setTop3Clientes(data || []);
         }).catch((error) => {
             console.error(error);
         })
+    }
 
-    }, [idEmpresa, navigate]);
 
     const gerarGraficoBarra = (dadosAgendamentosPorProfissional) => {
-        setChartData({
+        setGraficoBarras({
             labels: dadosAgendamentosPorProfissional.map((s) => s.nome),
             datasets: [
                 {
@@ -156,6 +232,23 @@ const Dashboard = () => {
         })
     }
 
+    const gerarGraficoDonut = (dadosAgendamentosPorCategoria) => {
+        let i = 0;
+        setGraficoDonut({
+            labels: dadosAgendamentosPorCategoria.map((s) => s.categoria),
+            datasets: [
+                {
+                    label: `Agendamentos no Dia`,
+                    data: dadosAgendamentosPorCategoria.map((s) => s.count),
+                    backgroundColor: cores[0],
+                    borderColor: cores[1],
+                    borderWidth: 2
+                }
+            ],
+            // options:
+        })
+    }
+
 
     return (
         <>
@@ -183,7 +276,7 @@ const Dashboard = () => {
                                     <Input
                                         valor={dataSelecionada}
                                         type={"date"}
-                                        alterarValor={setDataSelecionada}
+                                        alterarValor={buscarDadosDashboard}
                                         cor={"roxo"}
                                     />
                                 </div>
@@ -201,6 +294,29 @@ const Dashboard = () => {
                                         >
                                             <Ticket />
                                         </IconlyProvider>
+                                    }
+
+                                    tooltip={
+                                        <Tooltip
+                                            anchorSelect="#tooltip"
+                                            className={styles["tooltip"]}
+                                            content={
+                                                <div className={styles["content-tooltip"]}>
+                                                    <span>
+                                                        Total de Agendamentos: <b> {agendamentosTotalDoDia} </b>
+                                                    </span>
+                                                    <span>
+                                                        Agendamentos Pendentes: <b> {agendamentosPendentes} </b>
+                                                    </span>
+                                                    <span>
+                                                        Agendamentos Finalizados: <b> {agendamentosFinalizados} </b>
+                                                    </span>
+                                                    <span>
+                                                        Agendamentos Cancelados: <b> {agendamentosCancelados} </b>
+                                                    </span>
+                                                </div>
+                                            }
+                                        />
                                     }
                                 />
                             </div>
@@ -222,7 +338,7 @@ const Dashboard = () => {
                             <div className={styles["card-kpi"]}>
                                 <CardKpi
                                     legenda={"Serviço Mais Agendado"}
-                                    valor={servicoMaisAgendado}
+                                    valor={servicoMaisAgendado || "Nenhum"}
                                     icon={
                                         <IconlyProvider
                                             stroke="bold"
@@ -235,12 +351,12 @@ const Dashboard = () => {
                             </div>
                         </div>
                         <div className={styles["group-dashboard"]}>
-                            <div className={styles["card-dashboard"]}>
+                            <div className={styles["card-dashboard"]} id={styles["lg"]}>
                                 <span className={styles["title-chart"]}>
                                     Agendamentos no Dia Por Profissional
                                 </span>
                                 <Bar
-                                    data={chartData}
+                                    data={graficoBarras}
                                     options={{
                                         plugins: {
                                             title: {
@@ -255,6 +371,50 @@ const Dashboard = () => {
                                         }
                                     }}
                                 />
+                            </div>
+                            <div className={styles["card-dashboard"]} id={styles["md"]}>
+                                <span className={styles["title-chart"]}>
+                                    Agendamentos no Dia Por Categoria
+                                </span>
+                                <div style={{
+                                    width: "13vw",
+                                    heigth: "13vw",
+                                    display: "flex"
+                                }}>
+                                    <Doughnut
+                                        data={graficoDonut}
+                                        options={{
+                                            plugins: {
+                                                title: {
+                                                    display: false
+                                                },
+                                                legend: {
+                                                    display: false,
+                                                },
+                                                subtitle: {
+                                                    display: false
+                                                },
+                                            }
+                                        }}
+                                    />
+                                    <ul className={styles["group-porcentagem"]}>
+                                        {dadosAgendamentosPorCategoria.map((categoria, index) => (
+                                            <li key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
+                                                <figure>
+                                                    <div className={styles["barrinha-label"]}/>
+                                                </figure>
+                                                {(categoria.count / agendamentosTotalDoDia)}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <ul className={styles["group-labels"]}>
+                                    {dadosAgendamentosPorCategoria.map((categoria, index) => (
+                                        <li key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
+                                            {categoria.categoria}
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         </div>
                         <div className={styles["group-top3"]}>
