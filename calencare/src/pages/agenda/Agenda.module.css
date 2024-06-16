@@ -31,3 +31,15 @@
     column-gap: 8px;
     justify-content: center;
   }
+
+  .section-agenda .container-agenda .content-agenda .table-agenda{
+    width: 70vw;
+    height: 80vh;
+    overflow-y: scroll;
+    overflow-x: scroll;
+  }
+
+  .section-agenda .container-agenda .div-card {
+    position: absolute;
+    /* top: 50%; */
+  }
