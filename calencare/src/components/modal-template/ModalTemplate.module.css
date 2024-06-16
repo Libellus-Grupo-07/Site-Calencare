@@ -1,5 +1,6 @@
 #lg{
   width: 35vw;
+  min-height: 10vh;
 }
 
 @media screen and (min-width: 1024px) {

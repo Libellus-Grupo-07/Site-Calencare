@@ -263,6 +263,11 @@ const AdicionarServico = () => {
         }
     }
 
+    const setNomeServico = (value) => {
+        setServico(value);
+        setDescricao(value.value)
+    }
+
     const editar = () => {
         if (isSelected(categoria, "Categoria do Serviço") &&
             isSelected(servico, "Nome do Serviço") &&
@@ -348,7 +353,7 @@ const AdicionarServico = () => {
                                 tamanho={"lg"}
                                 valor={servico}
                                 placeholder={"Nome"}
-                                alterarValor={setServico}
+                                alterarValor={setNomeServico}
                                 titulo={"Nome"}
                                 validarEntrada={(e) => inputSomenteTexto(e)}
                                 funcaoAdicionar={adicionarServico}

@@ -13,8 +13,8 @@ export function logado(token) {
 }
 
 export function isSelected(campo, nome) {
-  if (campo === undefined) {
-    toast.error(`Selecione o campo ${nome}`);
+  if (campo === undefined || campo === "Criar") {
+    toast.warn(`Selecione o campo ${nome}`);
     return false;
   }
 
@@ -23,7 +23,7 @@ export function isSelected(campo, nome) {
 
 export function isVazio(campo, nome) {
   if (campo === "") {
-    toast.error(`O campo ${nome} deve ser preenchido!`);
+    toast.warn(`O campo ${nome} deve ser preenchido!`);
     return true;
   }
   return false;
@@ -34,7 +34,7 @@ export function isValidEmail(email, nomeCampo) {
     return true;
   }
 
-  toast.error(`${nomeCampo} inválido.`);
+  toast.warn(`${nomeCampo} inválido.`);
   return false;
 }
 
@@ -43,7 +43,7 @@ export function isLengthValid(campo, tamanho, nome) {
     return true;
   }
 
-  toast.error(`O campo ${nome} deve ter no mínimo ${tamanho} caracteres`);
+  toast.warn(`O campo ${nome} deve ter no mínimo ${tamanho} caracteres`);
   return false;
 }
 
@@ -71,6 +71,7 @@ export function transformarDataHora(dataString) {
   return `${dia}/${mes}/${ano} ${hora}:${minutos}`;
 }
 
+
 export function transformarDataBd(dataString) {
   const data = new Date(dataString);
   const dia = data.getDate().toString().padStart(2, "0");
@@ -92,6 +93,10 @@ export function transformarHora(horaString) {
   const segundos = data.getSeconds().toString().padStart(2, "0");
   return `${hora}:${minutos}:${segundos}`;
 }
+
+export function transformarDataHoraBd(dataString, horaString){
+  return transformarDataBd(dataString) + "T" + transformarHora(horaString)
+  }
 
 export const inputSomenteTexto = (e) => {
   e.target.value = e.target.value.replace(/[^A-Za-zÀ-ú\s]/g, "");
@@ -141,7 +146,7 @@ export function aberturaMaiorFechamento(hora1, hora2) {
 
   if (horaAbertura.getHours() >= horaFechamento.getHours()) {
     if (horaAbertura.getMinutes() > horaFechamento.getMinutes()) {
-      toast.error(
+      toast.warn(
         "A hora de fechamento deve ser maior que a hora de abertura!"
       );
       return true;

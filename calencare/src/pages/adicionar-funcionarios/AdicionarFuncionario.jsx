@@ -39,10 +39,6 @@ const AdicionarFuncionario = () => {
     const [senha, setSenha] = useState("");
     const [empresa, setEmpresa] = useState({});
     const [options] = useState([
-        // {
-        //     label: "Selecione",
-        //     value: null
-        // }, 
         {
             label: "Administrador",
             value: "Administrador"
@@ -56,7 +52,7 @@ const AdicionarFuncionario = () => {
     const [tipoPerfil, setTipoPerfil] = useState("")
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
     const [servicosPorFuncionario, setServicosPorFuncionario] = useState([]);
-    const [items, setItems] = useState([]);
+    const [servicosPreco, setServicosPreco] = useState([]);
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -73,28 +69,28 @@ const AdicionarFuncionario = () => {
             console.log(error);
         });
 
-        api.get(`/funcionarios/${idProfissional}`).then((response) => {
-            const { data } = response;
-            console.log(response);
-            const { nome, telefone, email, bitStatus, perfilAcesso } = data;
-            setNome(nome);
-            setTelefone(telefone);
-            var tipoStatus = optionsStatus.filter(s => s.value === bitStatus)
-            setBitStatus(tipoStatus[0]);
-            setEmail(email);
-            var tipoPerfil = options.filter(s => s.label === perfilAcesso)
-            setTipoPerfil(tipoPerfil[0])
-            setSenha("123456")
+        if (isEditar) {
+            api.get(`/funcionarios/${idProfissional}`).then((response) => {
+                const { data } = response;
+                const { nome, telefone, email, bitStatus, perfilAcesso } = data;
+                setNome(nome);
+                setTelefone(telefone);
+                var tipoStatus = optionsStatus.filter(s => s.value === bitStatus)
+                setBitStatus(tipoStatus[0]);
+                setEmail(email);
+                var tipoPerfil = options.filter(s => s.label === perfilAcesso)
+                setTipoPerfil(tipoPerfil[0])
 
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar o funcionário");
-            console.log(error);
-        });
+            }).catch((error) => {
+                console.log("Houve um erro ao buscar o funcionário");
+                console.log(error);
+            });
+        }
 
         api.get(`/servico-preco/${idEmpresa}`).then((response) => {
             const { data } = response;
             const resposta = data
-            setItems(resposta.length === 0 ? [] : resposta)
+            setServicosPreco(resposta.length === 0 ? [] : resposta)
 
             if (isEditar) {
                 api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${idProfissional}`
@@ -157,30 +153,39 @@ const AdicionarFuncionario = () => {
         };
         if (validarFuncionario()) {
             if (isEditar) {
-                api.put(url, objetoAdicionado).then((response) => {
-                    const { data } = response;
-                    console.log(data)
-                    console.log(response)
-
-                    for (let index = 0; index < servicosPorFuncionario.length; index++) {
+                api.put(url, objetoAdicionado).then(() => {
+                    for (let index = 0; index < servicosPreco.length; index++) {
                         // Serviço por Funcionário atual
                         var servicoFuncionario = servicosPorFuncionario[index]
-                        // Filtrando o serviço preço pelo nome do Serviço Por Funcionário atual
-                        var servicoPreco = items.filter(s => s.nome === servicoFuncionario.nomeServico);
-                        // Variavel utilizada para checar se o serviço atual está selecionado e definir o status
-                        var isSelecionado = servicosSelecionados.includes(servicoPreco[0]) ? 1 : 0;
 
-                        // Se o status do serviço vindo do BD estiver diferente do status atual, então atualiza no BD
-                        if (servicoFuncionario.bitStatus !== isSelecionado) {
-                            api.patch(`/servico-por-funcionario/${idEmpresa}/${idProfissional}/${servicoFuncionario.id}`).then((response) => {
-                                console.warn("opa patch")
-                                console.error(response)
-                            }).catch((error) => {
-                                console.error(error)
-                            })
+                        if (servicoFuncionario) {
+                            // Variavel utilizada para checar se o serviço atual está selecionado e definir o status
+                            var isSelecionado = servicosSelecionados.includes(servicoFuncionario) ? 1 : 0;
+                            // Se o status do serviço vindo do BD estiver diferente do status atual, então atualiza no BD
+                            if (servicoFuncionario.bitStatus !== isSelecionado) {
+                                api.patch(`/servico-por-funcionario/${idEmpresa}/${idProfissional}/${servicoFuncionario.id}`).then().catch((error) => {
+                                    console.error(error)
+                                })
+                            }
+                        } else {
+                            // Filtrando o serviço preço pelo nome do Serviço Por Funcionário atual
+                            var servicoAtual = servicosSelecionados.includes(servicosPreco.filter(sp => sp.nome === servicosPreco[index].nome)[0]);
+
+                            if (servicoAtual) {
+                                let servicoAdicionado = {
+                                    idFuncionario: idProfissional,
+                                    idServicoPreco: servicosPreco[index].id,
+                                    dtCriacao: new Date(),
+                                    bitStatus: 1
+                                }
+
+                                api.post(`/servico-por-funcionario/${idEmpresa}`, servicoAdicionado).then().catch((error) => {
+                                     console.error(error)
+                                })
+                            }
                         }
                     }
-                    
+
                     toast.success("Funcionario atualizado com sucesso!");
                     navigate("/equipe");
                 }).catch((error) => {
@@ -189,19 +194,16 @@ const AdicionarFuncionario = () => {
                 })
 
             } else {
-
                 api.post(url, objetoAdicionado).then((response) => {
                     const { data } = response;
                     const { id } = data;
-                    console.log(data)
-                    console.log(response)
 
-                    for (let index = 0; index < items.length; index++) {
+                    for (let index = 0; index < servicosSelecionados.length; index++) {
                         let servicoAdicionado = {
                             idFuncionario: id,
-                            idServicoPreco: items[index].id,
+                            idServicoPreco: servicosPreco[index].id,
                             dtCriacao: new Date(),
-                            bitStatus: servicosSelecionados.includes(items[index]) ? 1 : 0
+                            bitStatus: 1
                         }
 
                         api.post(`/servico-por-funcionario/${idEmpresa}`, servicoAdicionado).then().catch((error) => {
@@ -214,13 +216,23 @@ const AdicionarFuncionario = () => {
                     navigate("/equipe");
                 }).catch((error) => {
                     console.error(error)
-                    toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
+                    const { code } = error;
+                    if (code === "ERR_NETWORK") {
+                        toast.error("Ocorreu um erro ao tentar realizar cadastro. Tente novamente mais tarde!");
+                    } else {
+                        const { response } = error;
+                        const { status } = response;
+
+                        if (status === 400) {
+                            toast.error("O email informado já foi cadastrado!")
+                        }
+                    }
                 })
             }
         }
     };
 
-    const toggleServico = (item) => {
+    const selecionarServico = (item) => {
         if (servicosSelecionados.includes(item)) {
             setServicosSelecionados(servicosSelecionados.filter(servico => servico !== item));
         } else {
@@ -283,6 +295,8 @@ const AdicionarFuncionario = () => {
                                     valor={tipoPerfil}
                                     alterarValor={setTipoPerfil}
                                     titulo={"Tipo de Perfil"}
+                                    pesquisavel={false}
+                                    criarOption={true}
                                 />
 
                                 {/* <div className={styles[isEditar ? "selectInput-status" : "none-selectInput-status"]}> */}
@@ -293,15 +307,17 @@ const AdicionarFuncionario = () => {
                                     valor={bitStatus}
                                     alterarValor={setBitStatus}
                                     titulo={"Status"}
+                                    pesquisavel={false}
+                                    criarOption={true}
                                 />
                                 {/* </div> */}
                             </div>
 
                             <Ul className={styles["servicos-grid"]}
                                 titulo={"Serviços que realiza"}
-                                items={items}
+                                items={servicosPreco}
                                 servicosSelecionados={servicosSelecionados}
-                                toggleServico={toggleServico}
+                                toggleServico={selecionarServico}
                             />
                         </div>
                         <div className={styles["group-button"]}>

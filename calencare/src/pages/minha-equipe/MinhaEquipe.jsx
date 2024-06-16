@@ -11,19 +11,18 @@ import Table from "../../components/table/Table";
 import ModalTemplate from "../../components/modal-template/ModalTemplate";
 import { toast } from "react-toastify";
 import Pilha from "../../PilhaDesfazerDados";
+import { FaUndo } from "react-icons/fa";
 
 
 const Equipe = () => {
     const navigate = useNavigate();
     const titulos = ["", "Nome", "Email", "Perfil", "Status", "Serviços", ""]
-
     const [pilha, setPilha] = useState(new Pilha())
     const idEmpresa = sessionStorage.getItem("idEmpresa")
     const idUser = sessionStorage.getItem("idUser")
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
-    const [listaServico, setListaServico] = useState([])
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -44,10 +43,13 @@ const Equipe = () => {
                 const promessasServicos = data.map((funcionario) =>
                     api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${funcionario.id}`)
                 );
+
                 Promise.all(promessasServicos)
                     .then((respostas) => {
                         const dadosAtualizados = data.map((funcionario, index) => {
-                            const servicosFuncionario = respostas[index].data.length === 0 ? "" :
+                            var respostaAtual = respostas[index].data.length === 0 ? [] : respostas[index].data
+                            let servicos = respostaAtual.filter(s => s.bitStatus === 1);
+                            const servicosFuncionario = respostaAtual.length === 0 ? "" :
                                 (
                                     <ul style={{
                                         listStyle: "revert",
@@ -56,7 +58,7 @@ const Equipe = () => {
                                         display: "grid",
                                     }}>
 
-                                        {respostas[index].data.map((servico) => (
+                                        {servicos.map((servico) => (
                                             <li key={index}>{servico.nomeServico}</li>
                                         ))}
                                     </ul>
@@ -66,7 +68,7 @@ const Equipe = () => {
                                 servicos: servicosFuncionario
                             };
                         });
-                        setDados(dadosAtualizados);
+                        setDados(dadosAtualizados.filter(f => f.id !== Number(idUser)));
                     })
                     .catch((error) => {
                         console.error("Houve um erro ao buscar serviços", error);
@@ -86,7 +88,6 @@ const Equipe = () => {
             const funcionarioStatusDto = {
                 bitStatus: 1
             };
-            console.log(pilha)
             api.patch(`/funcionarios/status/${id}`, funcionarioStatusDto)
                 .then(() => {
                     buscarFuncionarios()
@@ -164,14 +165,8 @@ const Equipe = () => {
                                     funcaoButton={desfazer}
                                     cor="branco"
                                     disabled={pilha.isEmpty()}
-                                    titulo={"Desfazer"}
-                                    icone={<IconlyProvider
-                                        stroke="bold"
-                                        size="small"
-                                    >
-                                        <AddUser />
-                                    </IconlyProvider>
-                                    }
+                                    titulo={"Desfazer Exclusão"}
+                                    icone={<FaUndo className={styles["icon-desfazer"]}/>}
                                 />
 
                                 <Button
@@ -195,10 +190,9 @@ const Equipe = () => {
                                     Nenhum funcionário cadastrado
                                 </div> : <Table
                                     titulos={titulos}
-                                    linhas={dados.map((linha, index) => {
-
+                                    matriz={dados.map((linha) => {
                                         const status = linha.bitStatus === 1 ? "Ativo" : "Inativo";
-                                        return [linha.id, linha.nome, linha.email, linha.perfilAcesso, status, linha.servicos];
+                                        return [linha.id, linha.nome, linha.email, linha.perfilAcesso, status, linha.servicos]
                                     })}
                                     showEditIcon={true}
                                     showDeleteIcon={true}

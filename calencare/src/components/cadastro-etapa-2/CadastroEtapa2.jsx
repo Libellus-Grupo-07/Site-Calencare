@@ -53,22 +53,26 @@ const CadastroEtapa2 = ({
                     maxlength={45}
                 />
                 <div className={styles["container-adrress"]}>
-                    <Input
-                        id="numeroLogradouro"
-                        valor={Numero}
-                        alterarValor={setNumero}
-                        titulo={"Número"}
-                        maxlength={9}
-                        minlength={1}
-                    />
-                    <Input
-                        id="complemento"
-                        valor={Complemento}
-                        alterarValor={setComplemento}
-                        titulo={"Complemento"}
-                        minlength={0}
-                        maxlength={9}
-                    />
+                    <div style={{ width: "50%" }}>
+                        <Input
+                            id="numeroLogradouro"
+                            valor={Numero}
+                            alterarValor={setNumero}
+                            titulo={"Número"}
+                            maxlength={9}
+                            minlength={1}
+                        />
+                    </div>
+                    <div style={{width: "47.5%"}}>
+                        <Input
+                            id="complemento"
+                            valor={Complemento}
+                            alterarValor={setComplemento}
+                            titulo={"Complemento"}
+                            minlength={0}
+                            maxlength={9}
+                        />
+                    </div>
                 </div>
                 <Input
                     id="bairro"

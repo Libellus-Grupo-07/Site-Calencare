@@ -9,7 +9,9 @@ import { Icon } from '@iconify-icon/react';
 import CardKpi from "../../components/card-kpi/CardKpi";
 import CardAgendamento from './../../components/card-agendamento/CardAgendamento';
 import { logado, transformarDataBd, transformarDouble } from "../../utils/global";
-import Swal from "sweetalert2";
+import ModalTemplate from "../../components/modal-template/ModalTemplate";
+import Input from "../../components/input/Input";
+import SelectInput from "../../components/select-input/SelectInput";
 
 const Inicio = () => {
     const navigate = useNavigate();
@@ -20,47 +22,83 @@ const Inicio = () => {
     const [servicoMaisProcuradoDia, setServicoMaisProcuradoDia] = useState("");
     const [proximosAgendamentos, setProximosAgendamentos] = useState([]);
     const [agendamentosEmAndamento, setAgendamentosEmAndamento] = useState([]);
+    const [modalFinalizarAgendamento, setModalFinalizarAgendamento] = useState([]);
+    const [metodoPagamento, setmetodoPagamento] = useState("");
+    const [optionsMetodoPagamento, setOptionsMetodoPagamento] = useState([
+        {
+            label: "Cartão de Crédito",
+            value: "Cartão de Crédito"
+        },
+        {
+            label: "Cartão de Débito",
+            value: "Cartão de Débito"
+        },
+        {
+            label: "Dinheiro",
+            value: "Dinheiro"
+        },
+        {
+            label: "PIX",
+            value: "PIX"
+        }
+    ]);
 
     const cancelar = (idAgendamento) => {
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: "btn-roxo",
-                cancelButton: "btn-branco",
-                title: "title-modal",
-                text: "text-modal",
-            },
-            buttonsStyling: false
-        });
-        swalWithBootstrapButtons.fire({
-            title: "Cancelamento de Agendamento",
-            text: `Você realmente deseja cancelar o agendamento?`,
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sim",
-            cancelButtonText: "Não",
-            showCloseButton: true,
-            reverseButtons: true,
-            width: "35vw",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // api.delete(`/funcionarios/${idUser}`).then((response) => {
-                //     swalWithBootstrapButtons.fire({
-                //         title: "Exclusão de Conta",
-                //         text: "Agendamento cancelado com sucesso.",
-                //         icon: "success"
-                //     });
-                // }).catch((error) => {
-                //     swalWithBootstrapButtons.fire({
-                //         title: "Exclusão de Conta",
-                //         text: "Não foi possível cancelar o agendamento.",
-                //         icon: "error"
-                //     });
-                //     console.error("Houve um erro ao tentar excluir a conta")
-                //     console.log(error)
-                // })
-            }
-        });
+        alert(idAgendamento)
+        // const swalWithBootstrapButtons = Swal.mixin({
+        //     customClass: {
+        //         confirmButton: "btn-roxo",
+        //         cancelButton: "btn-branco",
+        //         title: "title-modal",
+        //         text: "text-modal",
+        //     },
+        //     buttonsStyling: false
+        // });
+        // swalWithBootstrapButtons.fire({
+        //     title: "Cancelamento de Agendamento",
+        //     text: `Você realmente deseja cancelar o agendamento?`,
+        //     icon: "warning",
+        //     showCancelButton: true,
+        //     confirmButtonText: "Sim",
+        //     cancelButtonText: "Não",
+        //     showCloseButton: true,
+        //     reverseButtons: true,
+        //     width: "35vw",
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         // api.delete(`/funcionarios/${idUser}`).then((response) => {
+        //         //     swalWithBootstrapButtons.fire({
+        //         //         title: "Exclusão de Conta",
+        //         //         text: "Agendamento cancelado com sucesso.",
+        //         //         icon: "success"
+        //         //     });
+        //         // }).catch((error) => {
+        //         //     swalWithBootstrapButtons.fire({
+        //         //         title: "Exclusão de Conta",
+        //         //         text: "Não foi possível cancelar o agendamento.",
+        //         //         icon: "error"
+        //         //     });
+        //         //     console.error("Houve um erro ao tentar excluir a conta")
+        //         //     console.log(error)
+        //         // })
+        //     }
+        // });
     }
+
+    const finalizar = (idAgendamento) => {
+
+    }
+
+    const corpoModalFinalizar = (
+        <>
+            <SelectInput
+                titulo={"Método de Pagamento"}
+                id={"metodoPagamento"}
+
+                options={optionsMetodoPagamento}
+            />
+        </>
+    )
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -96,7 +134,7 @@ const Inicio = () => {
             console.log(error);
         });
 
-        api.get(`/agendamentos/em-andamento?empresaId=${idEmpresa}`).then((response) => {
+        api.get(`/agendamentos/pendentes/${idEmpresa}`).then((response) => {
             const { data } = response;
             setAgendamentosEmAndamento(data);
         }).catch((error) => {
@@ -184,9 +222,10 @@ const Inicio = () => {
                                         <div className={styles["group-proximos-agendamentos"]}>
                                             {
                                                 proximosAgendamentos.map((agendamento, index) => (
-                                                    <div key={index}>
+                                                    <div style={{ width: "95%" }} key={index}>
                                                         <CardAgendamento
                                                             cor={"branco"}
+                                                            // tamanho={"md"}
                                                             nomeFuncionario={agendamento.nomeFuncionario}
                                                             dataHora={agendamento.dtHora}
                                                             nomeCliente={agendamento.nomeCliente}
@@ -219,7 +258,9 @@ const Inicio = () => {
                                                         dataHora={agendamento.dtHora}
                                                         nomeServico={agendamento.nomeServico}
                                                         precoServico={agendamento.preco}
+                                                        horaFinalizacao={agendamento.horarioFinalizacao}
                                                         funcaoCancelar={() => cancelar(agendamento.id)}
+                                                        funcaoBotaoConfirmar={() => cancelar(agendamento.id)}
                                                     />
                                                 </div>
 
@@ -233,6 +274,15 @@ const Inicio = () => {
                     </div>
                 </div>
             </section >
+            <ModalTemplate
+                aberto={modalFinalizarAgendamento}
+                setAberto={() => setModalFinalizarAgendamento(!modalFinalizarAgendamento)}
+                funcaoBotaoConfirmar={finalizar}
+                corpo={corpoModalFinalizar}
+                titulo={"Finaliar Agendamento"}
+                tituloBotaoConfirmar={"Finalizar"}
+                tamanho={"lg"}
+            />
         </>
     )
 }

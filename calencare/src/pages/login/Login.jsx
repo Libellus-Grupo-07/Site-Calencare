@@ -21,6 +21,7 @@ const validar = (valor, nome ) => {
 }
 
 const Login = () => {
+    sessionStorage.clear();
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
