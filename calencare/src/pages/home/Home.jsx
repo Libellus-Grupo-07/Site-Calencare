@@ -14,6 +14,7 @@ import CarouselProduto from './../../components/carousel-produto/CarouselProduto
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  sessionStorage.clear();
   const navigate = useNavigate();
   const secao = sessionStorage.getItem("secao");
   const sectionInicio = useRef();

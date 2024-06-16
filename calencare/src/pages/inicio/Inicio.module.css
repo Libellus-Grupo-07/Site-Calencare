@@ -39,7 +39,6 @@
 
 .section-inicio .container-inicio .content-inicio .group-kpis .card-kpi {
   width: 32%;
-  background-color: aliceblue;
 }
 
 .section-inicio .container-inicio .content-inicio .container-agendamentos {
@@ -54,14 +53,14 @@
   .content-inicio
   .container-agendamentos
   .proximos-agendamentos {
-  width: 60%;
+  width: 50%;
   height: 55vh;
   min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  row-gap: 16px;
+  row-gap: 1.3rem;
 }
 
 .section-inicio
@@ -76,10 +75,11 @@
   .container-agendamentos
   .proximos-agendamentos
   .group-proximos-agendamentos {
+    width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   row-gap: 24px;
 }
 
@@ -106,7 +106,7 @@
   .container-agendamentos
   .agendamentos-em-andamento {
   background-color: var(--preto);
-  width: 40%;
+  width: 50%;
   height: 55vh;
   padding: 24px;
   min-height: 5vh;
@@ -114,10 +114,11 @@
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: stretch;
+  justify-content: stretch;
   row-gap: 16px;
   max-width: 26vw;
+  
 }
 
 .section-inicio
