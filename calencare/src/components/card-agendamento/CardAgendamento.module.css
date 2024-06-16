@@ -47,10 +47,14 @@
   .text-agendamento
   .info-agendamento
   .text-funcionario {
+  max-width: 10vw;
   font-size: 1.1rem;
   color: var(--roxo-principal);
   font-weight: 700;
   letter-spacing: -0.05rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-agendamento

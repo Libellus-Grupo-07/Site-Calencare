@@ -44,7 +44,7 @@
 .section-inicio .container-inicio .content-inicio .container-agendamentos {
   width: 100%;
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: space-between;
 }
 
@@ -107,7 +107,7 @@
   .agendamentos-em-andamento {
   background-color: var(--preto);
   width: 50%;
-  height: 55vh;
+  min-height: 55vh;
   padding: 24px;
   min-height: 5vh;
   border: none;
