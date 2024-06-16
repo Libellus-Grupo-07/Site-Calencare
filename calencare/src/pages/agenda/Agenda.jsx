@@ -3,7 +3,7 @@ import Header from "../../components/header/Header";
 import AgendaDoDia from "../../components/agenda-do-dia/AgendaDoDia";
 import api from "../../api";
 import styles from "./Agenda.module.css";
-import { logado } from "../../utils/global";
+import { logado, transformarDataBd } from "../../utils/global";
 import { useNavigate } from "react-router-dom";
 import { AddUser, Edit, IconlyProvider } from "react-iconly";
 import Button from "../../components/button/Button";
@@ -11,6 +11,8 @@ import Titulo from "../../components/titulo/Titulo";
 import CardAgendamento from "../../components/card-agendamento/CardAgendamento";
 import Swal from "sweetalert2";
 import { Tooltip } from 'react-tooltip'
+import Input from "../../components/input/Input";
+import fechado from "../../utils/assets/fechado.svg";
 
 
 
@@ -22,11 +24,14 @@ const Agenda = () => {
     const [dadosAgendamento, setDadosAgendamento] = useState({});
 
     const [nomeFuncionario, setNomeFuncionario] = useState("");
-    const [dataHora, setDataHora] = useState("");
+    const [dataHora, setDataHora] = useState(new Date());
     const [nomeServico, setNomeServico] = useState("");
     const [precoServico, setPrecoServico] = useState(0);
+    const [horaFinalizacao, setHoraFinalizacao] = useState(new Date());
     const [funcaoCancelar, setFuncaoCancelar] = useState(0);
     const [ident, setIdent] = useState(0);
+
+    const [dataSelecionada, setDataSelecionada] = useState(new Date());
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -34,11 +39,15 @@ const Agenda = () => {
             return;
         }
 
-        buscarAgenda(idEmpresa,);
-    }, [idEmpresa]);
+        buscarAgenda(dataSelecionada);
+    }, [dataSelecionada]);
 
-    const buscarAgenda = (idEmpresa, dia) => {
-        api.get(`/agendamentos/matriz/empresa/${idEmpresa}/data/2024-07-08`).then((response) => {
+    const buscarAgenda = (dia) => {
+        setDataSelecionada(dia)
+        setMatriz([]);
+        let dataFormatada = transformarDataBd(dia);
+
+        api.get(`/agendamentos/matriz/empresa/${idEmpresa}/data/${dataFormatada}`).then((response) => {
             const { data } = response;
             console.log(data);
             setMatriz(data);
@@ -53,12 +62,13 @@ const Agenda = () => {
             const { data } = response;
             console.log("Exibir card do agendamento de id: " + id);
             setAgendamento(data);
-            const { nomeFuncionario, dtHora, nomeServico, preco, ident } = data;
+            const { nomeFuncionario, dtHora, nomeServico, preco, ident, horarioFinalizacao } = data;
             setNomeFuncionario(nomeFuncionario);
             setDataHora(dtHora);
             setNomeServico(nomeServico);
             setPrecoServico(preco);
             setIdent(ident);
+            setHoraFinalizacao(horarioFinalizacao);
             //console.log(this)
 
             //document.getElementById("card").style.visibility = "visible";
@@ -119,18 +129,6 @@ const Agenda = () => {
                 </div>
                 <div className={styles["container-agenda"]}>
 
-                    {/* <div id="card" className={[styles["div-card"]]}>
-                        <CardAgendamento
-                            tamanho={"md"}
-                            cor={"cinza"}
-                            nomeFuncionario={nomeFuncionario}
-                            dataHora={dataHora}
-                            nomeServico={nomeFuncionario}
-                            precoServico={precoServico}
-                            funcaoCancelar={() => cancelar(ident)}
-                        />
-                    </div> */}
-
                     <div className={styles["content-agenda"]}>
                         <div className={styles["header"]}>
                             <Titulo tamanho={"md"} titulo={"Agenda"} />
@@ -147,20 +145,42 @@ const Agenda = () => {
                                     </IconlyProvider>
                                     }
                                 />
+
+                                <Input
+                                    valor={dataSelecionada}
+                                    type={"date"}
+                                    alterarValor={buscarAgenda}
+                                    cor={"roxo"} 
+                                />
+
                             </div>
                         </div>
                         <div className={styles["table-agenda"]}>
-                            <AgendaDoDia
+{
+                                matriz.length === 0 ?
+                                <div className={styles["sem-agendamentos"]}>
+                                    <div>
+                                    <img className={styles["imagem"]} src={fechado} alt="" />
+                                    </div>
+                                    <div>
+                                        <span>Empresa fechada para o dia selecionado!</span>
+                                    </div>
+                                </div>
+                                :
+                                <AgendaDoDia
                                 agenda={matriz}
                                 buscarInfoAgenda={buscarInfoAgenda}
                             />
+}
+
+                            
                         </div>
                     </div>
                 </div>
 
                 <Tooltip
                     id="my-tooltip"
-                    style={{ backgroundColor: "rgba(91, 91, 91, 0.0)"}}
+                    style={{ backgroundColor: "rgba(91, 91, 91, 0.0)" }}
                     opacity={1}
                     clickable
                     className={styles["example-no-radius"]}>
@@ -171,6 +191,7 @@ const Agenda = () => {
                         dataHora={dataHora}
                         nomeServico={nomeServico}
                         precoServico={precoServico}
+                        horaFinalizacao={horaFinalizacao}
                         funcaoCancelar={() => cancelar(ident)}
                     />
                 </Tooltip>

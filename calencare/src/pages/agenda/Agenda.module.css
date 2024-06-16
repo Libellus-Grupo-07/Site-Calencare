@@ -43,3 +43,20 @@
     position: absolute;
     /* top: 50%; */
   }
+
+  .sem-agendamentos {
+    /* display: flex; */
+    /* flex: column; */
+    font-size: 23px;
+    font-weight: 600;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .imagem {
+    width: 60vw;
+    height: 60vh;
+    /* object-fit: cover; */
+    border-radius: 1rem;
+  }
