@@ -242,7 +242,7 @@ const Clientes = () => {
                                     :
                                     <Table
                                         titulos={titulos}
-                                        linhas={dados}
+                                        matriz={dados}
                                         showEditIcon={true}
                                         showDeleteIcon={true}
                                         funcaoEditar={funcaoEditar}

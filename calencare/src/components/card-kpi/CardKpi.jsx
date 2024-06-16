@@ -1,7 +1,8 @@
 import React from "react";
 import styles from "./CardKpi.module.css";
+import { FaDove } from "react-icons/fa6";
 
-const CardKpi = ({ icon, legenda, valor }) => {
+const CardKpi = ({ icon, legenda, valor, tooltip }) => {
     return (
         <>
             <div className={styles["card-kpi"]}>
@@ -12,10 +13,18 @@ const CardKpi = ({ icon, legenda, valor }) => {
                 }
                 <div className={styles["text-kpi"]}>
                     <span className={styles["label-kpi"]}>
-                        { legenda }
+                        {legenda}
                     </span>
                     <span className={styles["value-kpi"]}>
-                        { valor }
+                        {tooltip ?
+                            <div>
+                                <a id="tooltip">
+                                    {valor}
+                                </a>
+                                {tooltip}
+                            </div>
+                        : valor
+                        }
                     </span>
                 </div>
             </div>

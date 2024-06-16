@@ -6,15 +6,15 @@ import Button from "../../components/button/Button";
 import { Delete, IconlyProvider, Logout } from "react-iconly";
 import { useNavigate } from "react-router-dom";
 import imgPerfil from "./../../utils/assets/perfil_padrao.svg";
-import Row from './../../components/row/Row';
+import Row from '../../components/row/Row';
 import { isVazio, logado, logoutUsuario, transformarData } from "../../utils/global";
-import DiaDaSemanaComponente from './../../components/dia-da-semana/DiaDaSemanaComponente';
+import DiaDaSemanaComponente from '../../components/dia-da-semana/DiaDaSemanaComponente';
 import { toast } from "react-toastify";
 import ModalTemplate from "../../components/modal-template/ModalTemplate";
-import Titulo from './../../components/titulo/Titulo';
+import Titulo from '../../components/titulo/Titulo';
 import Input from "../../components/input/Input";
 
-const Perfil = () => {
+const PerfilFuncionario = () => {
     const navigate = useNavigate();
     const hora = new Date();
     const idUser = sessionStorage.getItem('idUser');
@@ -559,4 +559,4 @@ const Perfil = () => {
     );
 }
 
-export default Perfil;
+export default PerfilFuncionario;

@@ -2,6 +2,8 @@ import React from "react";
 import styles from "./Input.module.css";
 // import InputMask from 'react-input-mask';
 import { IMaskInput } from 'react-imask';
+import DatePicker from "react-date-picker";
+import { Calendar } from "react-iconly";
 
 const Input = ({
     tamanho,
@@ -18,7 +20,8 @@ const Input = ({
     regex,
     maxlength,
     minlength,
-    sobrepor
+    sobrepor,
+    cor
 }) => {
     const mudarValor = (e) => {
         alterarValor(e.target.value);
@@ -27,14 +30,18 @@ const Input = ({
     return (
         <>
             <div className={styles["componet-input"]}>
-                <label for={id}>
-                    <span
-                        className={styles["titulo-input"]}
-                    >{titulo}</span>
-                </label>
+                {(titulo) &&
+                    <label for={id}>
+                        <span
+                            className={styles["titulo-input"]}
+                        >
+                            {titulo}
+                        </span>
+                    </label>
+                }
                 {mascara ?
                     <IMaskInput
-                        id={id}
+                        id={id || styles[cor]}
                         value={valor}
                         className={styles["input"]}
                         placeholder={placeholder || titulo}
@@ -51,26 +58,51 @@ const Input = ({
                         maxLength={maxlength}
                         minLength={minlength}
                         readOnly={readonly}
-                    /> :
-                    <input
-                        id={id}
-                        type={type}
-                        value={valor}
-                        className={styles["input"]}
-                        placeholder={placeholder || titulo}
-                        onChange={(e) => mudarValor(e)}
-                        onInput={validarEntrada ? (e) => validarEntrada(e) : null}
-                        readOnly={readonly || false}
-                        style={{
-                            height: tamanho ? "1rem" : "",
-                            fontSize: tamanho ? "14px" : "",
-                            padding: tamanho ? "0.9rem 1.8rem" : "",
-                            zIndex: sobrepor ? "99999" : ""
-                        }}
-                        pattern={regex}
-                        maxLength={maxlength}
-                        minLength={minlength}
-                    />
+                    /> : type === "date" ?
+                        <div id={id || styles[cor]} className={styles["component-date"]}
+                            style={{
+                                height: tamanho ? "1rem" : "",
+                                fontSize: tamanho ? "14px" : "",
+                                padding: tamanho ? "0.9rem 1.8rem" : "",
+                                zIndex: sobrepor ? "99999" : ""
+                            }}
+                        >
+                            <DatePicker
+                                value={valor || new Date()}
+                                onChange={(e) => alterarValor(e)}
+                                className={styles["input-date"]}
+                                calendarIcon={
+                                    <Calendar
+                                        primaryColor={cor === "roxo" ? "var(--texto-branco)" : ""}
+                                    />
+                                }
+                                clearIcon={null}
+                                format={"dd/MM/yyyy"}
+                                locale="br-BR"
+                                calendarProps={{
+                                    
+                                }}
+                            />
+                        </div>
+                        : <input
+                            id={id || styles[cor]}
+                            type={type}
+                            value={valor}
+                            className={styles["input"]}
+                            placeholder={placeholder || titulo}
+                            onChange={(e) => mudarValor(e)}
+                            onInput={validarEntrada ? (e) => validarEntrada(e) : null}
+                            readOnly={readonly || false}
+                            style={{
+                                height: tamanho ? "1rem" : "",
+                                fontSize: tamanho ? "14px" : "",
+                                padding: tamanho ? "0.9rem 1.8rem" : "",
+                                zIndex: sobrepor ? "99999" : ""
+                            }}
+                            pattern={regex}
+                            maxLength={maxlength}
+                            minLength={minlength}
+                        />
                 }
             </div>
 

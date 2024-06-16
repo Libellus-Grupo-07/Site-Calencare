@@ -16,7 +16,7 @@
   column-gap: 0.5rem;
 }
 
-.header .logo-header .icon-menu{
+.header .logo-header .icon-menu {
   font-size: 1.3rem;
   color: var(--roxo-principal);
   cursor: pointer;
@@ -42,18 +42,18 @@
   letter-spacing: -0.05rem;
 }
 
-.cinza{
+.cinza {
   color: var(--texto-cinza);
 }
 
-.cinza:hover{
+.cinza:hover {
   color: var(--roxo-principal);
 }
 
-#roxo, .roxo{ 
+#roxo,
+.roxo {
   color: var(--roxo-principal);
 }
-
 
 .header .user-profile {
   width: 70%;
@@ -67,7 +67,7 @@
   color: var(--roxo-principal);
 }
 
-.header .user-profile .icon-profile{
+.header .user-profile .icon-profile {
   height: 2.3rem;
 }
 
@@ -76,10 +76,15 @@
 }
 
 .header .user-profile .name-user {
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   cursor: pointer;
   font-weight: 600;
   letter-spacing: -0.05rem;
   transition: 0.3s all linear;
+  max-width: 8vw;
 }
 
 .header .user-profile .icon-arrow {
