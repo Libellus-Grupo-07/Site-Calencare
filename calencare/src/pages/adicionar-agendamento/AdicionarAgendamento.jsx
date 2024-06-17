@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Input from "../../components/input/Input";
-import { inputSomenteTexto, logado, isVazio, isValidEmail, transformarHora, transformarData, transformarDataHora, transformarDataHoraBd, transformarDataBd, isSelected } from "../../utils/global";
+import { inputSomenteTexto, logado, isVazio, isValidEmail, transformarHora, transformarDataHoraBd, transformarDataBd, isSelected } from "../../utils/global";
 import styles from "./AdicionarAgendamento.module.css";
 import Ul from "../../components/ul/Ul";
 import SelectInput from "../../components/select-input/SelectInput";
@@ -84,13 +84,13 @@ const AdicionarAgendamento = () => {
     const buscarAgendamento = () => {
         api.get(`/agendamentos/${idAgenda}`).then((response) => {
             const { data } = response;
-            const { dtHora, horario, funcionarioId, clienteId, servicoId, nomeServico, status } = data;
+            const { dtHora, horario, funcionarioId, clienteId, servicoPrecoId, nomeServico, status, } = data;
             setNomeServico(nomeServico);
             setData(dtHora);
             setHora(horario);
             setIdCliente(clienteId);
             setIdProfissional(funcionarioId);
-            setIdServicoPreco(servicoId);
+            setIdServicoPreco(servicoPrecoId);
             setBitStatus(status);
         }).catch((error) => {
             console.log("Houve um erro ao buscar um agendamento");
@@ -264,8 +264,11 @@ const AdicionarAgendamento = () => {
     }
 
     const handleSave = () => {
-        if (validarAgenda()) {
-            if (isEditar) { 
+        if (isEditar) {
+            if ((idCliente || !isSelected(cliente, "Cliente")) &&
+                (idProfissional || !isSelected(Profissional, "profissional")) &&
+                !isVazio(servicosSelecionados, "Serviços que realiza") &&
+                !isVazio(data, "Data Agendamento")) {
                 let AgendaAdicionado = {
                     dtHora: transformarDataHoraBd(data, hora),
                     dia: transformarDataBd(data),
@@ -273,17 +276,20 @@ const AdicionarAgendamento = () => {
                     bitStatus: bitStatus,
                     fkCliente: dadosClientes.find(c => c.id === idCliente).id,
                     fkFuncionario: dadosProfissionais.find(p => p.id === idProfissional).id,
-                    fkServicoPreco: servicos.find(s => s.nome === nomeServico).id
+                    fkServicoPreco: servicos.find(s => s.id === idServicoPreco).id
                 }
 
-                api.post(`/agendamentos/${dadosProfissionais.find(p => p.id === idProfissional).id}/${dadosClientes.find(c => c.id === idCliente).id}/${servicos.find(s => s.nome === nomeServico).id}`, AgendaAdicionado).then(() => {
+                api.put(`/agendamentos/${idAgenda}`, AgendaAdicionado).then(() => {
                     toast.success("Agendamento atualizado com sucesso!");
                     navigate("/agenda");
                 }).catch((error) => {
                     console.error(error)
                     toast.error("Ocorreu um erro ao atualizar os dados, por favor, tente novamente.");
                 })
-            } else {
+            }
+        } else {
+            if (validarAgenda()) {
+
                 //let dataHora = dataAgenda + "T" + hora;
                 let AgendaAdicionado = {
                     dtHora: transformarDataHoraBd(data, hora),
@@ -304,6 +310,7 @@ const AdicionarAgendamento = () => {
                     toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
                 })
             }
+
         }
     };
 

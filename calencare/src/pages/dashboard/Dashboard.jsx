@@ -31,7 +31,7 @@ const Dashboard = () => {
     const [top3Servicos, setTop3Servicos] = useState([]);
     const [top3Profissionais, setTop3Profissionais] = useState([]);
     const [top3Clientes, setTop3Clientes] = useState([]);
-    // const [dadosAgendamentosPorProfissional, setDadosAgendamentosPorProfissional] = useState(false);
+    const [dadosAgendamentosPorProfissional, setDadosAgendamentosPorProfissional] = useState(false);
     const [dadosAgendamentosPorCategoria, setDadosAgendamentosPorCategoria] = useState([])
 
     const [graficoBarras, setGraficoBarras] = useState({
@@ -117,9 +117,10 @@ const Dashboard = () => {
 
         buscarDadosDashboard(dataSelecionada);
 
-    }, [idEmpresa, navigate]);
+    }, [idEmpresa, navigate, dataSelecionada]);
 
     const buscarDadosDashboard = (dataSelecionada) => {
+        console.log(dataSelecionada)
         setDataSelecionada(dataSelecionada)
         let dataFormatada = transformarDataBd(dataSelecionada);
 
@@ -138,7 +139,6 @@ const Dashboard = () => {
         api.get(`/dashboard/profissional/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
             console.log(data)
-            // setDadosAgendamentosPorCategoria(data)
             gerarGraficoBarra(data);
         }).catch((error) => {
             console.error(error);
@@ -193,6 +193,7 @@ const Dashboard = () => {
 
 
     const gerarGraficoBarra = (dadosAgendamentosPorProfissional) => {
+        setDadosAgendamentosPorProfissional(dadosAgendamentosPorProfissional);
         setGraficoBarras({
             labels: dadosAgendamentosPorProfissional.map((s) => s.nome),
             datasets: [
@@ -235,6 +236,7 @@ const Dashboard = () => {
     }
 
     const gerarGraficoDonut = (dadosAgendamentosPorCategoria) => {
+        setDadosAgendamentosPorCategoria(dadosAgendamentosPorCategoria);
         setGraficoDonut({
             labels: dadosAgendamentosPorCategoria.map((s) => s.categoria),
             datasets: [
@@ -277,6 +279,7 @@ const Dashboard = () => {
                                         type={"date"}
                                         alterarValor={buscarDadosDashboard}
                                         cor={"roxo"}
+                                        isMensal={true}
                                     />
                                 </div>
                             </div>
@@ -354,95 +357,114 @@ const Dashboard = () => {
                                 <span className={styles["title-chart"]}>
                                     Agendamentos no Dia Por Profissional
                                 </span>
-                                <Bar
-                                    style={{
-                                        fontFamily: "Poppins"
-                                    }}
-                                    data={graficoBarras}
-                                    options={{
-                                        scales: {
-                                            x: {
-                                                ticks: {
-                                                    color: cores[1],
-                                                    font: {
-                                                        family: "Poppins",
-                                                        weight: "700"
+                                {dadosAgendamentosPorProfissional.length === 0 ?
+                                    <div className={styles["sem-dados"]}>
+                                        Não há dados para exibir
+                                    </div> :
+                                    <Bar
+                                        style={{
+                                            fontFamily: "Poppins"
+                                        }}
+                                        data={graficoBarras}
+                                        options={{
+                                            scales: {
+                                                x: {
+                                                    ticks: {
+                                                        color: cores[1],
+                                                        font: {
+                                                            family: "Poppins",
+                                                            weight: "700"
+                                                        }
+                                                    },
+                                                },
+                                                y: {
+                                                    ticks: {
+                                                        stepSize: 1
                                                     }
-                                                },
-                                            }
-                                        },
-                                        plugins: {
-                                            title: {
-                                                display: false
+                                                }
                                             },
-                                            legend: {
-                                                display: false
-                                            },
-                                            subtitle: {
-                                                display: false
-                                            },
-                                            tooltip: {
-                                                bodyFont: {
-                                                    family: "Poppins"
+                                            plugins: {
+                                                title: {
+                                                    display: false
                                                 },
-                                                titleFont: {
-                                                    family: "Poppins"
+                                                legend: {
+                                                    display: false
                                                 },
+                                                subtitle: {
+                                                    display: false
+                                                },
+                                                tooltip: {
+                                                    bodyFont: {
+                                                        family: "Poppins"
+                                                    },
+                                                    titleFont: {
+                                                        family: "Poppins"
+                                                    },
 
+                                                }
                                             }
-                                        }
-                                    }}
-                                />
+                                        }}
+                                    />
+                                }
                             </div>
                             <div className={styles["card-dashboard"]} id={styles["md"]}>
                                 <span className={styles["title-chart"]}>
                                     Agendamentos no Dia Por Categoria
                                 </span>
-                                <div  className={styles["content-chart"]}>
-                                    <div className={styles["grafico-chart"]}>
-                                        <Doughnut
-                                            data={graficoDonut}
-                                            options={{
-                                                plugins: {
-                                                    title: {
-                                                        display: false
-                                                    },
-                                                    legend: {
-                                                        display: false,
-                                                    },
-                                                    subtitle: {
-                                                        display: false
-                                                    },
-                                                    tooltip: {
-                                                        bodyFont: {
-                                                            family: "Poppins"
-                                                        },
-                                                        titleFont: {
-                                                            family: "Poppins"
-                                                        },
-                                                    }
-                                                }
-                                            }}
-                                        />
-                                    </div>
-                                    <div className={styles["group-porcentagem"]}>
-                                        {dadosAgendamentosPorCategoria.map((categoria, index) => (
-                                            <div key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
-                                                <figure>
-                                                    <div className={styles["barrinha-label"]} style={{ backgroundColor: cores[1][index] }} />
-                                                </figure>
-                                                {(categoria.count / (agendamentosTotalDoDia) * 100).toFixed(0).replace(".", ",")}%
+                                {
+                                    dadosAgendamentosPorCategoria.length === 0 ?
+                                        <div className={styles["sem-dados"]}>
+                                            Não há dados para exibir
+                                        </div> :
+                                        <>
+                                            <div className={styles["content-chart"]}>
+
+                                                <div className={styles["grafico-chart"]}>
+                                                    <Doughnut
+                                                        data={graficoDonut}
+                                                        options={{
+                                                            plugins: {
+                                                                title: {
+                                                                    display: false
+                                                                },
+                                                                legend: {
+                                                                    display: false,
+                                                                },
+                                                                subtitle: {
+                                                                    display: false
+                                                                },
+                                                                tooltip: {
+                                                                    bodyFont: {
+                                                                        family: "Poppins"
+                                                                    },
+                                                                    titleFont: {
+                                                                        family: "Poppins"
+                                                                    },
+                                                                }
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className={styles["group-porcentagem"]}>
+                                                    {dadosAgendamentosPorCategoria.map((categoria, index) => (
+                                                        <div key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
+                                                            <figure>
+                                                                <div className={styles["barrinha-label"]} style={{ backgroundColor: cores[1][index] }} />
+                                                            </figure>
+                                                            {(categoria.count / (agendamentosTotalDoDia) * 100).toFixed(0).replace(".", ",")}%
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>
-                                <ul className={styles["group-labels"]}>
-                                    {dadosAgendamentosPorCategoria.map((categoria, index) => (
-                                        <li key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
-                                            {categoria.categoria}
-                                        </li>
-                                    ))}
-                                </ul>
+                                            <ul className={styles["group-labels"]}>
+                                                {dadosAgendamentosPorCategoria.map((categoria, index) => (
+                                                    <li key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
+                                                        {categoria.categoria}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </>
+                                }
                             </div>
                         </div>
                         <div className={styles["group-top3"]}>
