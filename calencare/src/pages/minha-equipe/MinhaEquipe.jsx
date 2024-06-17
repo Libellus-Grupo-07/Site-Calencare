@@ -16,10 +16,10 @@ import { FaUndo } from "react-icons/fa";
 
 const Equipe = () => {
     const navigate = useNavigate();
-    const titulos = ["", "Nome", "Email", "Perfil", "Status", "Serviços", ""]
+    const titulos = [/*"",*/ "Nome", "Email", "Perfil", "Status", "Serviços", ""]
     const [pilha, setPilha] = useState(new Pilha())
     const idEmpresa = sessionStorage.getItem("idEmpresa")
-    const idUser = sessionStorage.getItem("idUser")
+    // const idUser = sessionStorage.getItem("idUser")
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
@@ -69,7 +69,7 @@ const Equipe = () => {
                                 servicos: servicosFuncionario
                             };
                         });
-                        setDados(dadosAtualizados.filter(f => f.id !== Number(idUser)));
+                        setDados(dadosAtualizados);
                     })
                     .catch((error) => {
                         console.error("Houve um erro ao buscar serviços", error);
@@ -198,7 +198,7 @@ const Equipe = () => {
                                     titulos={titulos}
                                     matriz={dados.map((linha) => {
                                         const status = linha.bitStatus === 1 ? "Ativo" : "Inativo";
-                                        return [linha.id, linha.nome, linha.email, linha.perfilAcesso, status, linha.servicos]
+                                        return [/*linha.id,*/ linha.nome, linha.email, linha.perfilAcesso, status, linha.servicos]
                                     })}
                                     showEditIcon={true}
                                     showDeleteIcon={true}

@@ -24,6 +24,7 @@ const Perfil = () => {
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
     const [dtCriacao, setDtCriacao] = useState("");
+    const [servicosPrestados, setServicosPrestados] = useState([])
     const [empresa, setEmpresa] = useState({})
 
     const [razaoSocial, setRazaoSocial] = useState("")
@@ -162,7 +163,16 @@ const Perfil = () => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
         }, [])
-    }, [navigate, idUser, idEmpresa]);
+
+        api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${idUser}`).then((response) => {
+            const { data } = response;
+            setServicosPrestados(data)
+            console.log(data)
+        }).catch((error) => {
+            console.error(error)
+        });
+        
+    }, [idEmpresa, idUser, navigate]);
 
     const buscarEndereco = () => {
         api.get(`/enderecos/empresa/${idEmpresa}`).then((response) => {
@@ -523,6 +533,11 @@ const Perfil = () => {
                                             <Row
                                                 titulo="Email"
                                                 valor={email}
+                                                funcao={() => navegar("usuario")}
+                                            />
+                                            <Row
+                                                titulo="Serviços Prestados"
+                                                valor={servicosPrestados.map((s) => s.nomeServico).join(", ").replace(/,([^,]*)$/, ' e$1')}
                                                 funcao={() => navegar("usuario")}
                                             />
                                             <Row

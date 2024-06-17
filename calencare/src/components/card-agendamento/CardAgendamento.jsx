@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./CardAgendamento.module.css";
 import imgPerfilGradiente from "./../../utils/assets/perfil_gradiente.svg";
-// import imgPerfilRoxo from "./../../utils/assets/perfil_roxo.svg";
+import imgPerfilRoxo from "./../../utils/assets/perfil_roxo.svg";
 import { transformarDataHora, transformarDouble, transformarHora } from "../../utils/global";
 import Button from './../button/Button';
 import { TiCancel } from "react-icons/ti";
@@ -19,9 +19,10 @@ const CardAgendamento = ({
     precoServico,
     funcaoCancelar,
     funcaoConfirmar,
-    tituloBotaoConfirmar
+    tituloBotaoConfirmar,
+    tituloBotaoCancelar
 }) => {
-    // const imgPerfil = cor === "branco" ? imgPerfilGradiente : imgPerfilRoxo;
+    const imgPerfil = cor === "branco" ? imgPerfilGradiente : imgPerfilRoxo;
 
     return (
         <>
@@ -39,7 +40,7 @@ const CardAgendamento = ({
                         <img
                             className={styles["img-funcionario"]}
                             src={
-                                imgFuncionario || imgPerfilGradiente
+                                imgFuncionario || imgPerfil
                             }
                             alt="Foto de perfil do funcionário"
                             style={{
@@ -107,7 +108,7 @@ const CardAgendamento = ({
                     <Button
                         funcaoButton={funcaoCancelar}
                         tamanho={tamanho}
-                        titulo="Cancelar"
+                        titulo={tituloBotaoCancelar || "Cancelar"}
                         cor={cor === "branco" ? cor : "cinza"}
                         icone=
                         {tamanho ? "" :

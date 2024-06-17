@@ -38,13 +38,13 @@ function Rotas() {
           <Route path="empresa/editar/:idEmpresa" element={<EditarEmpresa />} />
           <Route path="dias-funcionamento/editar/:idEmpresa" element={<EditarDiasFuncionamento />} />
           <Route path="equipe" element={<Equipe/>}/>
+          <Route path="equipe/estatistica/:idProfissional" element={<PerfilEstatistica/>}/>
           <Route path="dashboard" element={<Dashboard/>}/>
           <Route path="profissional/adicionar" element={<AdicionarFuncionario/>}/>
           <Route path="profissional/editar/:idProfissional" element={<AdicionarFuncionario/>}/>
           <Route path="agenda" element={<Agenda/>} />
           <Route path="agenda/adicionar" element={<AdicionarAgendamento/>}/>
-          <Route path="equipe/estatistica/:idProfissional" element={<PerfilEstatistica/>}/>
-
+          <Route path="agenda/editar/:idAgenda" element={<AdicionarAgendamento/>}/>
         </Routes>
       </BrowserRouter>
     </>

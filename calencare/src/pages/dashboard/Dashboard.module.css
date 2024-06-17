@@ -98,8 +98,8 @@
   display: flex;
   flex-direction: column;
   /* flex-wrap: wrap; */
-  padding: 2.5rem 0.5rem;
-  justify-content: center;
+  padding: 2rem 0rem 2.5rem 0rem;
+  justify-content: flex-start;
   align-items: center;
   row-gap: 1rem;
   column-gap: 1rem;
@@ -110,8 +110,21 @@
   .container-dashboard
   .content-dashboard
   .group-dashboard
+  .card-dashboard
+  .sem-dados {
+    height: 100%;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .group-dashboard
   #lg {
-  width: 35vw;
+  width: 38vw;
 }
 
 .section-dashboard
@@ -141,6 +154,74 @@
   .content-dashboard
   .group-dashboard
   .card-dashboard
+  .content-chart {
+  width: 70%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .group-dashboard
+  .card-dashboard
+  .content-chart
+  .grafico-chart {
+  width: 11vw;
+  heigth: 11vh;
+  display: flex;
+  justify-content: center;
+}
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .group-dashboard
+  .card-dashboard
+  .group-porcentagem {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.7rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .group-dashboard
+  .card-dashboard
+  .group-porcentagem
+  .label {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  column-gap: 0.7rem;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.03rem;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .group-dashboard
+  .card-dashboard
+  .group-porcentagem
+  .barrinha-label {
+  width: 1.5rem;
+  height: 0.3rem;
+  border: none;
+  border-radius: 2rem;
+  text-align: center;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .group-dashboard
+  .card-dashboard
   .group-labels {
   display: flex;
   flex-wrap: wrap;
@@ -148,7 +229,9 @@
   align-items: center;
   list-style: outside;
   column-gap: 1rem;
-  width: 100%;
+  width: 90%;
+  padding-top: 1.3rem;
+  border-top: 1.5px solid var(--cinza-claro);
 }
 
 .section-dashboard
@@ -172,8 +255,8 @@
   .group-dashboard
   .card-dashboard
   .group-labels
-  li::marker {
-  content: '•';;
+  .label::marker {
+  content: "•";
   display: inline-block;
   position: absolute;
 }

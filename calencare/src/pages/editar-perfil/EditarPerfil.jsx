@@ -5,7 +5,7 @@ import api from "../../api";
 import Titulo from './../../components/titulo/Titulo';
 import Button from "../../components/button/Button";
 import { useNavigate, useParams } from "react-router-dom";
-import { inputSomenteNumero, inputSomenteTexto, logado } from "../../utils/global";
+import { inputSomenteTexto, logado } from "../../utils/global";
 import Input from "../../components/input/Input";
 import { FaCheck } from "react-icons/fa6";
 import { TiCancel } from "react-icons/ti";
@@ -177,7 +177,7 @@ const EditarPerfil = () => {
                                 alterarValor={setTelefone}
                                 titulo={"Telefone"}
                                 mascara={"(00) 00000-0000"}
-                                validarEntrada={(e) => inputSomenteNumero(e)}
+                                // validarEntrada={(e) => inputSomenteNumero(e)}
                             />
                             <Input
                                 tamanho={"lg"}

@@ -31,7 +31,7 @@ const Dashboard = () => {
     const [top3Servicos, setTop3Servicos] = useState([]);
     const [top3Profissionais, setTop3Profissionais] = useState([]);
     const [top3Clientes, setTop3Clientes] = useState([]);
-    // const [dadosAgendamentosPorProfissional, setDadosAgendamentosPorProfissional] = useState(false);
+    const [dadosAgendamentosPorProfissional, setDadosAgendamentosPorProfissional] = useState(false);
     const [dadosAgendamentosPorCategoria, setDadosAgendamentosPorCategoria] = useState([])
 
     const [graficoBarras, setGraficoBarras] = useState({
@@ -83,18 +83,19 @@ const Dashboard = () => {
             }
         ]
     });
+
     const cores = [[
-        "rgba(159, 53, 240, 0.7)",
-        "rgba(53, 69, 240, 0.7)",
-        "rgba(97, 52, 239, 0.7)",
-        "rgba(192, 133, 239, 0.7)",
-        "rgba(135, 88, 234, 0.7)",
-        "rgba(240, 54, 165, 0.7)",
-        "rgba(219, 53, 239, 0.7)",
-        "rgba(81, 189, 233, 0.7)",
-        "rgba(94, 164, 234, 0.7)",
-        "rgba(53, 240, 233, 0.7)",
-        "rgba(241, 170, 54, 0.7)"
+        "rgba(159, 53, 240, 0.5)",
+        "rgba(53, 69, 240, 0.5)",
+        "rgba(97, 52, 239, 0.5)",
+        "rgba(192, 133, 239, 0.5)",
+        "rgba(135, 88, 234, 0.5)",
+        "rgba(240, 54, 165, 0.5)",
+        "rgba(219, 53, 239, 0.5)",
+        "rgba(81, 189, 233, 0.5)",
+        "rgba(94, 164, 234, 0.5)",
+        "rgba(53, 240, 233, 0.5)",
+        "rgba(241, 170, 54, 0.5)"
     ], [
         "#9F35F0",
         "#3545F0",
@@ -116,9 +117,10 @@ const Dashboard = () => {
 
         buscarDadosDashboard(dataSelecionada);
 
-    }, [idEmpresa, navigate]);
+    }, [idEmpresa, navigate, dataSelecionada]);
 
     const buscarDadosDashboard = (dataSelecionada) => {
+        console.log(dataSelecionada)
         setDataSelecionada(dataSelecionada)
         let dataFormatada = transformarDataBd(dataSelecionada);
 
@@ -137,7 +139,6 @@ const Dashboard = () => {
         api.get(`/dashboard/profissional/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
             console.log(data)
-            // setDadosGraficoBarra(data)
             gerarGraficoBarra(data);
         }).catch((error) => {
             console.error(error);
@@ -192,26 +193,28 @@ const Dashboard = () => {
 
 
     const gerarGraficoBarra = (dadosAgendamentosPorProfissional) => {
+        setDadosAgendamentosPorProfissional(dadosAgendamentosPorProfissional);
         setGraficoBarras({
             labels: dadosAgendamentosPorProfissional.map((s) => s.nome),
             datasets: [
                 {
                     label: "Agendamentos no Dia",
+
                     data: dadosAgendamentosPorProfissional.map((s) => s.count),
                     backgroundColor: [
-                        "rgba(159, 53, 240, 0.15)",
-                        "rgba(53, 69, 240, 0.15)",
+                        "rgba(159, 53, 240, 0.25)",
+                        "rgba(53, 69, 240, 0.25)",
 
-                        "rgba(97, 52, 239, 0.15)",
+                        "rgba(97, 52, 239, 0.25)",
 
-                        "rgba(192, 133, 239, 0.15)",
-                        "rgba(135, 88, 234, 0.15)",
-                        "rgba(240, 54, 165, 0.15)",
-                        "rgba(219, 53, 239, 0.15)",
-                        "rgba(81, 189, 233, 0.15)",
-                        "rgba(94, 164, 234, 0.15)",
-                        "rgba(53, 240, 233, 0.15)",
-                        "rgba(241, 170, 54, 0.15)"
+                        "rgba(192, 133, 239, 0.25)",
+                        "rgba(135, 88, 234, 0.25)",
+                        "rgba(240, 54, 165, 0.25)",
+                        "rgba(219, 53, 239, 0.25)",
+                        "rgba(81, 189, 233, 0.25)",
+                        "rgba(94, 164, 234, 0.25)",
+                        "rgba(53, 240, 233, 0.25)",
+                        "rgba(241, 170, 54, 0.25)"
                     ],
                     borderColor: [
                         "#9F35F0",
@@ -233,7 +236,7 @@ const Dashboard = () => {
     }
 
     const gerarGraficoDonut = (dadosAgendamentosPorCategoria) => {
-        let i = 0;
+        setDadosAgendamentosPorCategoria(dadosAgendamentosPorCategoria);
         setGraficoDonut({
             labels: dadosAgendamentosPorCategoria.map((s) => s.categoria),
             datasets: [
@@ -245,10 +248,8 @@ const Dashboard = () => {
                     borderWidth: 2
                 }
             ],
-            // options:
         })
     }
-
 
     return (
         <>
@@ -278,6 +279,7 @@ const Dashboard = () => {
                                         type={"date"}
                                         alterarValor={buscarDadosDashboard}
                                         cor={"roxo"}
+                                        isMensal={true}
                                     />
                                 </div>
                             </div>
@@ -355,66 +357,114 @@ const Dashboard = () => {
                                 <span className={styles["title-chart"]}>
                                     Agendamentos no Dia Por Profissional
                                 </span>
-                                <Bar
-                                    data={graficoBarras}
-                                    options={{
-                                        plugins: {
-                                            title: {
-                                                display: false
-                                            },
-                                            legend: {
-                                                display: false,
-                                            },
-                                            subtitle: {
-                                                display: false
-                                            },
-                                        }
-                                    }}
-                                />
-                            </div>
-                            <div className={styles["card-dashboard"]} id={styles["md"]}>
-                                <span className={styles["title-chart"]}>
-                                    Agendamentos no Dia Por Categoria
-                                </span>
-                                <div style={{
-                                    width: "13vw",
-                                    heigth: "13vw",
-                                    display: "flex"
-                                }}>
-                                    <Doughnut
-                                        data={graficoDonut}
+                                {dadosAgendamentosPorProfissional.length === 0 ?
+                                    <div className={styles["sem-dados"]}>
+                                        Não há dados para exibir
+                                    </div> :
+                                    <Bar
+                                        style={{
+                                            fontFamily: "Poppins"
+                                        }}
+                                        data={graficoBarras}
                                         options={{
+                                            scales: {
+                                                x: {
+                                                    ticks: {
+                                                        color: cores[1],
+                                                        font: {
+                                                            family: "Poppins",
+                                                            weight: "700"
+                                                        }
+                                                    },
+                                                },
+                                                y: {
+                                                    ticks: {
+                                                        stepSize: 1
+                                                    }
+                                                }
+                                            },
                                             plugins: {
                                                 title: {
                                                     display: false
                                                 },
                                                 legend: {
-                                                    display: false,
+                                                    display: false
                                                 },
                                                 subtitle: {
                                                     display: false
                                                 },
+                                                tooltip: {
+                                                    bodyFont: {
+                                                        family: "Poppins"
+                                                    },
+                                                    titleFont: {
+                                                        family: "Poppins"
+                                                    },
+
+                                                }
                                             }
                                         }}
                                     />
-                                    <ul className={styles["group-porcentagem"]}>
-                                        {dadosAgendamentosPorCategoria.map((categoria, index) => (
-                                            <li key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
-                                                <figure>
-                                                    <div className={styles["barrinha-label"]}/>
-                                                </figure>
-                                                {(categoria.count / agendamentosTotalDoDia)}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <ul className={styles["group-labels"]}>
-                                    {dadosAgendamentosPorCategoria.map((categoria, index) => (
-                                        <li key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
-                                            {categoria.categoria}
-                                        </li>
-                                    ))}
-                                </ul>
+                                }
+                            </div>
+                            <div className={styles["card-dashboard"]} id={styles["md"]}>
+                                <span className={styles["title-chart"]}>
+                                    Agendamentos no Dia Por Categoria
+                                </span>
+                                {
+                                    dadosAgendamentosPorCategoria.length === 0 ?
+                                        <div className={styles["sem-dados"]}>
+                                            Não há dados para exibir
+                                        </div> :
+                                        <>
+                                            <div className={styles["content-chart"]}>
+
+                                                <div className={styles["grafico-chart"]}>
+                                                    <Doughnut
+                                                        data={graficoDonut}
+                                                        options={{
+                                                            plugins: {
+                                                                title: {
+                                                                    display: false
+                                                                },
+                                                                legend: {
+                                                                    display: false,
+                                                                },
+                                                                subtitle: {
+                                                                    display: false
+                                                                },
+                                                                tooltip: {
+                                                                    bodyFont: {
+                                                                        family: "Poppins"
+                                                                    },
+                                                                    titleFont: {
+                                                                        family: "Poppins"
+                                                                    },
+                                                                }
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className={styles["group-porcentagem"]}>
+                                                    {dadosAgendamentosPorCategoria.map((categoria, index) => (
+                                                        <div key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
+                                                            <figure>
+                                                                <div className={styles["barrinha-label"]} style={{ backgroundColor: cores[1][index] }} />
+                                                            </figure>
+                                                            {(categoria.count / (agendamentosTotalDoDia) * 100).toFixed(0).replace(".", ",")}%
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            <ul className={styles["group-labels"]}>
+                                                {dadosAgendamentosPorCategoria.map((categoria, index) => (
+                                                    <li key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
+                                                        {categoria.categoria}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </>
+                                }
                             </div>
                         </div>
                         <div className={styles["group-top3"]}>
