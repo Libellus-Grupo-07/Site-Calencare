@@ -376,7 +376,7 @@ const Cadastro = () => {
                 const { response } = error;
                 const { status } = response;
 
-                if (status === 409) {
+                if (status === 400) {
                     toast.error("O CNPJ informado, já foi cadastrado!")
                 }
             }

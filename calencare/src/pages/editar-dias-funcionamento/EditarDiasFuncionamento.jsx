@@ -52,7 +52,7 @@ const EditarDiasFuncionamento = () => {
         [setDiaQuintaAberto, setHorario1Quinta, setHorario2Quinta, diaQuintaAberto, horario1Quinta, horario2Quinta],
         [setDiaSextaAberto, setHorario1Sexta, setHorario2Sexta, diaSextaAberto, horario1Sexta, horario2Sexta],
         [setDiaSabadoAberto, setHorario1Sabado, setHorario2Sabado, diaSabadoAberto, horario1Sabado, horario2Sabado],
-        [setDiaDomingoAberto, setHorario1Domingo, setHorario2Segunda, diaDomingoAberto, horario1Domingo, horario2Domingo],
+        [setDiaDomingoAberto, setHorario1Domingo, setHorario2Domingo, diaDomingoAberto, horario1Domingo, horario2Domingo],
     ];
 
     useEffect(() => {
