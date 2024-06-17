@@ -1,5 +1,5 @@
 import styles from './ModalTemplate.module.css'
-import { IoClose } from "react-icons/io5";
+import { IoArrowBackOutline, IoClose } from "react-icons/io5";
 import Button from './../button/Button';
 import { FaCheck } from 'react-icons/fa6';
 import { TiCancel } from 'react-icons/ti';
@@ -7,7 +7,7 @@ import Titulo from '../titulo/Titulo';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 
-const ModalTemplate = ({ tamanho, aberto, setAberto, titulo, corpo, tituloBotaoConfirmar, funcaoBotaoConfirmar, funcaoBotaoCancelar }) => {
+const ModalTemplate = ({ tamanho, aberto, setAberto, titulo, corpo, tituloBotaoConfirmar, tituloBotaoCancelar, funcaoBotaoConfirmar, funcaoBotaoCancelar }) => {
 
     const handleClose = () => setAberto(false);
     // const handleShow = () => setAberto(true);
@@ -26,22 +26,22 @@ const ModalTemplate = ({ tamanho, aberto, setAberto, titulo, corpo, tituloBotaoC
             >
                 <div className={styles["container-modal"]}>
                     <div className={styles["header-modal"]}>
-                        <Titulo titulo={ titulo || "Título Modal" } tamanho={"md"} />
+                        <Titulo titulo={titulo || "Título Modal"} tamanho={"md"} />
                         <IoClose
                             className={styles["icon"]}
                             onClick={handleClose}
                         />
                     </div>
                     <div className={styles['form']}>
-                       { corpo }
+                        {corpo}
                     </div>
                     <div className={styles['group-button']}>
                         <Button
                             funcaoButton={funcaoBotaoCancelar || handleClose}
-                            titulo={"Cancelar"}
+                            titulo={tituloBotaoCancelar || "Cancelar"}
                             cor={"branco"}
                             icone={
-                                <TiCancel />
+                                tituloBotaoCancelar === "Voltar" ? <IoArrowBackOutline /> : <FaCheck />
                             } />
                         <Button
                             funcaoButton={funcaoBotaoConfirmar || handleClose}

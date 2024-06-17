@@ -42,6 +42,7 @@ function Rotas() {
           <Route path="profissional/editar/:idProfissional" element={<AdicionarFuncionario/>}/>
           <Route path="agenda" element={<Agenda/>} />
           <Route path="agenda/adicionar" element={<AdicionarAgendamento/>}/>
+          <Route path="agenda/editar/:idAgenda" element={<AdicionarAgendamento/>}/>
 
         </Routes>
       </BrowserRouter>

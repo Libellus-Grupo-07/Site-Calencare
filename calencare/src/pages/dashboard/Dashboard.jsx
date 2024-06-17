@@ -83,18 +83,19 @@ const Dashboard = () => {
             }
         ]
     });
+
     const cores = [[
-        "rgba(159, 53, 240, 0.7)",
-        "rgba(53, 69, 240, 0.7)",
-        "rgba(97, 52, 239, 0.7)",
-        "rgba(192, 133, 239, 0.7)",
-        "rgba(135, 88, 234, 0.7)",
-        "rgba(240, 54, 165, 0.7)",
-        "rgba(219, 53, 239, 0.7)",
-        "rgba(81, 189, 233, 0.7)",
-        "rgba(94, 164, 234, 0.7)",
-        "rgba(53, 240, 233, 0.7)",
-        "rgba(241, 170, 54, 0.7)"
+        "rgba(159, 53, 240, 0.5)",
+        "rgba(53, 69, 240, 0.5)",
+        "rgba(97, 52, 239, 0.5)",
+        "rgba(192, 133, 239, 0.5)",
+        "rgba(135, 88, 234, 0.5)",
+        "rgba(240, 54, 165, 0.5)",
+        "rgba(219, 53, 239, 0.5)",
+        "rgba(81, 189, 233, 0.5)",
+        "rgba(94, 164, 234, 0.5)",
+        "rgba(53, 240, 233, 0.5)",
+        "rgba(241, 170, 54, 0.5)"
     ], [
         "#9F35F0",
         "#3545F0",
@@ -137,7 +138,7 @@ const Dashboard = () => {
         api.get(`/dashboard/profissional/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
             console.log(data)
-            // setDadosGraficoBarra(data)
+            // setDadosAgendamentosPorCategoria(data)
             gerarGraficoBarra(data);
         }).catch((error) => {
             console.error(error);
@@ -197,21 +198,22 @@ const Dashboard = () => {
             datasets: [
                 {
                     label: "Agendamentos no Dia",
+
                     data: dadosAgendamentosPorProfissional.map((s) => s.count),
                     backgroundColor: [
-                        "rgba(159, 53, 240, 0.15)",
-                        "rgba(53, 69, 240, 0.15)",
+                        "rgba(159, 53, 240, 0.25)",
+                        "rgba(53, 69, 240, 0.25)",
 
-                        "rgba(97, 52, 239, 0.15)",
+                        "rgba(97, 52, 239, 0.25)",
 
-                        "rgba(192, 133, 239, 0.15)",
-                        "rgba(135, 88, 234, 0.15)",
-                        "rgba(240, 54, 165, 0.15)",
-                        "rgba(219, 53, 239, 0.15)",
-                        "rgba(81, 189, 233, 0.15)",
-                        "rgba(94, 164, 234, 0.15)",
-                        "rgba(53, 240, 233, 0.15)",
-                        "rgba(241, 170, 54, 0.15)"
+                        "rgba(192, 133, 239, 0.25)",
+                        "rgba(135, 88, 234, 0.25)",
+                        "rgba(240, 54, 165, 0.25)",
+                        "rgba(219, 53, 239, 0.25)",
+                        "rgba(81, 189, 233, 0.25)",
+                        "rgba(94, 164, 234, 0.25)",
+                        "rgba(53, 240, 233, 0.25)",
+                        "rgba(241, 170, 54, 0.25)"
                     ],
                     borderColor: [
                         "#9F35F0",
@@ -233,7 +235,6 @@ const Dashboard = () => {
     }
 
     const gerarGraficoDonut = (dadosAgendamentosPorCategoria) => {
-        let i = 0;
         setGraficoDonut({
             labels: dadosAgendamentosPorCategoria.map((s) => s.categoria),
             datasets: [
@@ -245,10 +246,8 @@ const Dashboard = () => {
                     borderWidth: 2
                 }
             ],
-            // options:
         })
     }
-
 
     return (
         <>
@@ -356,18 +355,41 @@ const Dashboard = () => {
                                     Agendamentos no Dia Por Profissional
                                 </span>
                                 <Bar
+                                    style={{
+                                        fontFamily: "Poppins"
+                                    }}
                                     data={graficoBarras}
                                     options={{
+                                        scales: {
+                                            x: {
+                                                ticks: {
+                                                    color: cores[1],
+                                                    font: {
+                                                        family: "Poppins",
+                                                        weight: "700"
+                                                    }
+                                                },
+                                            }
+                                        },
                                         plugins: {
                                             title: {
                                                 display: false
                                             },
                                             legend: {
-                                                display: false,
+                                                display: false
                                             },
                                             subtitle: {
                                                 display: false
                                             },
+                                            tooltip: {
+                                                bodyFont: {
+                                                    family: "Poppins"
+                                                },
+                                                titleFont: {
+                                                    family: "Poppins"
+                                                },
+
+                                            }
                                         }
                                     }}
                                 />
@@ -376,37 +398,43 @@ const Dashboard = () => {
                                 <span className={styles["title-chart"]}>
                                     Agendamentos no Dia Por Categoria
                                 </span>
-                                <div style={{
-                                    width: "13vw",
-                                    heigth: "13vw",
-                                    display: "flex"
-                                }}>
-                                    <Doughnut
-                                        data={graficoDonut}
-                                        options={{
-                                            plugins: {
-                                                title: {
-                                                    display: false
-                                                },
-                                                legend: {
-                                                    display: false,
-                                                },
-                                                subtitle: {
-                                                    display: false
-                                                },
-                                            }
-                                        }}
-                                    />
-                                    <ul className={styles["group-porcentagem"]}>
+                                <div  className={styles["content-chart"]}>
+                                    <div className={styles["grafico-chart"]}>
+                                        <Doughnut
+                                            data={graficoDonut}
+                                            options={{
+                                                plugins: {
+                                                    title: {
+                                                        display: false
+                                                    },
+                                                    legend: {
+                                                        display: false,
+                                                    },
+                                                    subtitle: {
+                                                        display: false
+                                                    },
+                                                    tooltip: {
+                                                        bodyFont: {
+                                                            family: "Poppins"
+                                                        },
+                                                        titleFont: {
+                                                            family: "Poppins"
+                                                        },
+                                                    }
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                    <div className={styles["group-porcentagem"]}>
                                         {dadosAgendamentosPorCategoria.map((categoria, index) => (
-                                            <li key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
+                                            <div key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
                                                 <figure>
-                                                    <div className={styles["barrinha-label"]}/>
+                                                    <div className={styles["barrinha-label"]} style={{ backgroundColor: cores[1][index] }} />
                                                 </figure>
-                                                {(categoria.count / agendamentosTotalDoDia)}
-                                            </li>
+                                                {(categoria.count / (agendamentosTotalDoDia) * 100).toFixed(0).replace(".", ",")}%
+                                            </div>
                                         ))}
-                                    </ul>
+                                    </div>
                                 </div>
                                 <ul className={styles["group-labels"]}>
                                     {dadosAgendamentosPorCategoria.map((categoria, index) => (
