@@ -24,6 +24,7 @@ const Equipe = () => {
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
 
+
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
             navigate("/login");
@@ -130,6 +131,11 @@ const Equipe = () => {
         abrirModal(nome);
     }
 
+    const acessarEstatisticas = (index) => {
+        let idprofissional = dados[index].id;
+        navigate(`/equipe/estatistica/${idprofissional}`);
+    }
+
     const excluir = () => {
         const funcionarioStatusDto = {
             bitStatus: 4
@@ -166,7 +172,7 @@ const Equipe = () => {
                                     cor="branco"
                                     disabled={pilha.isEmpty()}
                                     titulo={"Desfazer Exclusão"}
-                                    icone={<FaUndo className={styles["icon-desfazer"]}/>}
+                                    icone={<FaUndo className={styles["icon-desfazer"]} />}
                                 />
 
                                 <Button
@@ -198,6 +204,7 @@ const Equipe = () => {
                                     showDeleteIcon={true}
                                     funcaoEditar={editar}
                                     funcaoDeletar={deletar}
+                                    acessarEstatisticas={acessarEstatisticas}
                                 />}
 
                         </div>
