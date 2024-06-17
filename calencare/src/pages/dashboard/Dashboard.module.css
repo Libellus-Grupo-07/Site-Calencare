@@ -110,6 +110,19 @@
   .container-dashboard
   .content-dashboard
   .group-dashboard
+  .card-dashboard
+  .sem-dados {
+    height: 100%;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-dashboard
+  .container-dashboard
+  .content-dashboard
+  .group-dashboard
   #lg {
   width: 38vw;
 }

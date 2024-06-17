@@ -300,7 +300,7 @@ const AdicionarFuncionario = () => {
                                 />
 
                                 {/* <div className={styles[isEditar ? "selectInput-status" : "none-selectInput-status"]}> */}
-                                <SelectInput exibir={!isEditar || undefined}
+                                <SelectInput exibir={!isEditar || idProfissional === idUser || undefined}
                                     id={"status"}
                                     tamanho={"md"}
                                     options={optionsStatus}

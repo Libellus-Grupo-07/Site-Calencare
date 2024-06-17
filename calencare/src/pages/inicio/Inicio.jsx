@@ -8,11 +8,11 @@ import { IconlyProvider, Notification, Calendar, Work } from "react-iconly";
 import { Icon } from '@iconify-icon/react';
 import CardKpi from "../../components/card-kpi/CardKpi";
 import CardAgendamento from './../../components/card-agendamento/CardAgendamento';
-import { isVazio, logado, transformarData, transformarDataBd, transformarDataHora, transformarDouble, transformarHora } from "../../utils/global";
+import { isVazio, logado, transformarData, transformarDataBd, transformarDouble, transformarHora } from "../../utils/global";
 import ModalTemplate from "../../components/modal-template/ModalTemplate";
-import Input from "../../components/input/Input";
 import SelectInput from "../../components/select-input/SelectInput";
 import { toast } from "react-toastify";
+import ModalCancelarAgendamento from "../../components/modal-cancelar-agendamento/ModalCancelarAgendamento";
 
 const Inicio = () => {
     const navigate = useNavigate();
@@ -28,7 +28,7 @@ const Inicio = () => {
     const [descricaoAgendamento, setDescricaoAgendamento] = useState("");
     const [metodoPagamento, setMetodoPagamento] = useState("");
     const [agendamento, setAgendamento] = useState({});
-    const [optionsMetodoPagamento, setOptionsMetodoPagamento] = useState([
+    const [optionsMetodoPagamento] = useState([
         {
             label: "Cartão de Crédito",
             value: "Cartão de Crédito"
@@ -72,7 +72,7 @@ const Inicio = () => {
     }
 
     const cancelar = () => {
-        api.put(`/agendamentos/cancelar/${agendamento.id}`).then(() => {
+        api.patch(`/agendamentos/atualizar-BitStatus-Cancelar-agendamento/${idEmpresa}/${agendamento.id}`).then(() => {
             toast.success("Agendamento cancelado com sucesso!");
             buscarAgendamentos(transformarDataBd(new Date()));
             abrirModalCancelar();
@@ -105,16 +105,6 @@ const Inicio = () => {
                 alterarValor={setMetodoPagamento}
                 options={optionsMetodoPagamento}
             />
-        </>
-    )
-
-    const corpoModalCancelar = (
-        <>
-            <span style={{
-                lineHeight: "1.5rem",
-            }}>
-                Você realmente deseja cancelar o agendamento que seria realizado na data "<b>{descricaoAgendamento}</b>"?
-            </span>
         </>
     )
 
@@ -307,15 +297,12 @@ const Inicio = () => {
                 tituloBotaoConfirmar={"Finalizar"}
                 tamanho={"lg"}
             />
-            <ModalTemplate
-                aberto={modalCancelarAberto}
-                setAberto={abrirModalCancelar}
-                funcaoBotaoConfirmar={cancelar}
-                corpo={corpoModalCancelar}
-                titulo={"Cancelar Agendamento"}
-                tituloBotaoCancelar={"Voltar"}
-                tituloBotaoConfirmar={"Confirmar"}
-                tamanho={"lg"}
+            <ModalCancelarAgendamento
+                modalCancelarAberto={modalCancelarAberto}
+                setModalCancelarAberto={abrirModalCancelar}
+                funcaoBotaoConfirmar={finalizar}
+                cancelar={cancelar}
+                descricaoAgendamento={descricaoAgendamento}
             />
         </>
     )

@@ -96,7 +96,20 @@ export function transformarHora(horaString) {
 
 export function transformarDataHoraBd(dataString, horaString){
   return transformarDataBd(dataString) + "T" + transformarHora(horaString)
-  }
+}
+  
+export function transformarTelefoneCelular(telefoneString) {
+  return telefoneString.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+}
+
+export function transformarTelefoneFixo(telefoneString) {
+  return telefoneString.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+}
+
+export function inputTelefone(e) {
+  console.log(e.target.value.length)
+  e.target.value = e.target.value.length > 14 ? e.target.value.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3") : e.target.value.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+}
 
 export const inputSomenteTexto = (e) => {
   e.target.value = e.target.value.replace(/[^A-Za-zÀ-ú\s]/g, "");

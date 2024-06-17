@@ -2,7 +2,6 @@ import React from 'react';
 import styles from "./DiaDaSemanaComponente.module.css";
 import { Switch } from 'antd';
 import { Box, Typography } from '@mui/material';
-import { IMaskInput } from 'react-imask';
 
 const DiaDaSemanaComponente = (
   { diaSemana,
@@ -95,17 +94,27 @@ const DiaDaSemanaComponente = (
             className={styles["input-time"]}
             value={horario1}
             onChange={(e) => setHorario1(e.target.value)}
+            onFocus={funcaoClickSwitch ? () => handleButtonClick() : () => { }}
+            onClick={funcaoClickSwitch ? () => handleButtonClick() : () => { }}
+            style={{
+              cursor: funcaoClickSwitch ? "pointer" : "default"
+            }}
           />
           <span style={{
             fontWeight: 700
           }}>
             às
           </span>
-          <IMaskInput
+          <input
             type='time'
             className={styles["input-time"]}
             value={horario2}
             onChange={(e) => setHorario2(e.target.value)}
+            onFocus={funcaoClickSwitch ? () => handleButtonClick() : () => { }}
+            onClick={funcaoClickSwitch ? () => handleButtonClick() : () => { }}
+            style={{
+              cursor: funcaoClickSwitch ? "pointer" : "default"
+            }}
           />
 
         </div>
