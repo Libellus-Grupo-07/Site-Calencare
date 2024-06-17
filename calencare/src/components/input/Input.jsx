@@ -21,7 +21,10 @@ const Input = ({
     maxlength,
     minlength,
     sobrepor,
-    cor
+    cor,
+    isAnual,
+    isMensal,
+    isDiaria
 }) => {
     const mudarValor = (e) => {
         alterarValor(e.target.value);
@@ -77,10 +80,14 @@ const Input = ({
                                     />
                                 }
                                 clearIcon={null}
-                                format={"dd/MM/yyyy"}
+                                format={isAnual ? "yyyy" : isMensal ? "MM/yyyy" : "dd/MM/yyyy"}
                                 locale="br-BR"
                                 calendarProps={{
-                                    
+                                    view: isMensal ? "year" : isDiaria ? "month" : "day",
+                                    defaultView: isMensal ? "year" : isDiaria ? "month" : "day",
+                                    onClickMonth: isMensal ? (e) => alterarValor(e) : null,
+                                    onClickYear: isAnual ? (e) => alterarValor(e) : null,
+                                    onClickDay: isMensal ? (e) => alterarValor(e) : null,
                                 }}
                             />
                         </div>
