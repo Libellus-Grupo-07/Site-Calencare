@@ -15,7 +15,7 @@ const Header = () => {
         <>
             <header className={styles["header"]}>
                 <div className={styles["logo-header"]}>
-                    <LuMenu className={styles["icon-menu"]} />
+                    {/* <LuMenu className={styles["icon-menu"]} /> */}
                     <Logo />
                 </div>
                 <ul className={styles["nav-list"]}>

@@ -23,8 +23,10 @@
   background-color: var(--preto);
   color: var(--branco);
   font-weight: 600;
+  line-height: 1.1rem;
   letter-spacing: -0.05rem;
   font-size: 14px;
+  vertical-align: middle;
 }
 
 .container-table .table .header-table th:first-child {

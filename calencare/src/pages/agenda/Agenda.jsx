@@ -14,6 +14,7 @@ import fechado from "../../utils/assets/fechado.svg";
 import { FaPlus } from "react-icons/fa6";
 import ModalCancelarAgendamento from "../../components/modal-cancelar-agendamento/ModalCancelarAgendamento";
 import { toast } from "react-toastify";
+import { TbCalendarTime } from "react-icons/tb";
 
 const Agenda = () => {
     const navigate = useNavigate();
@@ -97,88 +98,99 @@ const Agenda = () => {
             toast.error("Ocorreu um erro ao tentar cancelar agendamento. Tente novamente mais tarde.");
             console.log(error);
         });
-}
+    }
 
-return (
-    <>
-        <section className={styles["section-agenda"]}>
-            <div>
-                <Header />
-            </div>
-            <div className={styles["container-agenda"]}>
+    return (
+        <>
+            <section className={styles["section-agenda"]}>
+                <div>
+                    <Header />
+                </div>
+                <div className={styles["container-agenda"]}>
 
-                <div className={styles["content-agenda"]}>
-                    <div className={styles["header"]}>
-                        <Titulo tamanho={"md"} titulo={"Agenda"} />
-                        <div className={styles["group-button"]}>
-                            <Button
-                                funcaoButton={() => navigate("/agenda/adicionar")}
-                                cor="roxo"
-                                titulo={"Agendar"}
-                                icone={<FaPlus />}
-                            />
+                    <div className={styles["content-agenda"]}>
+                        <div className={styles["header"]}>
+                            <Titulo tamanho={"md"} titulo={"Agenda"} />
+                            <div className={styles["group-button"]}>
+                                <div>
 
-                            <Input
-                                valor={dataSelecionada}
-                                type={"date"}
-                                alterarValor={buscarAgenda}
-                                cor={"roxo"}
-                            />
+                                    <Button
+                                        funcaoButton={() => navigate("/agenda/relatorio")}
+                                        cor="roxo"
+                                        titulo={"Ver Relatório"}
+                                        icone={<TbCalendarTime style={{ fontSize: "1.7rem" }} />}
+                                    />
+
+                                </div>
+                                <Button
+                                    funcaoButton={() => navigate("/agenda/adicionar")}
+                                    cor="roxo"
+                                    titulo={"Agendar"}
+                                    icone={<FaPlus />}
+                                />
+                                <div>
+                                    <Input
+                                        valor={dataSelecionada}
+                                        type={"date"}
+                                        alterarValor={buscarAgenda}
+                                        cor={"roxo"}
+                                    />
+                                </div>
+
+                            </div>
+                        </div>
+                        <div className={styles["table-agenda"]}>
+                            {
+                                matriz.length === 0 ?
+                                    <div className={styles["sem-agendamentos"]}>
+                                        <div>
+                                            <img className={styles["imagem"]} src={fechado} alt="" />
+                                        </div>
+                                        <div>
+                                            <span>Empresa fechada para o dia selecionado!</span>
+                                        </div>
+                                    </div>
+                                    :
+                                    <AgendaDoDia
+                                        agenda={matriz}
+                                        buscarInfoAgenda={buscarInfoAgenda}
+                                    />
+                            }
+
 
                         </div>
                     </div>
-                    <div className={styles["table-agenda"]}>
-                        {
-                            matriz.length === 0 ?
-                                <div className={styles["sem-agendamentos"]}>
-                                    <div>
-                                        <img className={styles["imagem"]} src={fechado} alt="" />
-                                    </div>
-                                    <div>
-                                        <span>Empresa fechada para o dia selecionado!</span>
-                                    </div>
-                                </div>
-                                :
-                                <AgendaDoDia
-                                    agenda={matriz}
-                                    buscarInfoAgenda={buscarInfoAgenda}
-                                />
-                        }
+                </div>
 
-
+                <Tooltip
+                    id="my-tooltip"
+                    style={{ backgroundColor: "rgba(91, 91, 91, 0.0)" }}
+                    opacity={1}
+                    clickable
+                    className={styles["example-no-radius"]}>
+                    <div style={{ minWidth: "30vw" }}>
+                        <CardAgendamento
+                            cor={"branco"}
+                            tamanho={"sm"}
+                            nomeFuncionario={nomeFuncionario}
+                            dataHora={dataHora}
+                            nomeServico={nomeServico}
+                            precoServico={precoServico}
+                            horaFinalizacao={horaFinalizacao}
+                            funcaoCancelar={() => abrirModalCancelar()}
+                            funcaoConfirmar={() => navigate(`/agenda/editar/${agendamento.id}`)}
+                        />
                     </div>
-                </div>
-            </div>
-
-            <Tooltip
-                id="my-tooltip"
-                style={{  backgroundColor: "rgba(91, 91, 91, 0.0)" }}
-                opacity={1}
-                clickable
-                className={styles["example-no-radius"]}>
-                <div style={{minWidth: "30vw"}}>
-                    <CardAgendamento
-                        cor={"branco"}
-                        tamanho={"sm"}
-                        nomeFuncionario={nomeFuncionario}
-                        dataHora={dataHora}
-                        nomeServico={nomeServico}
-                        precoServico={precoServico}
-                        horaFinalizacao={horaFinalizacao}
-                        funcaoCancelar={() => abrirModalCancelar()}
-                        funcaoConfirmar={() => navigate(`/agenda/editar/${agendamento.id}`)}
-                    />
-                </div>
-            </Tooltip>
-        </section>
-        <ModalCancelarAgendamento
-            modalCancelarAberto={modalCancelarAberto}
-            setModalCancelarAberto={abrirModalCancelar}
-            cancelar={cancelar}
-            descricaoAgendamento={descricaoAgendamento}
-        />
-    </>
-);
+                </Tooltip>
+            </section>
+            <ModalCancelarAgendamento
+                modalCancelarAberto={modalCancelarAberto}
+                setModalCancelarAberto={abrirModalCancelar}
+                cancelar={cancelar}
+                descricaoAgendamento={descricaoAgendamento}
+            />
+        </>
+    );
 };
 
 export default Agenda;
