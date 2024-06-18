@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./CardKpi.module.css";
-import { FaDove } from "react-icons/fa6";
+import { AiFillQuestionCircle } from "react-icons/ai";
+
 
 const CardKpi = ({ icon, legenda, valor, tooltip }) => {
     return (
@@ -17,9 +18,10 @@ const CardKpi = ({ icon, legenda, valor, tooltip }) => {
                     </span>
                     <span className={styles["value-kpi"]}>
                         {tooltip ?
-                            <div>
-                                <a id="tooltip">
-                                    {valor}
+                            <div style={{ display: "flex", alignItems: "center", columnGap: "0.3rem" }}>
+                                {valor}
+                                <a id="tooltip" style={{ color: "var(--cinza-claro)", cursor: "pointer", fontSize: "1rem"}}>
+                                    <AiFillQuestionCircle />
                                 </a>
                                 {tooltip}
                             </div>

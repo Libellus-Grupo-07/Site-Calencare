@@ -35,6 +35,14 @@
   font-weight: 700;
   color: var(--texto-cinza);
   letter-spacing: -0.03rem;
+  row-gap: 1rem;
+}
+
+.card-kpi .text-kpi .label-kpi .sub-label-kpi {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--texto-preto);
+  letter-spacing: -0.03rem;
 }
 
 .card-kpi .text-kpi .value-kpi {
@@ -45,7 +53,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  max-width: 14vw;
+  max-width: 13vw;
   /* border: 1px solid; */
   min-height: 1.6rem;
 }

@@ -3,18 +3,19 @@ import Header from "../../components/header/Header";
 import styles from "./Dashboard.module.css";
 import Titulo from './../../components/titulo/Titulo';
 import Button from './../../components/button/Button';
-import { Download, IconlyProvider, Ticket, Work, User } from "react-iconly";
+import { Download, IconlyProvider, Work, User, Calendar } from "react-iconly";
 import CardKpi from './../../components/card-kpi/CardKpi';
 import { CiMoneyBill } from "react-icons/ci";
 import Input from "../../components/input/Input";
 import api from "../../api";
-import { logado, transformarDataBd } from "../../utils/global";
+import { logado, transformarData, transformarDataBd } from "../../utils/global";
 import { useNavigate } from "react-router-dom";
 import CardTop3 from '../../components/card-top-3/CardTop3';
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js/auto";
 import { Bar, Doughnut } from "react-chartjs-2";
-import { Tooltip } from 'react-tooltip';;
+import { Tooltip } from 'react-tooltip';import { toast } from "react-toastify";
+;
 
 Chart.register(CategoryScale);
 
@@ -23,6 +24,7 @@ const Dashboard = () => {
     const idEmpresa = sessionStorage.idEmpresa;
     const [agendamentosTotalDoDia, setAgendamentosTotalDoDia] = useState(0);
     const [agendamentosPendentes, setagendamentosPendentes] = useState(0);
+    const [agendamentosAtivos, setagendamentosAtivos] = useState(0);
     const [agendamentosFinalizados, setAgendamentosFinalizados] = useState(0);
     const [agendamentosCancelados, setAgendamentosCancelados] = useState(0);
     const [lucroTotalDoDia, setLucroTotalDoDia] = useState(0);
@@ -127,6 +129,7 @@ const Dashboard = () => {
         api.get(`/dashboard/stats/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
             const { Pendentes, Cancelados, Finalizados, TotalAgendamentos } = data;
+            setagendamentosAtivos(TotalAgendamentos - (Pendentes + Cancelados + Finalizados))
             setAgendamentosTotalDoDia(TotalAgendamentos)
             setagendamentosPendentes(Pendentes)
             setAgendamentosFinalizados(Finalizados)
@@ -251,6 +254,27 @@ const Dashboard = () => {
         })
     }
 
+    const gerarRelatorio = () => {
+        api.get(`/pdfs/${idEmpresa}?date=${transformarDataBd(dataSelecionada)}&page=0&size=3`, {
+            responseType: "arraybuffer"
+        }).then((response) => {
+            const { data } = response;
+            // Criando uma URL e um arquivo Blob com a resposta da requisição no Backend
+            const url = window.URL.createObjectURL(new Blob([data]));
+            // Criando um elemento A, para representar um link
+            const link = document.createElement("a");
+            // Definindo nome do arquivo a ser baixado
+            link.download = `Relatório do Dia - ${transformarData(dataSelecionada)}.pdf`;
+            // Definindo a URL no link
+            link.href = url;
+            // Simulando um click no link para baixar o arquivo
+            link.click();
+        }).catch((error) => {
+            console.error(error);
+            toast.error("Ocorreu um erro baixar relatório.");
+        })
+    }
+
     return (
         <>
             <section className={styles["section-dashboard"]}>
@@ -272,6 +296,7 @@ const Dashboard = () => {
                                             <Download />
                                         </IconlyProvider>
                                     }
+                                    funcaoButton={() => gerarRelatorio()}
                                 />
                                 <div>
                                     <Input
@@ -279,7 +304,6 @@ const Dashboard = () => {
                                         type={"date"}
                                         alterarValor={buscarDadosDashboard}
                                         cor={"roxo"}
-                                        isMensal={true}
                                     />
                                 </div>
                             </div>
@@ -294,7 +318,7 @@ const Dashboard = () => {
                                             stroke="bold"
                                             size={"large"}
                                         >
-                                            <Ticket />
+                                            <Calendar />
                                         </IconlyProvider>
                                     }
 
@@ -306,6 +330,9 @@ const Dashboard = () => {
                                                 <div className={styles["content-tooltip"]}>
                                                     <span>
                                                         Total de Agendamentos: <b> {agendamentosTotalDoDia} </b>
+                                                    </span>
+                                                    <span>
+                                                        Agendamentos Ativos: <b> {agendamentosAtivos} </b>
                                                     </span>
                                                     <span>
                                                         Agendamentos Pendentes: <b> {agendamentosPendentes} </b>
@@ -434,6 +461,8 @@ const Dashboard = () => {
                                                                     display: false
                                                                 },
                                                                 tooltip: {
+                                                                    boxWidth: 10,
+                                                                    position: "average",
                                                                     bodyFont: {
                                                                         family: "Poppins"
                                                                     },

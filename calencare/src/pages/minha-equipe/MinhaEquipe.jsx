@@ -19,7 +19,7 @@ const Equipe = () => {
     const titulos = [/*"",*/ "Nome", "Email", "Perfil", "Status", "Serviços", ""]
     const [pilha, setPilha] = useState(new Pilha())
     const idEmpresa = sessionStorage.getItem("idEmpresa")
-    // const idUser = sessionStorage.getItem("idUser")
+    const idUser = sessionStorage.getItem("idUser")
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
@@ -107,7 +107,7 @@ const Equipe = () => {
             <span style={{
                 lineHeight: "1.5rem",
             }}>
-                Você realmente deseja excluir o funcionário "{nome}"?
+                Você realmente deseja excluir o funcionário <b>"{nome}"</b>?
             </span>
         </>
     )
@@ -126,9 +126,14 @@ const Equipe = () => {
     const deletar = (index) => {
         var id = dados[index].id;
         var nome = dados[index].nome;
-        setIdProfissional(id)
-        setNome(nome)
-        abrirModal(nome);
+
+        if (id === Number(idUser)) {
+            toast.error("Você não pode excluir a si mesmo!")
+        } else {
+            setIdProfissional(id)
+            setNome(nome)
+            abrirModal(nome);
+        }
     }
 
     const acessarEstatisticas = (index) => {

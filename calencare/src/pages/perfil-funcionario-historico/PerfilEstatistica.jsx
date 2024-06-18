@@ -4,18 +4,13 @@ import api from "../../api";
 import styles from "./PerfilEstatistica.module.css";
 import { logado, transformarDataHora } from "../../utils/global";
 import { useNavigate, useParams } from "react-router-dom";
-import { AddUser, IconlyProvider } from "react-iconly";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
 import Titulo from "../../components/titulo/Titulo";
 import imgPerfil from "./../../utils/assets/perfil_gradiente.svg";
 import Table from "../../components/table/Table";
-import ModalTemplate from "../../components/modal-template/ModalTemplate";
 import { toast } from "react-toastify";
-import { fontGrid } from "@mui/material/styles/cssUtils";
 import { FaArrowLeft } from "react-icons/fa";
-
-
 
 const PerfilEstatistica = () => {
     const navigate = useNavigate();
@@ -27,8 +22,6 @@ const PerfilEstatistica = () => {
     const [qntdConcluidos, setQntdConcluidos] = useState(0);
     const [valorComissao, setValorComissao] = useState(0);
     const [dataSelecionada, setDataSelecionada] = useState(new Date());
-    const [mes, setMes] = useState(0);
-    const [ano, setAno] = useState(0);
     const [nome, setNome] = useState("");
 
     useEffect(() => {
@@ -80,9 +73,9 @@ const PerfilEstatistica = () => {
     }
 
     //Retornar quantidade de agendamentos no mês
-    const quantidadeAgendamentos = () => {
-        return dadosAgendamentos.length;
-    }
+    // const quantidadeAgendamentos = () => {
+    //     return dadosAgendamentos.length;
+    // }
 
     const buscarAgendConcluido = (idProfissional, ano, mes) => {
         api.get(`/perfilFuncionario/quantidadeAgendamentos/${idProfissional}/${ano}/${mes}`)
@@ -138,7 +131,8 @@ const PerfilEstatistica = () => {
                                 onClick={() => navigate("/equipe")} 
                             /> */}
                             <Button
-                                funcaoButton={() => navigate("/equipe")}
+                                // funcaoButton={() => navigate("/equipe")}
+                                funcaoButton={() => navigate(-1)}
                                 cor="branco"
                                 icone={<FaArrowLeft className={styles["icon-voltar"]} />}
                             />
@@ -182,7 +176,7 @@ const PerfilEstatistica = () => {
 
                                     <div className={styles["info-kpis"]}>
                                         <Titulo tamanho={"md"} titulo={qntdClientes} />
-                                        <Titulo tamanho={"sm-leve"} titulo={"Clientes registrados"} />
+                                        <Titulo tamanho={"sm-leve"} titulo={"Clientes Registrados"} />
                                     </div>
 
                                     <div className={styles["info-kpis"]}>
@@ -192,7 +186,7 @@ const PerfilEstatistica = () => {
                                                 :
                                                 <Titulo tamanho={"md"} titulo={"R$ 0,00"} />
                                         }
-                                        <Titulo tamanho={"sm-leve"} titulo={"Comissão"} />
+                                        <Titulo tamanho={"sm-leve"} titulo={"Comissão Mensal"} />
                                     </div>
                                 </div>
                             </div>

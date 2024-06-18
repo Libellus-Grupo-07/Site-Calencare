@@ -71,6 +71,7 @@
 
 .react-calendar__month-view__weekdays__weekday {
   padding: 0.5em;
+    color: var(--texto-preto);
 }
 
 .react-calendar__month-view__weekNumbers .react-calendar__tile {
@@ -85,7 +86,7 @@
 .react-calendar__month-view__days__day--neighboringMonth,
 .react-calendar__decade-view__years__year--neighboringDecade,
 .react-calendar__century-view__decades__decade--neighboringCentury {
-  color: #757575;
+  color: var(--texto-cinza);
 }
 
 .react-calendar__year-view .react-calendar__tile,

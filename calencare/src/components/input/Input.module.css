@@ -5,6 +5,7 @@
 }
 
 .input, .component-date {
+  background-color: white;
   padding: 0px 1.5rem;
   height: 2.5rem;
   border: 1px solid;

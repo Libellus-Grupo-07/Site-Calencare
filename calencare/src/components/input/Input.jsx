@@ -4,6 +4,8 @@ import styles from "./Input.module.css";
 import { IMaskInput } from 'react-imask';
 import DatePicker from "react-date-picker";
 import { Calendar } from "react-iconly";
+import { IoIosArrowDown } from "react-icons/io";
+
 
 const Input = ({
     tamanho,
@@ -24,7 +26,8 @@ const Input = ({
     cor,
     isAnual,
     isMensal,
-    isDiaria
+    isDiaria,
+    showCalendarIcon
 }) => {
     const mudarValor = (e) => {
         alterarValor(e.target.value);
@@ -75,8 +78,16 @@ const Input = ({
                                 onChange={(e) => alterarValor(e)}
                                 className={styles["input-date"]}
                                 calendarIcon={
+                                    showCalendarIcon ?
                                     <Calendar
                                         primaryColor={cor === "roxo" ? "var(--texto-branco)" : ""}
+                                    /> :
+                                        <IoIosArrowDown 
+                                        
+                                            style={{
+                                                fontSize: "1.2rem",
+                                                color: cor === "roxo" ? "var(--texto-branco)" : ""
+                                            }}
                                     />
                                 }
                                 clearIcon={null}
