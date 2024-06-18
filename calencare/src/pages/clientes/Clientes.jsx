@@ -224,18 +224,18 @@ const Clientes = () => {
                         <div className={styles["header"]}>
                             <Titulo tamanho={"md"} titulo={`Clientes`} />
                             <div className={styles["group-button"]}>
-                                <Button
-                                    funcaoButton={() => abrirModal()}
-                                    cor="roxo"
-                                    titulo={"Adicionar"}
-                                    icone={<IconlyProvider
-                                        stroke="bold"
-                                        size="small"
-                                    >
-                                        <AddUser />
-                                    </IconlyProvider>
-                                    }
-                                />
+                                    {/* <Button
+                                        funcaoButton={() => abrirModal()}
+                                        cor="roxo"
+                                        titulo={"Adicionar"}
+                                        icone={<IconlyProvider
+                                            stroke="bold"
+                                            size="small"
+                                        >
+                                            <AddUser />
+                                        </IconlyProvider>
+                                        }
+                                    /> */}
                             </div>
                         </div>
                         <div className={styles["table-clientes"]}>

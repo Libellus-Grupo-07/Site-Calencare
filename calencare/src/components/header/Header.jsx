@@ -76,9 +76,10 @@ const Header = () => {
                     <li
                         className={
                             styles[
-                                location.pathname === "/dashboard" ? "roxo" : "cinza"
+                            location.pathname === "/dashboard" ? "roxo" : "cinza"
                             ]
                         }
+                        onClick={() => navigate("/dashboard")}
                     >
                         <IconlyProvider
                             className={styles["icon-link"]}
@@ -88,7 +89,7 @@ const Header = () => {
                             />
                         </IconlyProvider>
                         <span className={styles["text-link"]}
-                            onClick={() => navigate("/dashboard")}
+
                         >
                             Dashboard
                         </span>
@@ -161,7 +162,7 @@ const Header = () => {
                     <span
                         className={styles["name-user"]}
                     >
-                        { nomeUser || "Nome do Usuário" }
+                        {nomeUser || "Nome do Usuário"}
                     </span>
                     <div className={styles["icon-arrow"]}>
                         <FaAngleRight />

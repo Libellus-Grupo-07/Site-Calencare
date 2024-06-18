@@ -70,7 +70,7 @@ const CadastroEtapa2 = ({
                             alterarValor={setComplemento}
                             titulo={"Complemento"}
                             minlength={0}
-                            maxlength={9}
+                            maxlength={20}
                         />
                     </div>
                 </div>

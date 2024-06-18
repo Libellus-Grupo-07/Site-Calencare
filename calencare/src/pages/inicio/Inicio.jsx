@@ -4,7 +4,7 @@ import Titulo from "../../components/titulo/Titulo";
 import Header from "../../components/header/Header";
 import api from "../../api";
 import styles from "./Inicio.module.css";
-import { IconlyProvider, Notification, Calendar, Work } from "react-iconly";
+import { IconlyProvider, Notification, Calendar, Work, User } from "react-iconly";
 import { Icon } from '@iconify-icon/react';
 import CardKpi from "../../components/card-kpi/CardKpi";
 import CardAgendamento from './../../components/card-agendamento/CardAgendamento';
@@ -173,12 +173,12 @@ const Inicio = () => {
                     <div className={styles["content-inicio"]}>
                         <div className={styles["titulo-inicio"]}>
                             <Titulo tamanho={"md"} titulo={`Olá, ${nome}!`} />
-                            <IconlyProvider
+                            {/* <IconlyProvider
                                 stroke="bold"
                                 size={"large"}
                             >
                                 <Notification />
-                            </IconlyProvider>
+                            </IconlyProvider> */}
                         </div>
                         <div className={styles["group-kpis"]}>
                             <div className={styles["card-kpi"]}>
@@ -191,7 +191,7 @@ const Inicio = () => {
                                             <Calendar />
                                         </IconlyProvider>
                                     }
-                                    legenda={"Total De Agendamentos Hoje"}
+                                    legenda={"Total de Agendamentos Hoje"}
                                     valor={totalAgendamentosDia}
                                 />
                             </div>
@@ -212,11 +212,11 @@ const Inicio = () => {
                                             stroke="bold"
                                             size="large"
                                         >
-                                            <Work />
+                                            <User />
                                         </IconlyProvider>
                                     }
-                                    legenda={"Serviço Mais Procurado Hoje"}
-                                    valor={servicoMaisProcuradoDia || "Nenhum"}
+                                    legenda={"Profissionais Em Atividade"}
+                                    valor={servicoMaisProcuradoDia || 0}
                                 />
                             </div>
                         </div>
@@ -300,7 +300,6 @@ const Inicio = () => {
             <ModalCancelarAgendamento
                 modalCancelarAberto={modalCancelarAberto}
                 setModalCancelarAberto={abrirModalCancelar}
-                funcaoBotaoConfirmar={finalizar}
                 cancelar={cancelar}
                 descricaoAgendamento={descricaoAgendamento}
             />
