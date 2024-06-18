@@ -352,7 +352,7 @@ const Dashboard = () => {
                             <div className={styles["card-kpi"]}>
                                 <CardKpi
                                     legenda={"Lucro Obtido no Dia"}
-                                    valor={lucroTotalDoDia.toFixed(2).replace(".", ",")}
+                                    valor={"R$ " + lucroTotalDoDia.toFixed(2).replace(".", ",")}
                                     icon={
                                         <CiMoneyBill style={{
                                             fontSize: "2.5rem",

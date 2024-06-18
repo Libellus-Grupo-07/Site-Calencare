@@ -28,7 +28,7 @@ class CarouselProduto extends Component {
                 showStatus={false}
                 showArrows={false}
                 autoPlay={true}
-                interval={2000}
+                interval={3700}
                 infiniteLoop={true}
                 renderIndicator={(onClickHandler, isSelected, index, label) => {
                     if (isSelected) {
