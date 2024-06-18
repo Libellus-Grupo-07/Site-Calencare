@@ -50,7 +50,11 @@
 
 .card-top3 .group-text .text-top3 .value-top3 {
   font-size: 1.3rem;
+  max-width: 160px;
   color: var(--texto-preto);
   font-weight: 800;
   letter-spacing: -0.05rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

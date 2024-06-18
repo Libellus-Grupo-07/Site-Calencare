@@ -285,10 +285,11 @@ const AdicionarAgendamento = () => {
 
     const handleSave = () => {
         if (isEditar) {
-            if ((idCliente || !isSelected(cliente, "Cliente")) &&
-                (idProfissional || !isSelected(Profissional, "profissional")) &&
+            if (idCliente || isSelected(cliente, "Cliente") &&
+                idProfissional || isSelected(Profissional, "profissional") &&
                 !isVazio(servicosSelecionados, "Serviços que realiza") &&
-                !isVazio(data, "Data Agendamento")) {
+                !isVazio(data, "Data do Agendamento") && 
+                !isVazio(hora, "Hora do Agendamento")) {
                 let AgendaAdicionado = {
                     dtHora: transformarDataHoraBd(data, hora),
                     dia: transformarDataBd(data),

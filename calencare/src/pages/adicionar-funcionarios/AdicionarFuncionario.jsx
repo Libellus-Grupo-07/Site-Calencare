@@ -156,11 +156,12 @@ const AdicionarFuncionario = () => {
                 api.put(url, objetoAdicionado).then(() => {
                     for (let index = 0; index < servicosPreco.length; index++) {
                         // Serviço por Funcionário atual
-                        var servicoFuncionario = servicosPorFuncionario[index]
+                        var servicoFuncionario = servicosPorFuncionario.filter(sp => sp.servicoPrecoId === servicosPreco[index].id)[0];
 
                         if (servicoFuncionario) {
                             // Variavel utilizada para checar se o serviço atual está selecionado e definir o status
-                            var isSelecionado = servicosSelecionados.includes(servicoFuncionario) ? 1 : 0;
+                            var servicoPreco = servicosPreco.filter(sp => sp.id === servicoFuncionario.servicoPrecoId)[0];
+                            var isSelecionado = servicosSelecionados.includes(servicoPreco) ? 1 : 0;
                             // Se o status do serviço vindo do BD estiver diferente do status atual, então atualiza no BD
                             if (servicoFuncionario.bitStatus !== isSelecionado) {
                                 api.patch(`/servico-por-funcionario/${idEmpresa}/${idProfissional}/${servicoFuncionario.id}`).then().catch((error) => {

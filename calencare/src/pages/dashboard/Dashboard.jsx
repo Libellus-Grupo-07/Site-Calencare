@@ -244,7 +244,7 @@ const Dashboard = () => {
             labels: dadosAgendamentosPorCategoria.map((s) => s.categoria),
             datasets: [
                 {
-                    label: `Agendamentos no Dia`,
+                    label: `Agendamentos`,
                     data: dadosAgendamentosPorCategoria.map((s) => s.count),
                     backgroundColor: cores[0],
                     borderColor: cores[1],
@@ -351,7 +351,7 @@ const Dashboard = () => {
                             </div>
                             <div className={styles["card-kpi"]}>
                                 <CardKpi
-                                    legenda={"Lucro Total do Dia"}
+                                    legenda={"Lucro Obtido no Dia"}
                                     valor={lucroTotalDoDia.toFixed(2).replace(".", ",")}
                                     icon={
                                         <CiMoneyBill style={{

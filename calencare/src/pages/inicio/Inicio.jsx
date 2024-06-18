@@ -4,7 +4,7 @@ import Titulo from "../../components/titulo/Titulo";
 import Header from "../../components/header/Header";
 import api from "../../api";
 import styles from "./Inicio.module.css";
-import { IconlyProvider, Notification, Calendar, Work, User } from "react-iconly";
+import { IconlyProvider, Calendar, User } from "react-iconly";
 import { Icon } from '@iconify-icon/react';
 import CardKpi from "../../components/card-kpi/CardKpi";
 import CardAgendamento from './../../components/card-agendamento/CardAgendamento';
@@ -20,7 +20,7 @@ const Inicio = () => {
     const nome = sessionStorage.getItem("nomeUser");
     const [totalAgendamentosDia, setTotalAgendamentosDia] = useState("");
     const [potencialLucroDia, setPotencialLucroDia] = useState("");
-    const [servicoMaisProcuradoDia, setServicoMaisProcuradoDia] = useState("");
+    const [profissionaisEmAtividade, setProfissionaisEmAtividade] = useState("");
     const [proximosAgendamentos, setProximosAgendamentos] = useState([]);
     const [agendamentosEmAndamento, setAgendamentosEmAndamento] = useState([]);
     const [modalFinalizarAberto, setModalFinalizarAberto] = useState(false);
@@ -155,9 +155,9 @@ const Inicio = () => {
         });
 
 
-        api.get(`/agendamentos/servico-mais-procurado/empresa?empresaId=${idEmpresa}`).then((response) => {
+        api.get(`/agendamentos/qntd-funcionarios-dia/${idEmpresa}/${transformarDataBd(new Date())}`).then((response) => {
             const { data } = response;
-            setServicoMaisProcuradoDia(data);
+            setProfissionaisEmAtividade(data);
         }).catch((error) => {
             console.log(error);
         });
@@ -216,7 +216,7 @@ const Inicio = () => {
                                         </IconlyProvider>
                                     }
                                     legenda={"Profissionais Em Atividade"}
-                                    valor={servicoMaisProcuradoDia || 0}
+                                    valor={profissionaisEmAtividade || 0}
                                 />
                             </div>
                         </div>

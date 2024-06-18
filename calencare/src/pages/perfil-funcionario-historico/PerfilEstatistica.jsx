@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import api from "../../api";
 import styles from "./PerfilEstatistica.module.css";
-import { logado, transformarDataHora } from "../../utils/global";
+import { logado, transformarDataHora, transformarTelefoneCelular } from "../../utils/global";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
@@ -173,10 +173,9 @@ const PerfilEstatistica = () => {
                                         <Titulo tamanho={"md"} titulo={qntdConcluidos} />
                                         <Titulo tamanho={"sm-leve"} titulo={"Atendimentos Concluídos"} />
                                     </div>
-
                                     <div className={styles["info-kpis"]}>
                                         <Titulo tamanho={"md"} titulo={qntdClientes} />
-                                        <Titulo tamanho={"sm-leve"} titulo={"Clientes Registrados"} />
+                                        <Titulo tamanho={"sm-leve"} titulo={"Clientes Atendidos No Período"} />
                                     </div>
 
                                     <div className={styles["info-kpis"]}>
@@ -208,7 +207,7 @@ const PerfilEstatistica = () => {
                                                 titulos={titulos}
                                                 matriz={dadosAgendamentos.map((linha) => {
                                                     return [transformarDataHora(linha.dtHora), linha.nomeCliente,
-                                                    linha.telefoneCliente, linha.valorServico, linha.nomeServico, linha.descricaoStatus]
+                                                    transformarTelefoneCelular(linha.telefoneCliente), (`R$ ${linha.valorServico.toFixed(2).replace(".",",")}`), linha.nomeServico, linha.descricaoStatus]
                                                 })}
                                             />
                                     }
