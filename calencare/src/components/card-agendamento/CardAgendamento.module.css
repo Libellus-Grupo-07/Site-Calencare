@@ -127,7 +127,17 @@
 
 #cinza {
   background-color: var(--cinza);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+#cinza .informations-agendamento .text-agendamento .info-agendamento .text-funcionario {
+  color: #F0E0FC;
+}
+
+#cinza .informations-agendamento .text-agendamento .text-horario {
+  color: white;
+}
+
 
 #cinza .informations-agendamento .text-agendamento .info-servico .text-servico {
   color: var(--cinza-claro);

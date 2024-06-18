@@ -80,13 +80,7 @@ const AdicionarServico = () => {
 
     const mapear = (campo, data, index, action) => {
         console.error(campo)
-        var optionsMap = isAdicionar && campo === "categoria-servico" ?
-            [{
-                label: "Criar nova categoria",
-                value: "Criar",
-            }]
-            : []
-            ;
+        var optionsMap = [];
         let i = 0;
 
         for (i = 0; i < data.length; i++) {
@@ -99,8 +93,7 @@ const AdicionarServico = () => {
 
         i = index === 0 && action !== "E" ? index : action ? index : i;
 
-        if (campo === "categoria-servico")
-        {   
+        if (campo === "categoria-servico") {
             console.log(optionsMap)
             setOptions(optionsMap)
             setCategoria(optionsMap[i]);
@@ -129,7 +122,7 @@ const AdicionarServico = () => {
                 setDuracao(duracao);
                 setNomeCategoria(categoria)
                 setStatus(optionsStatus.filter(s => s.label === descricaoStatus));
-                
+
                 buscarServicos("E", undefined, nome);
                 buscarCategoriasServico("E", undefined, categoria);
 
@@ -329,25 +322,15 @@ const AdicionarServico = () => {
                             />
                         </div>
                         <form className={styles["informations-adicionar-servico"]}>
-                            {isAdicionar ?
-                                <SelectInput
-                                    id={"categoriaServico"}
-                                    tamanho={"lg"}
-                                    options={options}
-                                    valor={categoria}
-                                    alterarValor={setCategoria}
-                                    funcaoAdicionar={abrirModal}
-                                    titulo={"Categoria"}
-                                /> :
-                                <Input
-                                    id={"categoriaServico"}
-                                    tamanho={"lg"}
-                                    valor={nomeCategoria}
-                                    alterarValor={setNomeCategoria}
-                                    funcaoAdicionar={abrirModal}
-                                    titulo={"Categoria"}
-                                    readonly={true}
-                                />}
+                            <SelectInput
+                                id={"categoriaServico"}
+                                tamanho={"lg"}
+                                options={options}
+                                valor={categoria}
+                                alterarValor={setCategoria}
+                                titulo={"Categoria"}
+                                criarOption={true}
+                            />
                             <SelectInput
                                 id="nomeServico"
                                 tamanho={"lg"}

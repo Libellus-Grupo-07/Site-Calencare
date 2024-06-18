@@ -47,6 +47,16 @@
   color: var(--cinza-claro);
 }
 
+.transparente {
+  background-color: transparent;
+  border: transparent;
+  color: var(--texto-cinza);
+}
+
+.transparente:hover {
+  color: var(--texto-preto);
+}
+
 .cinza:hover {
   border: 1.5px solid var(--texto-branco);
   background-color: var(--texto-branco);

@@ -2,7 +2,6 @@ import styles from './ModalTemplate.module.css'
 import { IoArrowBackOutline, IoClose } from "react-icons/io5";
 import Button from './../button/Button';
 import { FaCheck } from 'react-icons/fa6';
-import { TiCancel } from 'react-icons/ti';
 import Titulo from '../titulo/Titulo';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';

@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Table.module.css";
 import { Delete, Edit, IconlyProvider } from "react-iconly";
 
-const Table = ({ titulos, matriz, showEditIcon, showDeleteIcon, funcaoEditar, funcaoDeletar }) => {
+const Table = ({ titulos, matriz, showEditIcon, showDeleteIcon, funcaoEditar, funcaoDeletar, acessarEstatisticas }) => {
     return (
         <>
             <div className={styles["container-table"]}>
@@ -23,11 +23,14 @@ const Table = ({ titulos, matriz, showEditIcon, showDeleteIcon, funcaoEditar, fu
                     <tbody className={styles["body-table"]}>
                         {
                             matriz.map((coluna, indiceLinha) => (
-                                <tr className={styles[indiceLinha % 2 === 0 ? "branco" : "roxo"]} key={indiceLinha}
-
-                                >
+                                <tr className={styles[indiceLinha % 2 === 0 ? "branco" : "roxo"]} key={indiceLinha}>
                                     {coluna.map((dado, indiceColuna) => (
-                                        <td key={indiceLinha + indiceColuna + 1} onClick={() => funcaoEditar(indiceColuna)}>
+                                        <td key={indiceLinha + indiceColuna + 1}
+                                        onClick={
+                                            acessarEstatisticas ? 
+                                            () => acessarEstatisticas(indiceLinha) : 
+                                                    funcaoEditar ? () => funcaoEditar(indiceLinha) : () => {}
+                                            }>
                                             <div className={styles["td-div"]}>
                                                 {dado}
                                             </div>

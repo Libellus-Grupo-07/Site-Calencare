@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/button/Button";
 import Titulo from "../../components/titulo/Titulo";
 import Input from "../../components/input/Input";
-import { inputSomenteTexto, logado, isVazio, isValidEmail, transformarHora, transformarData, transformarDataHora, transformarDataHoraBd, transformarDataBd, isSelected } from "../../utils/global";
+import { inputSomenteTexto, logado, isVazio, isValidEmail, transformarHora, transformarDataHoraBd, transformarDataBd, isSelected } from "../../utils/global";
 import styles from "./AdicionarAgendamento.module.css";
 import Ul from "../../components/ul/Ul";
 import SelectInput from "../../components/select-input/SelectInput";
@@ -26,6 +26,7 @@ const AdicionarAgendamento = () => {
     const [idCliente, setIdCliente] = useState(0);
     const [idProfissional, setIdProfissional] = useState(0);
     const [idServicoPreco, setIdServicoPreco] = useState(0);
+    const [precoServico, setPrecoServico] = useState(0);
     const [bitStatus, setBitStatus] = useState(0);
     const [nomeServico, setNomeServico] = useState("");
     const [cliente, setCliente] = useState();
@@ -50,18 +51,46 @@ const AdicionarAgendamento = () => {
 
         if (isEditar) {
             buscarAgendamento();
+        } else {
+            buscarClientes(0);
+            buscarProfissionais(0);
+            buscarServicos(0);
         }
-        buscarClientes(0);
-        buscarProfissionais(0);
-        buscarServicos();
 
     }, [navigate, idEmpresa, isEditar, idAgenda]);
 
-    const buscarServicos = () => {
+
+    const buscarAgendamento = () => {
+        api.get(`/agendamentos/${idAgenda}`).then((response) => {
+            const { data } = response;
+            const { dtHora, horario, funcionarioId, clienteId, servicoPrecoId, nomeServico, status, preco } = data;
+            setNomeServico(nomeServico);
+            setData(dtHora);
+            setHora(horario);
+            setIdCliente(clienteId);
+            setIdProfissional(funcionarioId);
+            setIdServicoPreco(servicoPrecoId);
+            setBitStatus(status);
+            setPrecoServico(preco);
+            buscarClientes(clienteId || 0);
+            buscarProfissionais(funcionarioId || 0);
+            buscarServicos(servicoPrecoId || 0);
+        }).catch((error) => {
+            console.log("Houve um erro ao buscar um agendamento");
+            console.log(error);
+        });
+
+    }
+
+    const buscarServicos = (id) =>{
         api.get(`/servico-preco/${idEmpresa}`).then((response) => {
             const { data } = response;
-            console.log(response);
             setServicos(data.length === 0 ? [] : data)
+        
+            if (isEditar) { 
+                toggleServico(data.find(s => s.id === id))
+            }
+
         }).catch((error) => {
             console.log("Houve um erro ao buscar o serviço");
             console.log(error);
@@ -72,7 +101,11 @@ const AdicionarAgendamento = () => {
     const buscarProfissionais = (index) => {
         api.get(`/funcionarios/empresa?idEmpresa=${idEmpresa}`).then((response) => {
             const { data } = response;
-            console.log(response);
+            
+            if (isEditar) {
+                index = data.findIndex(p => p.id === idProfissional);
+            }
+
             mapear(data, index || 0, "profissional")
             setDadosProfissionais(data)
         }).catch((error) => {
@@ -81,23 +114,6 @@ const AdicionarAgendamento = () => {
         });
     }
 
-    const buscarAgendamento = () => {
-        api.get(`/agendamentos/${idAgenda}`).then((response) => {
-            const { data } = response;
-            const { dtHora, horario, funcionarioId, clienteId, servicoId, nomeServico, status } = data;
-            setNomeServico(nomeServico);
-            setData(dtHora);
-            setHora(horario);
-            setIdCliente(clienteId);
-            setIdProfissional(funcionarioId);
-            setIdServicoPreco(servicoId);
-            setBitStatus(status);
-        }).catch((error) => {
-            console.log("Houve um erro ao buscar um agendamento");
-            console.log(error);
-        });
-
-    }
 
     const validarAgenda = () => {
         if (
@@ -145,7 +161,7 @@ const AdicionarAgendamento = () => {
             />
             <Input
                 id={"emailCliente"}
-                titulo={"Email"}
+                titulo={"Email (opcional)"}
                 placeholder={"Email"}
                 valor={emailCliente}
                 alterarValor={setEmailCliente}
@@ -221,7 +237,11 @@ const AdicionarAgendamento = () => {
     const buscarClientes = (index) => {
         api.get(`/clientes/listar/${idEmpresa}`).then((response) => {
             const { data } = response;
-            console.log(data);
+
+            if (isEditar) {
+                index = data.findIndex(c => c.id === idCliente);
+            }
+
             mapear(data, index, "cliente");
             setDadosClientes(data)
         }).catch((error) => {
@@ -235,7 +255,7 @@ const AdicionarAgendamento = () => {
 
         if (nomeVetor === "cliente") {
             dataMapp.push({
-                label: "Criar",
+                label: "Criar um Cliente",
                 value: "Criar"
             })
         }
@@ -252,7 +272,7 @@ const AdicionarAgendamento = () => {
             })
         }
 
-        i = index === 0 ? index - 1 : index;
+        i = index === 0 ? index - 1 : index === clientes.length ? index + 1 : index;
 
         if (nomeVetor === "cliente") {
             setClientes(dataMapp);
@@ -264,26 +284,33 @@ const AdicionarAgendamento = () => {
     }
 
     const handleSave = () => {
-        if (validarAgenda()) {
-            if (isEditar) { 
+        if (isEditar) {
+            if (idCliente || isSelected(cliente, "Cliente") &&
+                idProfissional || isSelected(Profissional, "profissional") &&
+                !isVazio(servicosSelecionados, "Serviços que realiza") &&
+                !isVazio(data, "Data do Agendamento") && 
+                !isVazio(hora, "Hora do Agendamento")) {
                 let AgendaAdicionado = {
                     dtHora: transformarDataHoraBd(data, hora),
                     dia: transformarDataBd(data),
                     horario: transformarHora(hora),
                     bitStatus: bitStatus,
-                    fkCliente: dadosClientes.find(c => c.id === idCliente).id,
-                    fkFuncionario: dadosProfissionais.find(p => p.id === idProfissional).id,
-                    fkServicoPreco: servicos.find(s => s.nome === nomeServico).id
+                    fkCliente: cliente ? dadosClientes[cliente.index].id : idCliente,
+                    fkFuncionario: Profissional ? dadosProfissionais[Profissional.index].id : idProfissional ,
+                    fkServicoPreco: servicosSelecionados[0].id
                 }
 
-                api.post(`/agendamentos/${dadosProfissionais.find(p => p.id === idProfissional).id}/${dadosClientes.find(c => c.id === idCliente).id}/${servicos.find(s => s.nome === nomeServico).id}`, AgendaAdicionado).then(() => {
+                api.put(`/agendamentos/${idAgenda}`, AgendaAdicionado).then(() => {
                     toast.success("Agendamento atualizado com sucesso!");
                     navigate("/agenda");
                 }).catch((error) => {
                     console.error(error)
                     toast.error("Ocorreu um erro ao atualizar os dados, por favor, tente novamente.");
                 })
-            } else {
+            }
+        } else {
+            if (validarAgenda()) {
+
                 //let dataHora = dataAgenda + "T" + hora;
                 let AgendaAdicionado = {
                     dtHora: transformarDataHoraBd(data, hora),
@@ -304,6 +331,7 @@ const AdicionarAgendamento = () => {
                     toast.error("Ocorreu um erro ao adicionar os dados, por favor, tente novamente.");
                 })
             }
+
         }
     };
 
@@ -334,7 +362,7 @@ const AdicionarAgendamento = () => {
                             <Ul className={styles["servicos-grid"]}
                                 titulo={"Serviços"}
                                 items={servicos}
-                                servicosSelecionados={servicosSelecionados.length === 0 && isEditar ? servicos.filter(s => s.nome === nomeServico) : servicosSelecionados}
+                                servicosSelecionados={servicosSelecionados}
                                 toggleServico={toggleServico}
                                 nomeCampo={undefined}
                             />
@@ -372,10 +400,9 @@ const AdicionarAgendamento = () => {
                                 <span>
                                     R$
                                     {
-                                        servicosSelecionados.length === 0 && !nomeServico ?
+                                        servicosSelecionados.length === 0 ?
                                             "0,00"
-                                            : nomeServico ? servicos.find(s => s.nome === nomeServico).preco.toFixed(2).replace(".", ",")
-                                                : servicosSelecionados[0].preco.toFixed(2).replace(".", ",")}
+                                            : precoServico.toFixed(2).replace(".", ",")}
 
                                 </span>
                             </div>

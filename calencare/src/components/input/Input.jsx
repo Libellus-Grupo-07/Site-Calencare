@@ -4,6 +4,8 @@ import styles from "./Input.module.css";
 import { IMaskInput } from 'react-imask';
 import DatePicker from "react-date-picker";
 import { Calendar } from "react-iconly";
+import { IoIosArrowDown } from "react-icons/io";
+
 
 const Input = ({
     tamanho,
@@ -21,7 +23,11 @@ const Input = ({
     maxlength,
     minlength,
     sobrepor,
-    cor
+    cor,
+    isAnual,
+    isMensal,
+    isDiaria,
+    showCalendarIcon
 }) => {
     const mudarValor = (e) => {
         alterarValor(e.target.value);
@@ -72,15 +78,27 @@ const Input = ({
                                 onChange={(e) => alterarValor(e)}
                                 className={styles["input-date"]}
                                 calendarIcon={
+                                    showCalendarIcon ?
                                     <Calendar
                                         primaryColor={cor === "roxo" ? "var(--texto-branco)" : ""}
+                                    /> :
+                                        <IoIosArrowDown 
+                                        
+                                            style={{
+                                                fontSize: "1.2rem",
+                                                color: cor === "roxo" ? "var(--texto-branco)" : ""
+                                            }}
                                     />
                                 }
                                 clearIcon={null}
-                                format={"dd/MM/yyyy"}
+                                format={isAnual ? "yyyy" : isMensal ? "MM/yyyy" : "dd/MM/yyyy"}
                                 locale="br-BR"
                                 calendarProps={{
-                                    
+                                    view: isMensal ? "year" : isDiaria ? "month" : "day",
+                                    defaultView: isMensal ? "year" : isDiaria ? "month" : "day",
+                                    onClickMonth: isMensal ? (e) => alterarValor(e) : null,
+                                    onClickYear: isAnual ? (e) => alterarValor(e) : null,
+                                    onClickDay: isMensal ? (e) => alterarValor(e) : null,
                                 }}
                             />
                         </div>

@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import api from "../../api";
 import styles from "./Clientes.module.css";
-import { isValidEmail, isVazio, logado, transformarData } from "../../utils/global";
+import { inputTelefone, isValidEmail, isVazio, logado, transformarData, transformarTelefoneCelular } from "../../utils/global";
 import { useNavigate } from "react-router-dom";
 import Titulo from "../../components/titulo/Titulo";
 import Table from "../../components/table/Table";
 import ModalTemplate from "../../components/modal-template/ModalTemplate";
 import Input from "../../components/input/Input";
 import { toast } from "react-toastify";
+import Button from "../../components/button/Button";
+import { AddUser, IconlyProvider } from "react-iconly";
 
 const Clientes = () => {
     const navigate = useNavigate();
@@ -49,7 +51,8 @@ const Clientes = () => {
                 titulo={"Telefone"}
                 valor={telefoneCliente}
                 alterarValor={setTelefoneCliente}
-                mascara={"(00) 00000-0000"}
+                validarEntrada={inputTelefone}
+                // mascara={"(00) 00000-0000"}
             />
             {/* <Input
                 id={"dataNascimentoCliente"}
@@ -65,8 +68,9 @@ const Clientes = () => {
         <>
             <span style={{
                 lineHeight: "1.5rem",
+                letterSpacing: "-0.03rem"
             }}>
-                Você realmente deseja excluir o cliente <b>"{nomeCliente}"</b>?
+                Você realmente deseja excluir o cliente <b> "{nomeCliente} {sobrenomeCliente}"</b>?
             </span>
         </>
     )
@@ -110,12 +114,12 @@ const Clientes = () => {
             var dataMappAtual = [];
             dataMappAtual.push(data[i].nome + " " + data[i].sobrenome);
             dataMappAtual.push(data[i].email);
-            dataMappAtual.push(data[i].telefone);
+            dataMappAtual.push(transformarTelefoneCelular(data[i].telefone));
             dataMappAtual.push(transformarData(data[i].dtCriacao));
             dataMappAtual.push(
                 data[i].dtUltimoAgendamento ?
                     transformarData(data[i].dtUltimoAgendamento)
-                    : "Não Há"
+                    : "Não Há Registros"
             );
             // dataMappAtual.push(data[i].dtAgendamento);
             dadosMapp.push(dataMappAtual);
@@ -130,7 +134,7 @@ const Clientes = () => {
         setNomeCliente(dadosResposta[index].nome);
         setSobrenomeCliente(dadosResposta[index].sobrenome);
         setEmailCliente(dadosResposta[index].email);
-        setTelefoneCliente(dadosResposta[index].telefone);
+        setTelefoneCliente(transformarTelefoneCelular(dadosResposta[index].telefone));
         // setDataNascimentoCliente(dadosResposta[index].dtNascimento);
         abrirModal()
     }
@@ -157,7 +161,7 @@ const Clientes = () => {
                 nome: nomeCliente,
                 sobrenome: sobrenomeCliente,
                 email: emailCliente,
-                telefone: telefoneCliente,
+                telefone: telefoneCliente.replace("(", "").replace(")", "").replace("-", "").replace(" ", ""),
                 dtNascimento: dataNascimentoCliente
             }
 
@@ -176,6 +180,7 @@ const Clientes = () => {
     const deletar = (index) => {
         setIdCliente(dadosResposta[index].id);
         setNomeCliente(dadosResposta[index].nome);
+        setSobrenomeCliente(dadosResposta[index].sobrenome);
         abrirModalExcluir()
     }
 
@@ -219,18 +224,18 @@ const Clientes = () => {
                         <div className={styles["header"]}>
                             <Titulo tamanho={"md"} titulo={`Clientes`} />
                             <div className={styles["group-button"]}>
-                                {/* <Button
-                                    funcaoButton={() => abrirModal()}
-                                    cor="roxo"
-                                    titulo={"Adicionar"}
-                                    icone={<IconlyProvider
-                                        stroke="bold"
-                                        size="small"
-                                    >
-                                        <AddUser />
-                                    </IconlyProvider>
-                                    }
-                                /> */}
+                                    {/* <Button
+                                        funcaoButton={() => abrirModal()}
+                                        cor="roxo"
+                                        titulo={"Adicionar"}
+                                        icone={<IconlyProvider
+                                            stroke="bold"
+                                            size="small"
+                                        >
+                                            <AddUser />
+                                        </IconlyProvider>
+                                        }
+                                    /> */}
                             </div>
                         </div>
                         <div className={styles["table-clientes"]}>

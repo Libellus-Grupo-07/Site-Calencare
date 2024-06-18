@@ -56,7 +56,7 @@ const SelectInput = ({ tamanho, placeholder, titulo, id, options, alterarValor, 
                                     borderColor: state.isFocused ? "var(--preto)" : "var(--texto-cinza)",
                                     borderWidth: state.isFocused ? "2px" : "1.5px",
                                     // width: tamanho === "md" ? "100%" : "",
-                                    background: "white"
+                                    backgroundColor: "white"
                                 }),
                             }}
                         /> :

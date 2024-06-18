@@ -16,13 +16,14 @@ import { FaUndo } from "react-icons/fa";
 
 const Equipe = () => {
     const navigate = useNavigate();
-    const titulos = ["", "Nome", "Email", "Perfil", "Status", "Serviços", ""]
+    const titulos = [/*"",*/ "Nome", "Email", "Perfil", "Status", "Serviços", ""]
     const [pilha, setPilha] = useState(new Pilha())
     const idEmpresa = sessionStorage.getItem("idEmpresa")
     const idUser = sessionStorage.getItem("idUser")
     const [dados, setDados] = useState("");
     const [idprofissional, setIdProfissional] = useState("");
     const [nome, setNome] = useState("");
+
 
     useEffect(() => {
         if (!logado(sessionStorage.getItem("token"))) {
@@ -68,7 +69,7 @@ const Equipe = () => {
                                 servicos: servicosFuncionario
                             };
                         });
-                        setDados(dadosAtualizados.filter(f => f.id !== Number(idUser)));
+                        setDados(dadosAtualizados);
                     })
                     .catch((error) => {
                         console.error("Houve um erro ao buscar serviços", error);
@@ -106,7 +107,7 @@ const Equipe = () => {
             <span style={{
                 lineHeight: "1.5rem",
             }}>
-                Você realmente deseja excluir o funcionário "{nome}"?
+                Você realmente deseja excluir o funcionário <b>"{nome}"</b>?
             </span>
         </>
     )
@@ -125,9 +126,19 @@ const Equipe = () => {
     const deletar = (index) => {
         var id = dados[index].id;
         var nome = dados[index].nome;
-        setIdProfissional(id)
-        setNome(nome)
-        abrirModal(nome);
+
+        if (id === Number(idUser)) {
+            toast.error("Você não pode excluir a si mesmo!")
+        } else {
+            setIdProfissional(id)
+            setNome(nome)
+            abrirModal(nome);
+        }
+    }
+
+    const acessarEstatisticas = (index) => {
+        let idprofissional = dados[index].id;
+        navigate(`/equipe/estatistica/${idprofissional}`);
     }
 
     const excluir = () => {
@@ -166,7 +177,7 @@ const Equipe = () => {
                                     cor="branco"
                                     disabled={pilha.isEmpty()}
                                     titulo={"Desfazer Exclusão"}
-                                    icone={<FaUndo className={styles["icon-desfazer"]}/>}
+                                    icone={<FaUndo className={styles["icon-desfazer"]} />}
                                 />
 
                                 <Button
@@ -192,12 +203,13 @@ const Equipe = () => {
                                     titulos={titulos}
                                     matriz={dados.map((linha) => {
                                         const status = linha.bitStatus === 1 ? "Ativo" : "Inativo";
-                                        return [linha.id, linha.nome, linha.email, linha.perfilAcesso, status, linha.servicos]
+                                        return [/*linha.id,*/ linha.nome, linha.email, linha.perfilAcesso, status, linha.servicos]
                                     })}
                                     showEditIcon={true}
                                     showDeleteIcon={true}
                                     funcaoEditar={editar}
                                     funcaoDeletar={deletar}
+                                    acessarEstatisticas={acessarEstatisticas}
                                 />}
 
                         </div>

@@ -31,6 +31,10 @@
   .container-table .table .body-table .linhas .classe-th:first-child {
     border-top-left-radius: 1rem;
   }
+    
+  .container-table .table .body-table .linhas #th-funcionario {
+    /* width: 35%; */
+  }
   
   .container-table .table .body-table .linhas .classe-th:last-child {
     border-top-right-radius: 1rem;

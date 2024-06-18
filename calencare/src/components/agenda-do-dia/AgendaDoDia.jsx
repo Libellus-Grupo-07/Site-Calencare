@@ -20,12 +20,12 @@ const AgendaDoDia = ({ agenda, buscarInfoAgenda, nomeFuncionario, dataHora, nome
                                     (i === 0 && j === 0) &&
                                     <th className={styles["classe-th"]} key={j}>
                                         <div className={styles["td-div"]}>
-                                            <span className={styles["dia-titulo"]}>:D</span>
+                                            <span className={styles["dia-titulo"]}></span>
                                         </div>
                                     </th>
 
                                     || (i === 0 && j > 0) &&
-                                    <th className={styles["classe-th"]} key={j}>
+                                    <th id={styles["th-funcionario"]} className={styles["classe-th"]} key={j}>
                                         <div className={["td-div"]}>
                                             <span className={["dia-titulo"]}>{coluna}</span>
                                         </div>

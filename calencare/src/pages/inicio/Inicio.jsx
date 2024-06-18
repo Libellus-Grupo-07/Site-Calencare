@@ -4,15 +4,15 @@ import Titulo from "../../components/titulo/Titulo";
 import Header from "../../components/header/Header";
 import api from "../../api";
 import styles from "./Inicio.module.css";
-import { IconlyProvider, Notification, Calendar, Work } from "react-iconly";
+import { IconlyProvider, Calendar, User } from "react-iconly";
 import { Icon } from '@iconify-icon/react';
 import CardKpi from "../../components/card-kpi/CardKpi";
 import CardAgendamento from './../../components/card-agendamento/CardAgendamento';
-import { isVazio, logado, transformarData, transformarDataBd, transformarDataHora, transformarDouble, transformarHora } from "../../utils/global";
+import { isVazio, logado, transformarData, transformarDataBd, transformarDouble, transformarHora } from "../../utils/global";
 import ModalTemplate from "../../components/modal-template/ModalTemplate";
-import Input from "../../components/input/Input";
 import SelectInput from "../../components/select-input/SelectInput";
 import { toast } from "react-toastify";
+import ModalCancelarAgendamento from "../../components/modal-cancelar-agendamento/ModalCancelarAgendamento";
 
 const Inicio = () => {
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Inicio = () => {
     const nome = sessionStorage.getItem("nomeUser");
     const [totalAgendamentosDia, setTotalAgendamentosDia] = useState("");
     const [potencialLucroDia, setPotencialLucroDia] = useState("");
-    const [servicoMaisProcuradoDia, setServicoMaisProcuradoDia] = useState("");
+    const [profissionaisEmAtividade, setProfissionaisEmAtividade] = useState("");
     const [proximosAgendamentos, setProximosAgendamentos] = useState([]);
     const [agendamentosEmAndamento, setAgendamentosEmAndamento] = useState([]);
     const [modalFinalizarAberto, setModalFinalizarAberto] = useState(false);
@@ -28,7 +28,7 @@ const Inicio = () => {
     const [descricaoAgendamento, setDescricaoAgendamento] = useState("");
     const [metodoPagamento, setMetodoPagamento] = useState("");
     const [agendamento, setAgendamento] = useState({});
-    const [optionsMetodoPagamento, setOptionsMetodoPagamento] = useState([
+    const [optionsMetodoPagamento] = useState([
         {
             label: "Cartão de Crédito",
             value: "Cartão de Crédito"
@@ -72,7 +72,7 @@ const Inicio = () => {
     }
 
     const cancelar = () => {
-        api.put(`/agendamentos/cancelar/${agendamento.id}`).then(() => {
+        api.patch(`/agendamentos/atualizar-BitStatus-Cancelar-agendamento/${idEmpresa}/${agendamento.id}`).then(() => {
             toast.success("Agendamento cancelado com sucesso!");
             buscarAgendamentos(transformarDataBd(new Date()));
             abrirModalCancelar();
@@ -105,16 +105,6 @@ const Inicio = () => {
                 alterarValor={setMetodoPagamento}
                 options={optionsMetodoPagamento}
             />
-        </>
-    )
-
-    const corpoModalCancelar = (
-        <>
-            <span style={{
-                lineHeight: "1.5rem",
-            }}>
-                Você realmente deseja cancelar o agendamento que seria realizado na data "<b>{descricaoAgendamento}</b>"?
-            </span>
         </>
     )
 
@@ -165,9 +155,9 @@ const Inicio = () => {
         });
 
 
-        api.get(`/agendamentos/servico-mais-procurado/empresa?empresaId=${idEmpresa}`).then((response) => {
+        api.get(`/agendamentos/qntd-funcionarios-dia/${idEmpresa}/${transformarDataBd(new Date())}`).then((response) => {
             const { data } = response;
-            setServicoMaisProcuradoDia(data);
+            setProfissionaisEmAtividade(data);
         }).catch((error) => {
             console.log(error);
         });
@@ -183,12 +173,12 @@ const Inicio = () => {
                     <div className={styles["content-inicio"]}>
                         <div className={styles["titulo-inicio"]}>
                             <Titulo tamanho={"md"} titulo={`Olá, ${nome}!`} />
-                            <IconlyProvider
+                            {/* <IconlyProvider
                                 stroke="bold"
                                 size={"large"}
                             >
                                 <Notification />
-                            </IconlyProvider>
+                            </IconlyProvider> */}
                         </div>
                         <div className={styles["group-kpis"]}>
                             <div className={styles["card-kpi"]}>
@@ -201,7 +191,7 @@ const Inicio = () => {
                                             <Calendar />
                                         </IconlyProvider>
                                     }
-                                    legenda={"Total De Agendamentos Hoje"}
+                                    legenda={"Total de Agendamentos Hoje"}
                                     valor={totalAgendamentosDia}
                                 />
                             </div>
@@ -222,11 +212,11 @@ const Inicio = () => {
                                             stroke="bold"
                                             size="large"
                                         >
-                                            <Work />
+                                            <User />
                                         </IconlyProvider>
                                     }
-                                    legenda={"Serviço Mais Procurado Hoje"}
-                                    valor={servicoMaisProcuradoDia || "Nenhum"}
+                                    legenda={"Profissionais Em Atividade"}
+                                    valor={profissionaisEmAtividade || 0}
                                 />
                             </div>
                         </div>
@@ -307,15 +297,11 @@ const Inicio = () => {
                 tituloBotaoConfirmar={"Finalizar"}
                 tamanho={"lg"}
             />
-            <ModalTemplate
-                aberto={modalCancelarAberto}
-                setAberto={abrirModalCancelar}
-                funcaoBotaoConfirmar={cancelar}
-                corpo={corpoModalCancelar}
-                titulo={"Cancelar Agendamento"}
-                tituloBotaoCancelar={"Voltar"}
-                tituloBotaoConfirmar={"Confirmar"}
-                tamanho={"lg"}
+            <ModalCancelarAgendamento
+                modalCancelarAberto={modalCancelarAberto}
+                setModalCancelarAberto={abrirModalCancelar}
+                cancelar={cancelar}
+                descricaoAgendamento={descricaoAgendamento}
             />
         </>
     )

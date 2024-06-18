@@ -3,7 +3,7 @@ import styles from "./Perfil.module.css"
 import Header from "../../components/header/Header";
 import api from "../../api";
 import Button from "../../components/button/Button";
-import { Delete, IconlyProvider, Logout } from "react-iconly";
+import {IconlyProvider, Logout } from "react-iconly";
 import { useNavigate } from "react-router-dom";
 import imgPerfil from "./../../utils/assets/perfil_padrao.svg";
 import Row from './../../components/row/Row';
@@ -24,6 +24,8 @@ const Perfil = () => {
     const [email, setEmail] = useState("");
     const [telefone, setTelefone] = useState("");
     const [dtCriacao, setDtCriacao] = useState("");
+    const [intervaloAtendimento, setIntervaloAtendimento] = useState(0)
+    const [servicosPrestados, setServicosPrestados] = useState([])
     const [empresa, setEmpresa] = useState({})
 
     const [razaoSocial, setRazaoSocial] = useState("")
@@ -82,17 +84,6 @@ const Perfil = () => {
     ];
 
     const [secaoPerfil, setSecaoPerfil] = useState(sessionStorage.getItem("sessaoPerfil") || "informacoes-empresa");
-    const corpoModal = (
-        <>
-            <span style={{
-                lineHeight: "1.5rem",
-            }}>
-                Você realmente deseja excluir a sua conta?
-            </span>
-        </>
-    )
-
-    const [modalAberto, setModalAberto] = useState(false);
     const [modalEditarEnderecoAberto, setModalEditarEnderecoAberto] = useState(false);
 
     useEffect(() => {
@@ -103,12 +94,13 @@ const Perfil = () => {
 
         api.get(`/empresas/${idEmpresa}`).then((response) => {
             const { data } = response
-            const { razaoSocial, cnpj, emailPrincipal, telefonePrincipal, horariosFuncionamentos } = data;
+            const { razaoSocial, cnpj, emailPrincipal, telefonePrincipal, horariosFuncionamentos, intervaloAtendimento } = data;
 
             setRazaoSocial(razaoSocial);
             setCNPJ(cnpj);
             setEmailPrincipal(emailPrincipal);
             setTelefonePrincipal(telefonePrincipal);
+            setIntervaloAtendimento(intervaloAtendimento);
 
             const ordemDias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
             const vetorDias = [];
@@ -162,7 +154,16 @@ const Perfil = () => {
             console.log("Houve um erro ao buscar o funcionário");
             console.log(error);
         }, [])
-    }, [navigate, idUser, idEmpresa]);
+
+        api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${idUser}`).then((response) => {
+            const { data } = response;
+            setServicosPrestados(data)
+            console.log(data)
+        }).catch((error) => {
+            console.error(error)
+        });
+        
+    }, [idEmpresa, idUser, navigate]);
 
     const buscarEndereco = () => {
         api.get(`/enderecos/empresa/${idEmpresa}`).then((response) => {
@@ -204,25 +205,8 @@ const Perfil = () => {
         navigate(url);
     }
 
-    const abrirModal = () => {
-        setModalAberto(!modalAberto);
-    }
-
     const abrirModalEditarEndereco = () => {
         setModalEditarEnderecoAberto(!modalEditarEnderecoAberto);
-    }
-
-    const excluir = () => {
-        api.delete(`/funcionarios/${idUser}`).then(() => {
-            abrirModal();
-            toast.sucess("Sua conta foi excluída com sucesso.");
-            sessionStorage.removeItem("idUser");
-            sair("/login");
-        }).catch((error) => {
-            toast.error("Não foi possível excluir sua conta.")
-            console.error("Houve um erro ao tentar excluir a conta")
-            console.log(error)
-        })
     }
 
     const buscarCep = () => {
@@ -392,14 +376,14 @@ const Perfil = () => {
                             <div className={styles["group-button"]}>
                                 <Button
                                     cor="branco"
-                                    titulo={"Excluir conta"}
-                                    funcaoButton={() => abrirModal()}
+                                    titulo={"Ver Perfil"}
+                                    funcaoButton={() => navigate(`/equipe/estatistica/${idUser}`)}
                                     icone={
                                         <IconlyProvider
                                             stroke="bold"
                                             size="small"
                                         >
-                                            <Delete />
+                                            {/* <Delete /> */}
                                         </IconlyProvider>
                                     }
                                 />
@@ -479,6 +463,11 @@ const Perfil = () => {
                                                 valor={endereco}
                                                 funcao={abrirModalEditarEndereco}
                                             />
+                                            <Row
+                                                titulo="Intervalo de Atendimentos"
+                                                valor={intervaloAtendimento + " minutos"}
+                                                funcao={() => navegar("empresa")}
+                                            />
 
                                         </div>
                                         <div className={styles["dias-funcionamento"]}>
@@ -526,6 +515,11 @@ const Perfil = () => {
                                                 funcao={() => navegar("usuario")}
                                             />
                                             <Row
+                                                titulo="Serviços Prestados"
+                                                valor={servicosPrestados.length === 0 ? "Nenhum" : servicosPrestados.map((s) => s.nomeServico).join(", ").replace(/,([^,]*)$/, ' e$1')}
+                                                funcao={() => navegar("usuario")}
+                                            />
+                                            <Row
                                                 titulo="Data de Cadastro"
                                                 valor={transformarData(dtCriacao)}
                                                 funcao={() => navegar("usuario")}
@@ -537,14 +531,6 @@ const Perfil = () => {
                     </div>
                 </div>
             </section>
-            <ModalTemplate
-                aberto={modalAberto}
-                setAberto={setModalAberto}
-                funcaoBotaoConfirmar={excluir}
-                corpo={corpoModal}
-                titulo={"Excluir Conta"}
-                tituloBotaoConfirmar={"Excluir"}
-            />
             <ModalTemplate
                 tamanho={"lg"}
                 aberto={modalEditarEnderecoAberto}

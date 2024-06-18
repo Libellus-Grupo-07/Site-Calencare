@@ -3,18 +3,19 @@ import Header from "../../components/header/Header";
 import styles from "./Dashboard.module.css";
 import Titulo from './../../components/titulo/Titulo';
 import Button from './../../components/button/Button';
-import { Download, IconlyProvider, Ticket, Work, User } from "react-iconly";
+import { Download, IconlyProvider, Work, User, Calendar } from "react-iconly";
 import CardKpi from './../../components/card-kpi/CardKpi';
 import { CiMoneyBill } from "react-icons/ci";
 import Input from "../../components/input/Input";
 import api from "../../api";
-import { logado, transformarDataBd } from "../../utils/global";
+import { logado, transformarData, transformarDataBd } from "../../utils/global";
 import { useNavigate } from "react-router-dom";
 import CardTop3 from '../../components/card-top-3/CardTop3';
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js/auto";
 import { Bar, Doughnut } from "react-chartjs-2";
-import { Tooltip } from 'react-tooltip';;
+import { Tooltip } from 'react-tooltip';import { toast } from "react-toastify";
+;
 
 Chart.register(CategoryScale);
 
@@ -23,6 +24,7 @@ const Dashboard = () => {
     const idEmpresa = sessionStorage.idEmpresa;
     const [agendamentosTotalDoDia, setAgendamentosTotalDoDia] = useState(0);
     const [agendamentosPendentes, setagendamentosPendentes] = useState(0);
+    const [agendamentosAtivos, setagendamentosAtivos] = useState(0);
     const [agendamentosFinalizados, setAgendamentosFinalizados] = useState(0);
     const [agendamentosCancelados, setAgendamentosCancelados] = useState(0);
     const [lucroTotalDoDia, setLucroTotalDoDia] = useState(0);
@@ -31,7 +33,7 @@ const Dashboard = () => {
     const [top3Servicos, setTop3Servicos] = useState([]);
     const [top3Profissionais, setTop3Profissionais] = useState([]);
     const [top3Clientes, setTop3Clientes] = useState([]);
-    // const [dadosAgendamentosPorProfissional, setDadosAgendamentosPorProfissional] = useState(false);
+    const [dadosAgendamentosPorProfissional, setDadosAgendamentosPorProfissional] = useState(false);
     const [dadosAgendamentosPorCategoria, setDadosAgendamentosPorCategoria] = useState([])
 
     const [graficoBarras, setGraficoBarras] = useState({
@@ -117,15 +119,17 @@ const Dashboard = () => {
 
         buscarDadosDashboard(dataSelecionada);
 
-    }, [idEmpresa, navigate]);
+    }, [idEmpresa, navigate, dataSelecionada]);
 
     const buscarDadosDashboard = (dataSelecionada) => {
+        console.log(dataSelecionada)
         setDataSelecionada(dataSelecionada)
         let dataFormatada = transformarDataBd(dataSelecionada);
 
         api.get(`/dashboard/stats/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
             const { Pendentes, Cancelados, Finalizados, TotalAgendamentos } = data;
+            setagendamentosAtivos(TotalAgendamentos - (Pendentes + Cancelados + Finalizados))
             setAgendamentosTotalDoDia(TotalAgendamentos)
             setagendamentosPendentes(Pendentes)
             setAgendamentosFinalizados(Finalizados)
@@ -138,7 +142,6 @@ const Dashboard = () => {
         api.get(`/dashboard/profissional/${idEmpresa}/${dataFormatada}`).then((response) => {
             const { data } = response;
             console.log(data)
-            // setDadosAgendamentosPorCategoria(data)
             gerarGraficoBarra(data);
         }).catch((error) => {
             console.error(error);
@@ -193,6 +196,7 @@ const Dashboard = () => {
 
 
     const gerarGraficoBarra = (dadosAgendamentosPorProfissional) => {
+        setDadosAgendamentosPorProfissional(dadosAgendamentosPorProfissional);
         setGraficoBarras({
             labels: dadosAgendamentosPorProfissional.map((s) => s.nome),
             datasets: [
@@ -235,17 +239,39 @@ const Dashboard = () => {
     }
 
     const gerarGraficoDonut = (dadosAgendamentosPorCategoria) => {
+        setDadosAgendamentosPorCategoria(dadosAgendamentosPorCategoria);
         setGraficoDonut({
             labels: dadosAgendamentosPorCategoria.map((s) => s.categoria),
             datasets: [
                 {
-                    label: `Agendamentos no Dia`,
+                    label: `Agendamentos`,
                     data: dadosAgendamentosPorCategoria.map((s) => s.count),
                     backgroundColor: cores[0],
                     borderColor: cores[1],
                     borderWidth: 2
                 }
             ],
+        })
+    }
+
+    const gerarRelatorio = () => {
+        api.get(`/pdfs/${idEmpresa}?date=${transformarDataBd(dataSelecionada)}&page=0&size=3`, {
+            responseType: "arraybuffer"
+        }).then((response) => {
+            const { data } = response;
+            // Criando uma URL e um arquivo Blob com a resposta da requisição no Backend
+            const url = window.URL.createObjectURL(new Blob([data]));
+            // Criando um elemento A, para representar um link
+            const link = document.createElement("a");
+            // Definindo nome do arquivo a ser baixado
+            link.download = `Relatório do Dia - ${transformarData(dataSelecionada)}.pdf`;
+            // Definindo a URL no link
+            link.href = url;
+            // Simulando um click no link para baixar o arquivo
+            link.click();
+        }).catch((error) => {
+            console.error(error);
+            toast.error("Ocorreu um erro baixar relatório.");
         })
     }
 
@@ -270,6 +296,7 @@ const Dashboard = () => {
                                             <Download />
                                         </IconlyProvider>
                                     }
+                                    funcaoButton={() => gerarRelatorio()}
                                 />
                                 <div>
                                     <Input
@@ -291,7 +318,7 @@ const Dashboard = () => {
                                             stroke="bold"
                                             size={"large"}
                                         >
-                                            <Ticket />
+                                            <Calendar />
                                         </IconlyProvider>
                                     }
 
@@ -303,6 +330,9 @@ const Dashboard = () => {
                                                 <div className={styles["content-tooltip"]}>
                                                     <span>
                                                         Total de Agendamentos: <b> {agendamentosTotalDoDia} </b>
+                                                    </span>
+                                                    <span>
+                                                        Agendamentos Ativos: <b> {agendamentosAtivos} </b>
                                                     </span>
                                                     <span>
                                                         Agendamentos Pendentes: <b> {agendamentosPendentes} </b>
@@ -321,7 +351,7 @@ const Dashboard = () => {
                             </div>
                             <div className={styles["card-kpi"]}>
                                 <CardKpi
-                                    legenda={"Lucro Total do Dia"}
+                                    legenda={"Lucro Obtido no Dia"}
                                     valor={lucroTotalDoDia.toFixed(2).replace(".", ",")}
                                     icon={
                                         <CiMoneyBill style={{
@@ -354,95 +384,116 @@ const Dashboard = () => {
                                 <span className={styles["title-chart"]}>
                                     Agendamentos no Dia Por Profissional
                                 </span>
-                                <Bar
-                                    style={{
-                                        fontFamily: "Poppins"
-                                    }}
-                                    data={graficoBarras}
-                                    options={{
-                                        scales: {
-                                            x: {
-                                                ticks: {
-                                                    color: cores[1],
-                                                    font: {
-                                                        family: "Poppins",
-                                                        weight: "700"
+                                {dadosAgendamentosPorProfissional.length === 0 ?
+                                    <div className={styles["sem-dados"]}>
+                                        Não há dados para exibir
+                                    </div> :
+                                    <Bar
+                                        style={{
+                                            fontFamily: "Poppins"
+                                        }}
+                                        data={graficoBarras}
+                                        options={{
+                                            scales: {
+                                                x: {
+                                                    ticks: {
+                                                        color: cores[1],
+                                                        font: {
+                                                            family: "Poppins",
+                                                            weight: "700"
+                                                        }
+                                                    },
+                                                },
+                                                y: {
+                                                    ticks: {
+                                                        stepSize: 1
                                                     }
-                                                },
-                                            }
-                                        },
-                                        plugins: {
-                                            title: {
-                                                display: false
+                                                }
                                             },
-                                            legend: {
-                                                display: false
-                                            },
-                                            subtitle: {
-                                                display: false
-                                            },
-                                            tooltip: {
-                                                bodyFont: {
-                                                    family: "Poppins"
+                                            plugins: {
+                                                title: {
+                                                    display: false
                                                 },
-                                                titleFont: {
-                                                    family: "Poppins"
+                                                legend: {
+                                                    display: false
                                                 },
+                                                subtitle: {
+                                                    display: false
+                                                },
+                                                tooltip: {
+                                                    bodyFont: {
+                                                        family: "Poppins"
+                                                    },
+                                                    titleFont: {
+                                                        family: "Poppins"
+                                                    },
 
+                                                }
                                             }
-                                        }
-                                    }}
-                                />
+                                        }}
+                                    />
+                                }
                             </div>
                             <div className={styles["card-dashboard"]} id={styles["md"]}>
                                 <span className={styles["title-chart"]}>
                                     Agendamentos no Dia Por Categoria
                                 </span>
-                                <div  className={styles["content-chart"]}>
-                                    <div className={styles["grafico-chart"]}>
-                                        <Doughnut
-                                            data={graficoDonut}
-                                            options={{
-                                                plugins: {
-                                                    title: {
-                                                        display: false
-                                                    },
-                                                    legend: {
-                                                        display: false,
-                                                    },
-                                                    subtitle: {
-                                                        display: false
-                                                    },
-                                                    tooltip: {
-                                                        bodyFont: {
-                                                            family: "Poppins"
-                                                        },
-                                                        titleFont: {
-                                                            family: "Poppins"
-                                                        },
-                                                    }
-                                                }
-                                            }}
-                                        />
-                                    </div>
-                                    <div className={styles["group-porcentagem"]}>
-                                        {dadosAgendamentosPorCategoria.map((categoria, index) => (
-                                            <div key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
-                                                <figure>
-                                                    <div className={styles["barrinha-label"]} style={{ backgroundColor: cores[1][index] }} />
-                                                </figure>
-                                                {(categoria.count / (agendamentosTotalDoDia) * 100).toFixed(0).replace(".", ",")}%
+                                {
+                                    dadosAgendamentosPorCategoria.length === 0 ?
+                                        <div className={styles["sem-dados"]}>
+                                            Não há dados para exibir
+                                        </div> :
+                                        <>
+                                            <div className={styles["content-chart"]}>
+
+                                                <div className={styles["grafico-chart"]}>
+                                                    <Doughnut
+                                                        data={graficoDonut}
+                                                        options={{
+                                                            plugins: {
+                                                                title: {
+                                                                    display: false
+                                                                },
+                                                                legend: {
+                                                                    display: false,
+                                                                },
+                                                                subtitle: {
+                                                                    display: false
+                                                                },
+                                                                tooltip: {
+                                                                    boxWidth: 10,
+                                                                    position: "average",
+                                                                    bodyFont: {
+                                                                        family: "Poppins"
+                                                                    },
+                                                                    titleFont: {
+                                                                        family: "Poppins"
+                                                                    },
+                                                                }
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className={styles["group-porcentagem"]}>
+                                                    {dadosAgendamentosPorCategoria.map((categoria, index) => (
+                                                        <div key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
+                                                            <figure>
+                                                                <div className={styles["barrinha-label"]} style={{ backgroundColor: cores[1][index] }} />
+                                                            </figure>
+                                                            {(categoria.count / (agendamentosTotalDoDia) * 100).toFixed(0).replace(".", ",")}%
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>
-                                <ul className={styles["group-labels"]}>
-                                    {dadosAgendamentosPorCategoria.map((categoria, index) => (
-                                        <li key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
-                                            {categoria.categoria}
-                                        </li>
-                                    ))}
-                                </ul>
+                                            <ul className={styles["group-labels"]}>
+                                                {dadosAgendamentosPorCategoria.map((categoria, index) => (
+                                                    <li key={index} className={styles["label"]} style={{ color: cores[1][index] }}>
+                                                        {categoria.categoria}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </>
+                                }
                             </div>
                         </div>
                         <div className={styles["group-top3"]}>
