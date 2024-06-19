@@ -11,7 +11,7 @@ const Ul = ({ items, titulo, servicosSelecionados, toggleServico, nomeCampo }) =
             <span className={styles["titulo-input"]}>{titulo}</span>
             <div className={styles["servicos-input"]}>
                 <div className={styles["servicos-grid"]}>
-                    {items.length === 0 ?
+                    {!items || items.length === 0 ?
                         <div className={styles["sem-servicos"]}>
                             Nenhum serviço cadastrado. <span
                                 className={styles["link-servico"]}

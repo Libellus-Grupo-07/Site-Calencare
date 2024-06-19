@@ -5,6 +5,7 @@ import { FaCheck } from 'react-icons/fa6';
 import Titulo from '../titulo/Titulo';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
+import { TiCancel } from 'react-icons/ti';
 
 const ModalTemplate = ({ tamanho, aberto, setAberto, titulo, corpo, tituloBotaoConfirmar, tituloBotaoCancelar, funcaoBotaoConfirmar, funcaoBotaoCancelar }) => {
 
@@ -40,7 +41,7 @@ const ModalTemplate = ({ tamanho, aberto, setAberto, titulo, corpo, tituloBotaoC
                             titulo={tituloBotaoCancelar || "Cancelar"}
                             cor={"branco"}
                             icone={
-                                tituloBotaoCancelar === "Voltar" ? <IoArrowBackOutline /> : <FaCheck />
+                                tituloBotaoCancelar === "Voltar" ? <IoArrowBackOutline /> : <TiCancel />
                             } />
                         <Button
                             funcaoButton={funcaoBotaoConfirmar || handleClose}

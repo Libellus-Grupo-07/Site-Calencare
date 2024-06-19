@@ -181,7 +181,7 @@ const PerfilEstatistica = () => {
                                     <div className={styles["info-kpis"]}>
                                         {
                                             valorComissao ?
-                                                <Titulo tamanho={"md"} titulo={"R$ " + valorComissao.toFixed(2).replace(".",",")} />
+                                                <Titulo tamanho={"md"} titulo={"R$ " + (valorComissao / 100).toFixed(2).replace(".",",")} />
                                                 :
                                                 <Titulo tamanho={"md"} titulo={"R$ 0,00"} />
                                         }

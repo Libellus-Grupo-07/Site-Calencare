@@ -10,6 +10,7 @@ import Titulo from "../../components/titulo/Titulo";
 import Table from "../../components/table/Table";
 import Input from "../../components/input/Input";
 import { Download, IconlyProvider } from "react-iconly";
+import { toast } from "react-toastify";
 
 const RelatorioAgendamentos = () => {
     const navigate = useNavigate();
@@ -59,6 +60,21 @@ const RelatorioAgendamentos = () => {
         setDados(dataMapp);
     }
 
+    const gerarRelatorio = () => {
+        api.get(`/agendamentos/csv/${idEmpresa}/${dataSelecionada.getMonth() + 1}/${dataSelecionada.getFullYear()}`).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `Relatório de Agendamentos - ${dataSelecionada.getMonth() + 1}-${dataSelecionada.getFullYear()}.csv`;
+            link.click();
+        }).catch((error) => {
+            toast.error("Ocorreu um erro ao gerar relatório de agendamentos.");
+            console.error("Houve um erro ao gerar relatório");
+            console.error(error)
+        })
+            
+    }
+
     return (
         <>
             <section className={styles["section-relatorio"]}>
@@ -88,7 +104,7 @@ const RelatorioAgendamentos = () => {
                                             <Download />
                                         </IconlyProvider>
                                     }
-                                    // funcaoButton={() => gerarRelatorio()}
+                                    funcaoButton={() => gerarRelatorio()}
                                 />
                                 <div>
                                     <Input
