@@ -26,64 +26,10 @@ const EditarPerfil = () => {
     const [empresa, setEmpresa] = useState({});
     const [servicosSelecionados, setServicosSelecionados] = useState([]);
     const [servicosPorFuncionario, setServicosPorFuncionario] = useState([]);
-    const [items, setItems] = useState([]);
+    const [servicosPreco, setServicosPreco] = useState([]);
 
     const voltar = () => {
         navigate(`/perfil`);
-    }
-
-    const editar = () => {
-        let body = {
-            "id": idUser,
-            "nome": nome,
-            email,
-            telefone,
-            dtCriacao,
-            perfilAcesso,
-            bitStatus: 1,
-            empresa
-        }
-        api.put(`/funcionarios/${idUser}`, body).then((response) => {
-            sessionStorage.nomeUser = response.data.nome;
-
-            if (servicosPorFuncionario.length > 0) {
-                for (let index = 0; index < servicosPorFuncionario.length; index++) {
-                    console.log(servicosPorFuncionario);
-                    // Serviço por Funcionário atual
-                    var servicoFuncionario = servicosPorFuncionario[index]
-                    // Filtrando o serviço preço pelo nome do Serviço Por Funcionário atual
-                    var servicoPreco = items.filter(s => s.nome === servicoFuncionario.nomeServico);
-                    // Variavel utilizada para checar se o serviço atual está selecionado e definir o status
-                    var isSelecionado = servicosSelecionados.includes(servicoPreco[0]) ? 1 : 0;
-
-                    // Se o status do serviço vindo do BD estiver diferente do status atual, então atualiza no BD
-                    if (servicoFuncionario.bitStatus !== isSelecionado) {
-                        api.patch(`/servico-por-funcionario/${idEmpresa}/${idUser}/${servicoFuncionario.id}`).then().catch((error) => {
-                            console.error(error)
-                        })
-                    }
-                }
-            } else {
-                for (let index = 0; index < items.length; index++) {
-                    let servicoAdicionado = {
-                        idFuncionario: idUser,
-                        idServicoPreco: items[index].id,
-                        dtCriacao: new Date(),
-                        bitStatus: servicosSelecionados.includes(items[index]) ? 1 : 0
-                    }
-
-                    api.post(`/servico-por-funcionario/${idEmpresa}`, servicoAdicionado).then().catch((error) => {
-                        console.error(error)
-                    })
-                }
-            }
-
-            toast.success("Informações atualizadas com sucesso!")
-            voltar();
-        }).catch((error) => {
-            toast.error("Ocorreu um erro ao atualizar o funcionário");
-            console.log(error);
-        });
     }
 
     useEffect(() => {
@@ -110,7 +56,7 @@ const EditarPerfil = () => {
         api.get(`/servico-preco/${idEmpresa}`).then((response) => {
             const { data } = response;
             const resposta = data
-            setItems(resposta.length === 0 ? [] : resposta)
+            setServicosPreco(resposta || [])
 
             api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${idUser}`
             ).then((response) => {
@@ -120,14 +66,13 @@ const EditarPerfil = () => {
                 // Percorrendo a lista de servicos realizados pelo funcionario
                 for (let index = 0; index < data.length; index++) {
                     const element = data[index];
-                    // resposta do servico preco(todos os servicos cadastrados da empresa) e filtrando apartir do serivco atual 
-                    var servicoFuncionario = resposta.filter(s => s.nome === element.nomeServico && element.bitStatus === 1);
-                    servicosRealizados.push(servicoFuncionario[0])
+                    // resposta do servico preco(todos os servicos cadastrados da empresa) e filtrando apartir do serivco atual
+                    var servicoFuncionario = resposta.find(s => s.nome === element.nomeServico && element.bitStatus === 1);
+                    servicosRealizados.push(servicoFuncionario)
                 }
 
-                setServicosSelecionados(servicosRealizados)
-
-
+                setServicosSelecionados(servicosRealizados);
+                
             }).catch((error) => {
                 console.log("Houve um erro ao buscar o serviço");
                 console.log(error);
@@ -148,6 +93,62 @@ const EditarPerfil = () => {
             setServicosSelecionados([...servicosSelecionados, item]);
         }
     };
+
+    const editar = () => {
+        let body = {
+            "id": idUser,
+            "nome": nome,
+            email,
+            telefone,
+            dtCriacao,
+            perfilAcesso,
+            bitStatus: 1,
+            empresa
+        }
+        api.put(`/funcionarios/${idUser}`, body).then((response) => {
+            sessionStorage.nomeUser = response.data.nome;
+
+            for (let index = 0; index < servicosPreco.length; index++) {
+                // Serviço por Funcionário atual
+                var servicoFuncionario = servicosPorFuncionario.find(sp => sp.servicoPrecoId === servicosPreco[index].id);
+
+                if (servicoFuncionario) {
+                    // Variavel utilizada para checar se o serviço atual está selecionado e definir o status
+                    var servicoPreco = servicosPreco.find(sp => sp.id === servicoFuncionario.servicoPrecoId);
+                    var isSelecionado = servicosSelecionados.includes(servicoPreco) ? 1 : 0;
+                    // Se o status do serviço vindo do BD estiver diferente do status atual, então atualiza no BD
+                    if (servicoFuncionario.bitStatus !== isSelecionado) {
+                        api.patch(`/servico-por-funcionario/${idEmpresa}/${idUser}/${servicoFuncionario.id}`).then().catch((error) => {
+                            console.error(error)
+                        })
+                    }
+                } else {
+                    // Filtrando o serviço preço pelo nome do Serviço Por Funcionário atual
+                    var servicoAtual = servicosSelecionados.includes(servicosPreco.find(sp => sp.nome === servicosPreco[index].nome));
+
+                    if (servicoAtual) {
+                        let servicoAdicionado = {
+                            idFuncionario: idUser,
+                            idServicoPreco: servicosPreco[index].id,
+                            dtCriacao: new Date(),
+                            bitStatus: 1
+                        }
+
+                        api.post(`/servico-por-funcionario/${idEmpresa}`, servicoAdicionado).then().catch((error) => {
+                            console.error(error)
+                        })
+                    }
+                }
+            }
+
+
+            toast.success("Informações atualizadas com sucesso!")
+            voltar();
+        }).catch((error) => {
+            toast.error("Ocorreu um erro ao atualizar o funcionário");
+            console.log(error);
+        });
+    }
 
     return (
         <>
@@ -177,7 +178,7 @@ const EditarPerfil = () => {
                                 alterarValor={setTelefone}
                                 titulo={"Telefone"}
                                 mascara={"(00) 00000-0000"}
-                                // validarEntrada={(e) => inputSomenteNumero(e)}
+                            // validarEntrada={(e) => inputSomenteNumero(e)}
                             />
                             <Input
                                 tamanho={"lg"}
@@ -194,7 +195,7 @@ const EditarPerfil = () => {
                             />
                             <Ul className={styles["servicos-grid"]}
                                 titulo={"Serviços que realiza"}
-                                items={items}
+                                items={servicosPreco}
                                 servicosSelecionados={servicosSelecionados}
                                 toggleServico={toggleServico}
                             />

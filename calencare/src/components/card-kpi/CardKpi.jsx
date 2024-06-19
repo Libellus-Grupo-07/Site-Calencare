@@ -12,29 +12,40 @@ const CardKpi = ({ icon, legenda, valor, tooltip }) => {
                     </div> : ""
                 }
                 <div className={styles["text-kpi"]}>
-                    <span 
+                    <span
                         className={styles["label-kpi"]}
-                        style={{ 
-                              display: tooltip ? "flex" : "",
-                              alignItens: "center",                                justifyContent: "center",
+                        style={{
+                            display: tooltip ? "flex" : "",
+                            alignItens: "center", justifyContent: "center",
                             columnGap: "4px",
+                            textWrap: "nowrap",
                         }}
                     >
-                        {legenda} { tooltip ? <div>
-                             <a id="tooltip" style={{ color: "var(--texto-cinza)", cursor: "pointer", fontSize: "0.9rem"}}>
-                                    <RiInformationFill />
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                            {legenda}
+                        </div>
+                        {tooltip ?
+                            <div style={{ display: "flex" }}>
+                                <a id="tooltip" style={{height: "0.9rem"}}>
+                                    <RiInformationFill style={{
+                                        color: "var(--texto-cinza)",
+                                        fontSize: "0.9rem",
+                                        cursor: "pointer",
+                                
+                                    }}/>
                                 </a>
-                                {tooltip} </div>
-                                : 
-                    ""}
+                                {tooltip}
+                            </div>
+                            :
+                            ""}
                     </span>
                     <span className={styles["value-kpi"]}>
                         {tooltip ?
                             <div style={{ display: "flex", alignItems: "center", columnGap: "0.3rem" }}>
                                 {valor}
-                                
+
                             </div>
-                        : valor
+                            : valor
                         }
                     </span>
                 </div>

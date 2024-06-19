@@ -16,6 +16,7 @@ import ModalCancelarAgendamento from "../../components/modal-cancelar-agendament
 
 const Inicio = () => {
     const navigate = useNavigate();
+    const horaAtual = new Date().getHours();
     const idEmpresa = sessionStorage.getItem("idEmpresa");
     const nome = sessionStorage.getItem("nomeUser");
     const [totalAgendamentosDia, setTotalAgendamentosDia] = useState("");
@@ -131,8 +132,6 @@ const Inicio = () => {
 
         api.get(`/agendamentos/potencial-lucro?data=${data}&empresaId=${idEmpresa}`).then((response) => {
             const { data } = response;
-            console.log("potencial lucro")
-            console.log(data);
             setPotencialLucroDia(data)
         }).catch((error) => {
             console.log("Houve um erro ao tentar buscar potencial lucro do dia");
@@ -202,7 +201,7 @@ const Inicio = () => {
                                             icon="fluent:money-16-regular" width="40" height="40" />
                                     }
                                     legenda={"Potencial Lucro Para Hoje"}
-                                    valor={potencialLucroDia.length === 0 ? "R$ 0,00" : "R$" + transformarDouble(potencialLucroDia)}
+                                    valor={potencialLucroDia.length === 0 ? "R$ 0,00" : "R$ " + transformarDouble(potencialLucroDia)}
                                 />
                             </div>
                             <div className={styles["card-kpi"]}>
@@ -224,11 +223,22 @@ const Inicio = () => {
                             <div className={styles["proximos-agendamentos"]}>
                                 <div className={styles["titulo"]}>
                                     <Titulo tamanho={"md"} titulo={"Próximos Agendamentos"} />
+                                    <span
+                                        style={{
+                                            color: "var(--texto-cinza)",
+                                            fontSize: "0.9rem",
+                                            letterSpacing: "-0.05rem",
+                                            fontWeight: "500"
+
+                                        }}
+                                    >
+                                        Período de {`${horaAtual}:00`} às {`${horaAtual}:59`}
+                                    </span>
                                 </div>
                                 {
                                     proximosAgendamentos.length === 0 ?
                                         <span className={styles["text-sem-agendamentos"]}>
-                                            Sem agendamentos marcados
+                                            Sem agendamentos no período
                                         </span> :
                                         <div className={styles["group-proximos-agendamentos"]}>
                                             {

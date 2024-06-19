@@ -117,11 +117,11 @@ const AdicionarAgendamento = () => {
 
     const validarAgenda = () => {
         if (
-            !isSelected(cliente, "Cliente") &&
-            !isSelected(Profissional, "profissional") &&
+            isSelected(cliente, "Cliente") &&
+            isSelected(Profissional, "profissional") &&
             !isVazio(servicosSelecionados, "Serviços que realiza") &&
-            !isVazio(data, "Data Agendamento"),
-            !isVazio(hora, "Data Agendamento")
+            !isVazio(data, "Data do Agendamento"),
+            !isVazio(hora, "Hora do Agendamento")
         ) {
             return true;
         }
@@ -360,7 +360,7 @@ const AdicionarAgendamento = () => {
                             />
 
                             <Ul className={styles["servicos-grid"]}
-                                titulo={"Serviços"}
+                                titulo={"Serviço"}
                                 items={servicos}
                                 servicosSelecionados={servicosSelecionados}
                                 toggleServico={toggleServico}
@@ -402,7 +402,7 @@ const AdicionarAgendamento = () => {
                                     {
                                         servicosSelecionados.length === 0 ?
                                             "0,00"
-                                            : precoServico.toFixed(2).replace(".", ",")}
+                                            : servicosSelecionados[0].preco.toFixed(2).replace(".", ",")}
 
                                 </span>
                             </div>

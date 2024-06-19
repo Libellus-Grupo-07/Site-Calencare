@@ -157,7 +157,7 @@ const Perfil = () => {
 
         api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${idUser}`).then((response) => {
             const { data } = response;
-            setServicosPrestados(data)
+            setServicosPrestados(data.filter(servicoFuncionario => servicoFuncionario.bitStatus === 1))
             console.log(data)
         }).catch((error) => {
             console.error(error)

@@ -60,7 +60,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  row-gap: 1.3rem;
+  row-gap: 1.5rem;
 }
 
 .section-inicio
@@ -68,19 +68,27 @@
   .content-inicio
   .container-agendamentos
   .proximos-agendamentos
-  .titulo,
+  .titulo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  row-gap: 1rem;
+}
+
 .section-inicio
   .container-inicio
   .content-inicio
   .container-agendamentos
   .proximos-agendamentos
   .group-proximos-agendamentos {
-    width: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  row-gap: 24px;
+  row-gap: 1.5rem;
 }
 
 .section-inicio
@@ -118,7 +126,6 @@
   justify-content: stretch;
   row-gap: 16px;
   max-width: 26vw;
-  
 }
 
 .section-inicio

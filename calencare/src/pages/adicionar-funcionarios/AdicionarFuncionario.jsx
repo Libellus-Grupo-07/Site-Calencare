@@ -75,11 +75,11 @@ const AdicionarFuncionario = () => {
                 const { nome, telefone, email, bitStatus, perfilAcesso } = data;
                 setNome(nome);
                 setTelefone(telefone);
-                var tipoStatus = optionsStatus.filter(s => s.value === bitStatus)
-                setBitStatus(tipoStatus[0]);
+                var tipoStatus = optionsStatus.find(s => s.value === bitStatus)
+                setBitStatus(tipoStatus);
                 setEmail(email);
-                var tipoPerfil = options.filter(s => s.label === perfilAcesso)
-                setTipoPerfil(tipoPerfil[0])
+                var tipoPerfil = options.find(s => s.label === perfilAcesso)
+                setTipoPerfil(tipoPerfil)
 
             }).catch((error) => {
                 console.log("Houve um erro ao buscar o funcionário");
@@ -96,14 +96,14 @@ const AdicionarFuncionario = () => {
                 api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${idProfissional}`
                 ).then((response) => {
                     const { data } = response;
-                    setServicosPorFuncionario(data)
+                    setServicosPorFuncionario(data || [])
                     var servicosRealizados = []
                     // Percorrendo a lista de servicos realizados pelo funcionario
                     for (let index = 0; index < data.length; index++) {
                         const element = data[index];
                         // resposta do servico preco(todos os servicos cadastrados da empresa) e filtrando apartir do serivco atual 
-                        var servicoFuncionario = resposta.filter(s => s.nome === element.nomeServico && element.bitStatus === 1)
-                        servicosRealizados.push(servicoFuncionario[0])
+                        var servicoFuncionario = resposta.find(s => s.nome === element.nomeServico && element.bitStatus === 1)
+                        servicosRealizados.push(servicoFuncionario)
                     }
                     setServicosSelecionados(servicosRealizados)
 
@@ -156,11 +156,11 @@ const AdicionarFuncionario = () => {
                 api.put(url, objetoAdicionado).then(() => {
                     for (let index = 0; index < servicosPreco.length; index++) {
                         // Serviço por Funcionário atual
-                        var servicoFuncionario = servicosPorFuncionario.filter(sp => sp.servicoPrecoId === servicosPreco[index].id)[0];
+                        var servicoFuncionario = servicosPorFuncionario.find(sp => sp.servicoPrecoId === servicosPreco[index].id);
 
                         if (servicoFuncionario) {
                             // Variavel utilizada para checar se o serviço atual está selecionado e definir o status
-                            var servicoPreco = servicosPreco.filter(sp => sp.id === servicoFuncionario.servicoPrecoId)[0];
+                            var servicoPreco = servicosPreco.find(sp => sp.id === servicoFuncionario.servicoPrecoId);
                             var isSelecionado = servicosSelecionados.includes(servicoPreco) ? 1 : 0;
                             // Se o status do serviço vindo do BD estiver diferente do status atual, então atualiza no BD
                             if (servicoFuncionario.bitStatus !== isSelecionado) {
@@ -170,7 +170,7 @@ const AdicionarFuncionario = () => {
                             }
                         } else {
                             // Filtrando o serviço preço pelo nome do Serviço Por Funcionário atual
-                            var servicoAtual = servicosSelecionados.includes(servicosPreco.filter(sp => sp.nome === servicosPreco[index].nome)[0]);
+                            var servicoAtual = servicosSelecionados.includes(servicosPreco.find(sp => sp.nome === servicosPreco[index].nome));
 
                             if (servicoAtual) {
                                 let servicoAdicionado = {
