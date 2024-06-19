@@ -29,7 +29,7 @@ const AdicionarAgendamento = () => {
     const [precoServico, setPrecoServico] = useState(0);
     const [bitStatus, setBitStatus] = useState(0);
     const [nomeServico, setNomeServico] = useState("");
-    const [cliente, setCliente] = useState();
+    const [cliente, setCliente] = useState(undefined);
     const [clientes, setClientes] = useState([]);
     const [nomeCliente, setNomeCliente] = useState("");
     const [sobrenomeCliente, setSobrenomeCliente] = useState("");
@@ -119,7 +119,7 @@ const AdicionarAgendamento = () => {
         if (
             isSelected(cliente, "Cliente") &&
             isSelected(Profissional, "profissional") &&
-            !isVazio(servicosSelecionados, "Serviços que realiza") &&
+            !isVazio(servicosSelecionados, "Serviços") &&
             !isVazio(data, "Data do Agendamento"),
             !isVazio(hora, "Hora do Agendamento")
         ) {
@@ -272,7 +272,7 @@ const AdicionarAgendamento = () => {
             })
         }
 
-        i = index === 0 ? index - 1 : index === clientes.length ? index + 1 : index;
+        i = index === 0 ? index - 1 : index === clientes.length || index === dadosClientes.length ? index + 1 : index;
 
         if (nomeVetor === "cliente") {
             setClientes(dataMapp);
@@ -309,8 +309,11 @@ const AdicionarAgendamento = () => {
                 })
             }
         } else {
-            if (validarAgenda()) {
-
+            if (  isSelected(cliente, "Cliente") &&
+            isSelected(Profissional, "profissional") &&
+            !isVazio(servicosSelecionados, "Serviços") &&
+            !isVazio(data, "Data do Agendamento"),
+            !isVazio(hora, "Hora do Agendamento")) {
                 //let dataHora = dataAgenda + "T" + hora;
                 let AgendaAdicionado = {
                     dtHora: transformarDataHoraBd(data, hora),

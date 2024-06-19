@@ -61,7 +61,7 @@ const EditarPerfil = () => {
             api.get(`/servico-por-funcionario/${idEmpresa}/funcionario/${idUser}`
             ).then((response) => {
                 const { data } = response;
-                setServicosPorFuncionario(data)
+                setServicosPorFuncionario(data || [])
                 var servicosRealizados = []
                 // Percorrendo a lista de servicos realizados pelo funcionario
                 for (let index = 0; index < data.length; index++) {
