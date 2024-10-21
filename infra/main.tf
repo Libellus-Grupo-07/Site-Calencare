@@ -9,7 +9,7 @@ resource "aws_instance" "public_ec2_01" {
     volume_type = "gp3"
   }
 
-  key_name                    = "teste.pem"
+  key_name                    = "teste"
   subnet_id                   = var.subnet_id
   associate_public_ip_address = true
   vpc_security_group_ids      = [var.sg_id]
