@@ -4,7 +4,7 @@ FROM nginx:latest
 WORKDIR /usr/share/nginx/html
 
 #Copia os arquivos da pasta dist para o diretório do servidor
-COPY ./dist .
+COPY ./calencare/build .
 #COPY nginx.conf /etc/nginx/sites-available/default
 
 #Verifica se os arquivos foram copiados corretamente (apenas para fins de depuração)

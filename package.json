@@ -5,6 +5,7 @@
   
   "scripts": {
     "install": "cd calencare && npm install",
-    "start": "cd calencare && npm start"
+    "start": "cd calencare && npm start",
+    "build": "react-scripts build"
   }
 }
