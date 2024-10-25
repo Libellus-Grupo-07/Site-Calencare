@@ -2,7 +2,6 @@ services:
   calencare-web:
     build:
       context: ./
-      image: torres5271/calencare-web
     ports:
       - "80:80"
       - "443:443"
