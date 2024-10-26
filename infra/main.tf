@@ -50,7 +50,7 @@ sudo mkdir -p /home/ubuntu/frontend
 sudo apt-get install -y certbot python3-certbot-nginx
 
 # Obter o certificado SSL usando Certbot (substitua pelo seu domínio)
-sudo certbot --nginx -d vitalis-prod.zapto.org --non-interactive --agree-tos --email gustavo.souza@sptech.school
+sudo certbot --nginx -d calencare.zapto.org --non-interactive --agree-tos --email gtstorres5271@gmail.com
 
 # Verificar permissões no diretório do repositório
 sudo chown -R $USER:$USER /home/ubuntu/frontend  # Ajustar permissões para o usuário atual
@@ -62,12 +62,12 @@ sudo npm install -g npm  # Atualizar npm para a versão mais recente
 sudo npm ci  # Instalar dependências do repositório
 
 # Apagar diretório dist anterior e criar nova build
-sudo rm -rf /var/www/dist
+sudo rm -rf /var/www/calencare/build
 sudo npm run build
 
 # Copiar a pasta 'dist' para o diretório web
-sudo mkdir -p /var/www
-sudo cp -r dist /var/www
+sudo mkdir -p /var/www/calencare/build
+sudo cp -r build /var/www/calencare
 
 # Ajustar permissões para o nginx (usuário www-data)
 sudo chown -R www-data:www-data /var/www
