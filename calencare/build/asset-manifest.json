@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.b26d7f31.css",
-    "main.js": "/static/js/main.a0798882.js",
+    "main.js": "/static/js/main.95e1e8b7.js",
     "static/media/logo_calencare_branca.png": "/static/media/logo_calencare_branca.3e63f2428bd07f5fdbaa.png",
     "static/media/logo_calencare.png": "/static/media/logo_calencare.d696471a2aa457df7adb.png",
     "static/media/carrossel_2.png": "/static/media/carrossel_2.3307962880ad7e17660b.png",
@@ -25,10 +25,10 @@
     "static/media/fundo_carrossel.svg": "/static/media/fundo_carrossel.841045e9fffd677386512184346989cb.svg",
     "static/media/perfil_roxo.svg": "/static/media/perfil_roxo.83ec143035e30d9f89f45e43a9ff3ae5.svg",
     "main.b26d7f31.css.map": "/static/css/main.b26d7f31.css.map",
-    "main.a0798882.js.map": "/static/js/main.a0798882.js.map"
+    "main.95e1e8b7.js.map": "/static/js/main.95e1e8b7.js.map"
   },
   "entrypoints": [
     "static/css/main.b26d7f31.css",
-    "static/js/main.a0798882.js"
+    "static/js/main.95e1e8b7.js"
   ]
 }
