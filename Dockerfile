@@ -3,7 +3,6 @@ FROM nginx:latest
 #Define o diretório de trabalho
 WORKDIR /usr/share/nginx/html
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
 #Copia os arquivos da pasta dist para o diretório do servidor
 COPY /calencare/build .
 #COPY nginx.conf /etc/nginx/sites-available/default
