@@ -1,0 +1,34 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b26d7f31.css",
+    "main.js": "/static/js/main.071cd405.js",
+    "static/media/logo_calencare_branca.png": "/static/media/logo_calencare_branca.3e63f2428bd07f5fdbaa.png",
+    "static/media/logo_calencare.png": "/static/media/logo_calencare.d696471a2aa457df7adb.png",
+    "static/media/carrossel_2.png": "/static/media/carrossel_2.3307962880ad7e17660b.png",
+    "static/media/img_footer.png": "/static/media/img_footer.64a546e4ab67dbc705f9.png",
+    "static/media/carrossel_1.png": "/static/media/carrossel_1.20f8fe3fa6a7abd4465e.png",
+    "static/media/img_inicio.png": "/static/media/img_inicio.eab2f4f5836fc1ee2542.png",
+    "static/media/carrossel_3.png": "/static/media/carrossel_3.f84d1aa84d49c81006db.png",
+    "static/media/not_found.png": "/static/media/not_found.23f47cc5834ca7e08764.png",
+    "static/media/beneficios_2.png": "/static/media/beneficios_2.f45f36c105626cf3b427.png",
+    "static/media/cadastro.svg": "/static/media/cadastro.c82f288b11b2cfda261511de641973a3.svg",
+    "static/media/fechado.svg": "/static/media/fechado.fce0f3be305d375197fd4bd2b4ae8b04.svg",
+    "static/media/login.svg": "/static/media/login.41bea442547d26502c284cae52b77e60.svg",
+    "static/media/beneficios_3.png": "/static/media/beneficios_3.1be7dea542091f208cda.png",
+    "static/media/beneficios_1.png": "/static/media/beneficios_1.f5e017fd94ccdd3c3a8a.png",
+    "static/media/bolinhas_fundo.svg": "/static/media/bolinhas_fundo.3d9509e09fbf2a7b6e0a6c5d7091163c.svg",
+    "static/media/perfil_padrao.svg": "/static/media/perfil_padrao.7498f3289a12abb89af53b3af9c14040.svg",
+    "static/media/perfil_gradiente.svg": "/static/media/perfil_gradiente.723e1562a8b4958d08b75062cffe8b08.svg",
+    "index.html": "/index.html",
+    "static/media/bolinha_imagem_login.svg": "/static/media/bolinha_imagem_login.fa10663e82b7f37457dfa7cf0fdea266.svg",
+    "static/media/bolinha_login.svg": "/static/media/bolinha_login.e89c456e5ec348877c816913f017a19e.svg",
+    "static/media/fundo_carrossel.svg": "/static/media/fundo_carrossel.841045e9fffd677386512184346989cb.svg",
+    "static/media/perfil_roxo.svg": "/static/media/perfil_roxo.83ec143035e30d9f89f45e43a9ff3ae5.svg",
+    "main.b26d7f31.css.map": "/static/css/main.b26d7f31.css.map",
+    "main.071cd405.js.map": "/static/js/main.071cd405.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b26d7f31.css",
+    "static/js/main.071cd405.js"
+  ]
+}
