@@ -13,7 +13,7 @@ RUN ls -la
 #Expor a porta 80
 EXPOSE 80
 EXPOSE 808
-EXPOSE 443
+EXPOSE 844
 
 #Comando para iniciar o servidor Nginx
 CMD ["nginx", "-g", "daemon off;"]
