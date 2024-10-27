@@ -3,7 +3,7 @@ services:
     build:
       context: ./
     ports:
-      - "80:80"
+      - "808:808"
       - "443:443"
     volumes:
       - ./frontend:/home/ubuntu/frontend
