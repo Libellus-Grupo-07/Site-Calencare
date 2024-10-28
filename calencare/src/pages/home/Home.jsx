@@ -12,6 +12,8 @@ import CardBeneficios from './../../components/card-beneficios/CardBeneficios';
 import CardPrecos from './../../components/card-precos/CardPrecos';
 import CarouselProduto from './../../components/carousel-produto/CarouselProduto';
 import { useNavigate } from "react-router-dom";
+import api from "../../api";
+
 
 const Home = () => {
   sessionStorage.clear();
@@ -26,6 +28,22 @@ const Home = () => {
   const irParaProduto = () => sectionProduto.current.scrollIntoView();
   const irParaBeneficios = () => sectionBeneficios.current.scrollIntoView();
   const irParaPrecos = () => sectionPrecos.current.scrollIntoView();
+
+  //document.body.style.setProperty('--color', 'green');
+
+  const retornarCor = () => {
+    api.get("/empresas/cor").then((response) => {
+      const { data } = response;
+      document.body.style.setProperty('--roxo-principal', data[0]);
+      document.body.style.setProperty('--roxo-opacidade-15', data[1]);
+      document.body.style.setProperty('--roxo-secundario', data[2]);
+      alert(data[0])
+    }).catch((error) => {
+      console.error("Houve um erro ao buscar a cor");
+      console.error(error)
+    })
+
+  }
 
   useEffect(() => {
     if (secao) {
@@ -44,6 +62,7 @@ const Home = () => {
           break;
       }
     }
+    retornarCor();
   });
 
   return (
