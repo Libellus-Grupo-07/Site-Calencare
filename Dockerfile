@@ -12,6 +12,7 @@ RUN ls -la
 
 #Expor a porta 80
 EXPOSE 80
+
 EXPOSE 443
 
 #Comando para iniciar o servidor Nginx
