@@ -72,6 +72,7 @@ sudo cp -r build /var/www/calencare
 # Ajustar permissões para o nginx (usuário www-data)
 sudo chown -R www-data:www-data /var/www
 
+
 # Rodar docker-compose
 sudo docker-compose up -d
 
