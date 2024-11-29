@@ -19,8 +19,8 @@ EXPOSE 80
 EXPOSE 443
 
 #Comando para iniciar o servidor Nginx
-#CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
 
-CMD ["bash", "-c", "\
-    certbot certonly --nginx --non-interactive --agree-tos --email gtstorres5271@gmail.com -d calencare-prod.sytes.net && \
-    nginx -g 'daemon off;'"]
+#CMD ["bash", "-c", "\
+#    certbot certonly --nginx --non-interactive --agree-tos --email gtstorres5271@gmail.com -d calencare-prod.sytes.net && \
+#    nginx -g 'daemon off;'"]
